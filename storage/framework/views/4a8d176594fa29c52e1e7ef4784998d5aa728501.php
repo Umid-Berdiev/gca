@@ -1,0 +1,1 @@
+<?php /**PATH D:\OpenServer\domains\gca\resources\views\gca\event.blade.php ENDPATH**/ ?>

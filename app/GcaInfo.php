@@ -1,0 +1,14 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class GcaInfo extends Model
+{
+    public function news()
+    {
+        $lang_id = language::where('language_prefix',\App::getLocale())->first();
+        return $this->hasMany(post::class,'gcainfo_id','id')->where('language_id','=',$lang_id->id);
+    }
+}

@@ -1,0 +1,83 @@
+.forspam img {
+  border: 1px solid #dcdcdc;
+}
+
+.forspam input {
+  width: 60%;
+  height:39px;
+  padding-left:10px;
+  margin-bottom: 10px;
+}
+
+.info-request {
+  background-color: #0066FF;
+  color: #fff;
+  border-radius:5px;
+}
+
+.alert-success {
+  background-color: #AFF5E0;
+  color: #006699;
+}
+
+.check-status .form-inline input {
+  width: 69%;
+}
+
+.check-status .form-inline button {
+  width: 29%;
+}
+
+.page-header {
+  border-bottom: 2px solid #3300CC;
+}
+
+.page-print-link {
+  margin-top: -60px;
+}
+
+.captcha-image {
+  border: 1px solid #dcdcdc;
+}
+
+.info-block {
+  color: #fff;
+}
+
+.info-header {
+  background-color: #0000ff;
+}
+
+.info-content {
+  background: linear-gradient(to top, #0066ff 0%, #99ccff 100%);
+  padding-bottom: 10px;
+}
+
+.info-content a {
+  text-decoration: none;
+  color: #fff;
+  float:left;
+  font-style:italic;
+}
+
+.info-content .row img {
+  filter: invert(1) sepia(1) saturate(5) hue-rotate(175deg);
+}
+
+.info-content table thead th {
+   border-radius: 2px;
+    padding: 5px 0px;
+    margin-right: 5px;
+    border: 5px solid;
+    background-color: #fff;
+    color: blue;
+    text-align: center;
+    font-size: 12px;
+    vertical-align: middle;
+    border-bottom: none;
+	font-weight: 500;
+}
+
+.info-content tbody tr:first-of-type td {
+   border-top: unset;
+}

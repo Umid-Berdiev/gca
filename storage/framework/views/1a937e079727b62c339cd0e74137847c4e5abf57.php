@@ -1,0 +1,2 @@
+
+<?php echo $__env->make("admin.layout.template", \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\OpenServer\domains\gca\resources\views\admin\index.blade.php ENDPATH**/ ?>
