@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use App\Statistica;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,20 +16,20 @@ class StatisticaController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  private function getlang()
+  private function getLang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
     if ($model)
       return $model->id;
     else {
-      $model = language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
+      $model = Language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
       return $model->id;
     }
   }
   public function index()
   {
-    $lang = language::all()->where('status', '=', '1');
-    $statistica = Statistica::where("language_id", "=", $this->getlang())->orderBy('id', 'desc')->paginate('10');
+    $lang = Language::where('status', 1)->get();
+    $statistica = Statistica::where("language_id", "=", $this->getLang())->orderBy('id', 'desc')->paginate('10');
     return view('admin.statistica')
       ->with('statistica', $statistica);
   }
@@ -41,7 +41,7 @@ class StatisticaController extends Controller
    */
   public function create()
   {
-    $lang = language::all()->where('status', '=', '1');
+    $lang = Language::where('status', 1)->get();
     return view('admin.statistica_add')
       ->with('languages', $lang);
   }
@@ -61,8 +61,8 @@ class StatisticaController extends Controller
 
 
     ]);
-    $grp_id = $this->getgroup_id();
-    foreach ($request->input("language_id") as $key => $value) {
+    $grp_id = $this->getGroupId();
+    foreach ($request->language_ids as $key => $value) {
       $statistica = new Statistica();
       $statistica->name = Input::get('name');
       if (isset($request->file('cover')[$key])) {
@@ -126,7 +126,7 @@ class StatisticaController extends Controller
     return redirect('admin/statistica');
   }
 
-  private function getgroup_id()
+  private function getGroupId()
   {
     return time();
   }

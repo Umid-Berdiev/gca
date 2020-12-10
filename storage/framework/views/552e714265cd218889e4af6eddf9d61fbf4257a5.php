@@ -15,26 +15,29 @@
             <i class="fa fa-bars"></i>
           </a>
         </li>
-        <li>
-          <div class="body_language" style="z-index: 999999!important;">
-            <?php $__currentLoopData = \App\language::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$language): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <a href="<?php echo e(url('/locale/'.$language->language_prefix)); ?>"><?php echo e('  '.$language->language_name.'   '); ?></a>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </div>
-        </li>
-
       </ul>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="headerbar-right">
       <ul class="header-nav header-nav-profile">
+        <?php $__currentLoopData = \App\Language::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $language): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <li>
+          <div>
+            <a class="text-uppercase" href="<?php echo e(url('/locale/' . $language->language_prefix)); ?>">
+              <?php echo e($language->language_prefix); ?>
+
+            </a>
+
+          </div>
+        </li>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         <li class="dropdown">
           <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
             <img src="<?php echo e(asset('assets/img/avatar1.jpg?1403934956')); ?>" alt="" />
             <span class="profile-info">
               <?php
-                                $user = \Illuminate\Support\Facades\Auth::user();
-                            ?>
+                $user = \Illuminate\Support\Facades\Auth::user();
+              ?>
               <?php echo e($user->name); ?>
 
               <?php switch($user->status):

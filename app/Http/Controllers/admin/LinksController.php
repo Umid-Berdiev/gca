@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use App\Links;
 use App\LinksCategories;
 use Illuminate\Http\Request;
@@ -23,31 +23,32 @@ class LinksController extends Controller
       ->select(['links.*', 'languages.language_name', 'links_categories.title as category_name'])
       ->leftJoin("languages", "languages.id", "=", "links.language_id")
       ->leftJoin("links_categories", "links_categories.group", "=", "links.category_group")
-      ->where("links_categories.language_id", "=", $this->getlang())
-      ->where("links.language_id", "=", $this->getlang())
+      ->where("links_categories.language_id", "=", $this->getLang())
+      ->where("links.language_id", "=", $this->getLang())
       ->orderBy('id', 'desc')
       ->paginate(10);
 
 
     return view('admin.links')->with('table', $model);
   }
+
   public function indexCategories()
   {
     $model = \DB::table("links_categories")
       ->select(['links_categories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "links_categories.language_id")
-      ->where("language_id", "=", $this->getlang())
+      ->where("language_id", "=", $this->getLang())
       ->orderBy('order')
       ->paginate(10);
     return view('admin.links_categories')->with('table', $model);
   }
-  private function getlang()
+  private function getLang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
     if ($model)
       return $model->id;
     else {
-      $model = language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
+      $model = Language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
       return $model->id;
     }
   }
@@ -60,8 +61,8 @@ class LinksController extends Controller
    */
   public function create()
   {
-    $lang = language::all()->where('status', '=', '1');
-    $category = LinksCategories::where('language_id', '=', $this->getlang())->get();
+    $lang = Language::where('status', 1)->get();
+    $category = LinksCategories::where('language_id', '=', $this->getLang())->get();
 
     return view('admin.links_add')
       ->with('languages', $lang)
@@ -69,7 +70,7 @@ class LinksController extends Controller
   }
   public function createCategories()
   {
-    $lang = language::all()->where('status', '=', '1');
+    $lang = Language::where('status', 1)->get();
 
     return view('admin.links_categories_add')->with('languages', $lang);
   }
@@ -93,8 +94,8 @@ class LinksController extends Controller
     ]);
 
     // dd(Input::all());
-    $grp_id = $this->getgroup_id();
-    foreach ($request->input("language_id") as $key => $value) {
+    $grp_id = $this->getGroupId();
+    foreach ($request->language_ids as $key => $value) {
       $model = new Links();
       if (isset($request->input("title")[$key]))
         $model->title = $request->input("title")[$key];
@@ -123,8 +124,8 @@ class LinksController extends Controller
 
     ]);
     $max_id = LinksCategories::max('id');
-    $grp_id = $this->getgroup_id();
-    foreach ($request->input("language_id") as $key => $value) {
+    $grp_id = $this->getGroupId();
+    foreach ($request->language_ids as $key => $value) {
       $model = new LinksCategories();
       if (isset($request->input("category_name")[$key]))
         $model->title = $request->input("category_name")[$key];
@@ -139,7 +140,7 @@ class LinksController extends Controller
 
     return redirect("/admin/links/categories");
   }
-  private function getgroup_id()
+  private function getGroupId()
   {
     return time();
   }
@@ -161,20 +162,20 @@ class LinksController extends Controller
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function edit(Request $request)
+  public function edit(Request $request, $id)
   {
 
     $model  = Links::all()->where("group", "=", $request->input("id"));
-    $lang = language::all();
+    $lang = Language::all();
     $category_id = Links::where("group", "=", $request->input("id"))->first();
-    $doccat = LinksCategories::all()->where("language_id", "=", $this->getlang());
+    $doccat = LinksCategories::where("language_id", $this->getLang())->get();
 
     //dd($model);
     return view("admin.links_edit", [
 
       "languages" => $lang,
       "model" => $model,
-      "grp_id" => $request->input("id"),
+      "grp_id" => $id,
       "category_id" => $category_id,
       "category" => $doccat,
     ]);
@@ -183,12 +184,12 @@ class LinksController extends Controller
   public function editCategories(Request $request)
   {
     $model  = LinksCategories::all()->where("group", "=", $request->input("id"));
-    $lang = language::all();
+    $lang = Language::all();
     return view("admin.links_categories_edit", [
 
       "languages" => $lang,
       "model" => $model,
-      "grp_id" => $request->input("id"),
+      "grp_id" => $id,
     ]);
   }
 
@@ -216,7 +217,7 @@ class LinksController extends Controller
     $grp_id = $request->input("group");
 
 
-    foreach ($request->input("language_id") as $key => $value) {
+    foreach ($request->language_ids as $key => $value) {
       $model = Links::all()
         ->where("group", "=", $grp_id)
         ->where("language_id", "=", $value)
@@ -250,7 +251,7 @@ class LinksController extends Controller
     $grp_id = $request->input("group");
 
 
-    foreach ($request->input("language_id") as $key => $value) {
+    foreach ($request->language_ids as $key => $value) {
       $model = LinksCategories::all()
         ->where("group", "=", $grp_id)
         ->where("language_id", "=", $value)

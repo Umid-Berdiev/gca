@@ -8,7 +8,7 @@ use App\Mail\DemoEmail;
 use App\ObjectSend;
 use App\Obuna;
 use Illuminate\Http\Request;
-use App\language;
+use App\Language;
 use App\tender;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
@@ -29,8 +29,8 @@ class FormController extends Controller
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->where('events.title', '<>', '')
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
     $last_month = Carbon::now()->addMonth(-1);
     $now = Carbon::now();
 
@@ -41,8 +41,8 @@ class FormController extends Controller
     $yur = ObjectSend::whereBetween('created_at', [$last_month, $now])->where('object_type', '=', 'Юридик шахс')->count();
     $worked = ObjectSend::whereBetween('created_at', [$last_month, $now])->where('status', '=', 1)->count();
     $finished = ObjectSend::whereBetween('created_at', [$last_month, $now])->where('status', '=', 3)->count();
-    $languages = language::where('status', 1)->get();
-    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getlang())->get();
+    $languages = Language::where('status', 1)->get();
+    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->get();
     return view('send_doc')
       ->with('languages', $languages)
       ->with('tenders', $tenders)
@@ -184,10 +184,10 @@ class FormController extends Controller
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->where('events.title', '<>', '')
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
-    $languages = language::where('status', 1)->get();
-    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getlang())->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
+    $languages = Language::where('status', 1)->get();
+    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->get();
     return view('gca.contact')
       ->with('languages', $languages)
       ->with('events', $events)
@@ -300,9 +300,9 @@ class FormController extends Controller
   {
     //
   }
-  public function getlang()
+  public function getLang()
   {
-    $model = language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();
 
     return $model->id;
   }

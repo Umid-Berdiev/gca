@@ -2,26 +2,16 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
-use App\photogallery;
-use App\photogallerycategory;
-use App\videogallerycategory;
+use App\Language;
+use App\Photogallery;
+use App\PhotoCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\doccategory;
-use App\doc;
 use Illuminate\Support\Facades\Storage;
-
 
 class PhotoController extends Controller
 {
-  private function getlang()
-  {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
-
-    return $model->id;
-  }
-  public function Index(Request $request)
+  public function index(Request $request)
   {
 
     if ($request->has("search")) {
@@ -29,8 +19,8 @@ class PhotoController extends Controller
         ->select(['photogalleries.*', 'languages.language_name', 'photogallerycategories.title'])
         ->leftJoin("languages", "languages.id", "=", "photogalleries.language_id")
         ->leftJoin("photogallerycategories", "photogallerycategories.group", "=", "photogalleries.category_id")
-        ->where("photogalleries.language_id", "=", $this->getlang())
-        ->where("photogallerycategories.language_id", "=", $this->getlang())
+        ->where("photogalleries.language_id", "=", $this->getLang())
+        ->where("photogallerycategories.language_id", "=", $this->getLang())
         ->where("photogalleries.name", "LIKE", '%' . $request->input("search") . '%')
         ->orWhere("photogalleries.name", "LIKE", '%' . $request->input("search") . '%')
         ->orWhere("photogalleries.description", "LIKE", '%' . $request->input("search") . '%')
@@ -41,129 +31,119 @@ class PhotoController extends Controller
         ->select(['photogalleries.*', 'languages.language_name', 'photogallerycategories.title'])
         ->leftJoin("languages", "languages.id", "=", "photogalleries.language_id")
         ->leftJoin("photogallerycategories", "photogallerycategories.group", "=", "photogalleries.category_id")
-        ->where("photogalleries.language_id", "=", $this->getlang())
-        ->where("photogallerycategories.language_id", "=", $this->getlang())
+        ->where("photogalleries.language_id", "=", $this->getLang())
+        ->where("photogallerycategories.language_id", "=", $this->getLang())
         ->orderBy('id', 'desc')
         ->paginate(10);
     }
 
-
-    $lang = language::all()->where('status', '=', '1');
-    $doccat = photogallerycategory::all()->where("language_id", "=", $this->getlang());
-    return view("admin.photo", [
+    $lang = Language::where('status', 1)->get();
+    $doccat = PhotoCategory::where("language_id", $this->getLang())->get();
+    return view("admin.photo.index", [
       "table" => $model,
       "language" => $lang,
       "category" => $doccat,
     ]);
   }
-  public function Insert(Request $request)
+
+  public function create()
+  {
+    $lang = Language::where('status', 1)->get();
+    $doccat = PhotoCategory::where("language_id", $this->getLang())->get();
+    return view("admin.photo.create", [
+
+      "languages" => $lang,
+      "category" => $doccat,
+    ]);
+  }
+
+  public function store(Request $request)
   {
     $validatedData = $request->validate([
-      'name' => 'required|max:255',
-      'description' => 'required|max:255',
-      'language_id' => 'required',
+      'names.*' => 'required|max:255',
+      'descriptions.*' => 'required|max:255',
       'cover' => 'required',
-
       'category_id' => 'required',
-
-
     ]);
-    $grp_id = $this->getgroup_id();
-    foreach ($request->input("language_id") as $key => $value) {
-      $model = new photogallery();
-      $model->name = $request->input("name")[$key] ?? "";
-      $model->description = $request->input("description")[$key] ?? "";
 
-      $model->category_id = $request->input("category_id") ?? "";
+    $grp_id = $this->getGroupId();
+
+    foreach ($request->language_ids as $key => $value) {
+      $model = new Photogallery();
+      $model->name = $request->names[$key] ?? "";
+      $model->description = $request->descriptions[$key] ?? "";
+
+      $model->category_id = $request->category_id ?? "";
       $model->group = $grp_id ?? "";
       $model->language_id = $value;
-      if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'));
-      }
 
+      if ($request->hasFile("cover")) {
+        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      }
 
       $model->save();
     }
 
-    return redirect("/admin/photo");
+    return redirect(route('photos.index'))->with('success', 'Created!');
   }
-  public function InsertShow()
+
+  public function edit(Request $request, $id)
   {
-    $lang = language::all()->where('status', '=', '1');
-    $doccat = photogallerycategory::all()->where("language_id", "=", $this->getlang());
-    return view("admin.photo_add", [
+    $model  = Photogallery::where("group", $id)->get();
+    $lang = Language::all();
+    $doccat = PhotoCategory::where("language_id", $this->getLang())->get();
 
-      "languages" => $lang,
-      "category" => $doccat,
-    ]);
-  }
-  public function Update(Request $request)
-  {
-    $validatedData = $request->validate([
-      'name' => 'required|max:255',
-      'description' => 'required|max:255',
-      'language_id' => 'required',
-
-
-      'category_id' => 'required',
-      'group' => 'required',
-
-    ]);
-
-
-    $grp_id = $request->input("group");
-
-
-    foreach ($request->input("language_id") as $key => $value) {
-      $model = photogallery::all()
-        ->where("group", "=", $grp_id)
-        ->where("language_id", "=", $value)
-        ->first();
-      $model->name = $request->input("name")[$key];
-      $model->description = $request->input("description")[$key];
-
-      $model->category_id = $request->input("category_id");
-      $model->group = $grp_id;
-      $model->language_id = $value;
-      if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'));
-      }
-
-
-
-      $model->update();
-    }
-    return redirect("admin/photo");
-  }
-  public function UpdateShow(Request $request)
-  {
-    $model  = photogallery::all()->where("group", "=", $request->input("id"));
-    $lang = language::all();
-    $doccat = photogallerycategory::all()->where("language_id", "=", $this->getlang());
-    return view("admin.photo_edit", [
-
+    return view("admin.photo.edit", [
       "languages" => $lang,
       "model" => $model,
-      "grp_id" => $request->input("id"),
+      "grp_id" => $id,
       "category" => $doccat,
     ]);
   }
-  public function Delete(Request $request)
+
+  public function update(Request $request, $id)
   {
-    $validatedData = $request->validate([
-
-      'id' => 'required',
-
+    $request->validate([
+      'names.*' => 'required|max:255',
+      'descriptions.*' => 'required|max:255',
+      'category_id' => 'required',
+      'group' => 'required',
     ]);
-    $model = photogallery::all()->where("group", "=", $request->input("id"));
 
-    foreach ($model as $value) {
-      $mod = photogallery::find($value->id)->delete();
+    foreach ($request->language_ids as $key => $value) {
+      $model = Photogallery::all()
+        ->where("group", $id)
+        ->where("language_id", $value)
+        ->first();
+      $model->name = $request->names[$key];
+      $model->description = $request->descriptions[$key];
+      $model->category_id = $request->category_id;
+      $model->group = $id;
+      $model->language_id = $value;
+
+      if ($request->hasFile("cover")) {
+        $model->cover = Storage::putFile('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      }
+      $model->update();
     }
 
-    return redirect("admin/photo");
+    return redirect(route('photos.index'))->with('success', 'Updated!');
   }
-  private function getgroup_id()
+
+  public function destroy(Request $request, $id)
+  {
+    Photogallery::where("group", $id)->delete();
+
+    return redirect(route('photos.index'))->with('success', 'Deleted!');
+  }
+
+  private function getLang()
+  {
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    return $model->id;
+  }
+
+  private function getGroupId()
   {
     return time();
   }

@@ -4,19 +4,19 @@
 
 .forspam input {
   width: 60%;
-  height:39px;
-  padding-left:10px;
+  height: 39px;
+  padding-left: 10px;
   margin-bottom: 10px;
 }
 
 .info-request {
-  background-color: #0066FF;
+  background-color: #0066ff;
   color: #fff;
-  border-radius:5px;
+  border-radius: 5px;
 }
 
 .alert-success {
-  background-color: #AFF5E0;
+  background-color: #aff5e0;
   color: #006699;
 }
 
@@ -29,7 +29,7 @@
 }
 
 .page-header {
-  border-bottom: 2px solid #3300CC;
+  border-bottom: 2px solid #3300cc;
 }
 
 .page-print-link {
@@ -56,8 +56,8 @@
 .info-content a {
   text-decoration: none;
   color: #fff;
-  float:left;
-  font-style:italic;
+  float: left;
+  font-style: italic;
 }
 
 .info-content .row img {
@@ -65,19 +65,19 @@
 }
 
 .info-content table thead th {
-   border-radius: 2px;
-    padding: 5px 0px;
-    margin-right: 5px;
-    border: 5px solid;
-    background-color: #fff;
-    color: blue;
-    text-align: center;
-    font-size: 12px;
-    vertical-align: middle;
-    border-bottom: none;
-	font-weight: 500;
+  border-radius: 2px;
+  padding: 5px 0px;
+  margin-right: 5px;
+  border: 5px solid;
+  background-color: #fff;
+  color: blue;
+  text-align: center;
+  font-size: 12px;
+  vertical-align: middle;
+  border-bottom: none;
+  font-weight: 500;
 }
 
 .info-content tbody tr:first-of-type td {
-   border-top: unset;
+  border-top: unset;
 }

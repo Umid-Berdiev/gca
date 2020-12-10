@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use App\Years;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,20 +16,20 @@ class YearsController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function getlang()
+  public function getLang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
     if ($model) {
 
       return $model->id;
     } else {
-      $model = language::all()->where('status', '=', '1')->where("language_prefix", "en")->first();
+      $model = Language::where('status',  '1')->where("language_prefix", "en")->first();
       return $model->id;
     }
   }
   public function index()
   {
-    $years = Years::where("language_id", "=", $this->getlang())->orderBy('id', 'desc')->paginate('10');
+    $years = Years::where("language_id", "=", $this->getLang())->orderBy('id', 'desc')->paginate('10');
     return view('admin.years')
       ->with('years', $years);
   }
@@ -41,7 +41,7 @@ class YearsController extends Controller
    */
   public function create()
   {
-    $lang = language::all()->where('status', '=', '1');
+    $lang = Language::where('status', 1)->get();
     return view('admin.years_add')
       ->with('languages', $lang);
   }
@@ -60,8 +60,8 @@ class YearsController extends Controller
 
 
     ]);
-    $grp_id = $this->getgroup_id();
-    foreach ($request->input("language_id") as $key => $value) {
+    $grp_id = $this->getGroupId();
+    foreach ($request->language_ids as $key => $value) {
       $years = new Years();
       if (isset($request->file('cover')[$key])) {
         $years->photo_url =  \Storage::putFile('public', $request->file('cover')[$key]);
@@ -94,7 +94,7 @@ class YearsController extends Controller
   public function edit(Request $request)
   {
 
-    $lang = language::all();
+    $lang = Language::all();
     $years = Years::where('group', '=', Input::get('id'))->get();
     return view('admin.years_edit')->with('years', $years)->with('languages', $lang);
   }
@@ -117,7 +117,7 @@ class YearsController extends Controller
     ]);
     $id = Input::get('group');
 
-    foreach ($request->input("language_id") as $key => $value) {
+    foreach ($request->language_ids as $key => $value) {
       $years = Years::all()
         ->where("group", "=", $id)
         ->where("language_id", "=", $value)
@@ -153,7 +153,7 @@ class YearsController extends Controller
     return redirect("admin/years");
   }
 
-  private function getgroup_id()
+  private function getGroupId()
   {
     return time();
   }

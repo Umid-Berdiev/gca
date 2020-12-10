@@ -4,7 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\GcaInfo;
 use App\Http\Controllers\MailController;
-use App\language;
+use App\Language;
 use App\Obuna;
 use App\PagesGroup;
 use http\Url;
@@ -20,9 +20,9 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
-  public function getlang()
+  public function getLang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
 
     return $model->id;
   }
@@ -36,7 +36,7 @@ class PostController extends Controller
         ->select(['posts.*', 'languages.language_name'])
 
         ->leftJoin("languages", "languages.id", "=", "posts.language_id")
-        ->where("posts.language_id", "=", $this->getlang())
+        ->where("posts.language_id", "=", $this->getLang())
         ->where("posts.title", "LIKE", '%' . $request->input("search") . '%')
         ->orWhere("posts.decription", "LIKE", '%' . $request->input("search") . '%')
         ->orderBy('posts.id', 'desc')
@@ -47,13 +47,13 @@ class PostController extends Controller
         ->select(['posts.*', 'languages.language_name'])
 
         ->leftJoin("languages", "languages.id", "=", "posts.language_id")
-        ->where("posts.language_id", "=", $this->getlang())
+        ->where("posts.language_id", "=", $this->getLang())
 
         ->orderBy('posts.id', 'desc')
         ->paginate(10);
     }
 
-    $lang = language::all()->where('status', '=', '1');
+    $lang = Language::where('status', 1)->get();
 
     return view("admin.post", [
       'table' => $model,
@@ -71,7 +71,7 @@ class PostController extends Controller
 
     return $model->id;
   }
-  public function Insert(Request $request)
+  public function store(Request $request)
   {
 
 
@@ -88,7 +88,7 @@ class PostController extends Controller
     $grp_id = $this->postgrp($request->input("post_category_id"));
 
 
-    foreach ($request->input("language_id") as $key => $value) {
+    foreach ($request->language_ids as $key => $value) {
       $model = new post();
       $model->datetime = Input::get('datetime');
       if (isset($request->input("title")[$key]))
@@ -127,7 +127,7 @@ class PostController extends Controller
 
     return redirect("admin/post");
   }
-  public function Update(Request $request)
+  public function update(Request $request, $id)
   {
 
     //dd($request->all());
@@ -145,7 +145,7 @@ class PostController extends Controller
     $grpupd = postgroup::all()->where("id", "=", $grp_id)->first();
     $grpupd->post_category_group_id =  $request->input("post_category_id");
     $grpupd->update();
-    foreach ($request->input("language_id") as $key => $value) {
+    foreach ($request->language_ids as $key => $value) {
       $model =  post::all()
         ->where("group", "=", $grp_id)
         ->where("language_id", "=", $value)->first();
@@ -180,7 +180,7 @@ class PostController extends Controller
 
     return redirect("admin/post");
   }
-  public function UpdateShow(Request $request)
+  public function edit(Request $request, $id)
   {
     $validatedData = $request->validate([
 
@@ -196,8 +196,8 @@ class PostController extends Controller
       ->leftJoin("postgroups", "postgroups.id", "=", "posts.group")
       ->where("posts.group", "=", $request->input("id"))
       ->get();
-    $cat = postcategory::all()->where("language_id", "=", $this->getlang());
-    $lang = language::all();
+    $cat = postcategory::where("language_id", $this->getLang())->get();
+    $lang = Language::all();
     //dd($model);
 
     return view("admin.post_edit", [
@@ -208,7 +208,7 @@ class PostController extends Controller
       'group' => $request->input("id"),
     ]);
   }
-  public function Delete(Request $request)
+  public function destroy(Request $request, $id)
   {
 
     $validatedData = $request->validate([
@@ -216,7 +216,7 @@ class PostController extends Controller
       'id' => 'required',
 
     ]);
-    $model = post::all()->where("group", "=", $request->input("id"));
+    $model = post::where('group', $id)->get();
 
     foreach ($model as $value) {
       $mod = post::find($value->id)->delete();
@@ -225,13 +225,13 @@ class PostController extends Controller
 
     return redirect("admin/post");
   }
-  public function InsertShow()
+  public function create()
   {
 
-    $model = language::all();
+    $model = Language::all();
 
     $gcainfo = GcaInfo::all();
-    $cat = postcategory::all()->where("language_id", "=", $this->getlang());
+    $cat = postcategory::where("language_id", $this->getLang())->get();
     return view('admin.post_add', [
       'languages' => $model,
       'category' => $cat,

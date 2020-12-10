@@ -2,46 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\language;
+use App\Language;
 use App\tender;
 use Illuminate\Http\Request;
 
 class VideoController extends Controller
 {
-  private function getlang()
+  private function getLang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
     if ($model)
       return $model->id;
     else {
-      $model = language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
+      $model = Language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
       return $model->id;
     }
   }
+
   public function ViewVideo()
   {
     $model = "";
-    $languages = language::get();
-    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getlang())->orderBy('id', 'desc')->get();
+    $languages = Language::get();
+    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->get();
     $events = \DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->where('events.title', '<>', '')
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->orderBy('id', 'desc')->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->orderBy('id', 'desc')->get();
+
     $category = \DB::table("videogallerycategories")
       ->select(['videogallerycategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
-      ->where("videogallerycategories.language_id", "=", $this->getlang())->get();
-
+      ->where("videogallerycategories.language_id", $this->getLang())->get();
 
     $model = \DB::table("videogallerycategories")
       ->select(['videogallerycategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
-
-      ->where("videogallerycategories.language_id", "=", $this->getlang())
-      ->orderBy('id', 'desc')
+      ->where("videogallerycategories.language_id", $this->getLang())
+      ->orderBy('created_at', 'desc')
       ->paginate(10);
 
     return view('gca.video', [

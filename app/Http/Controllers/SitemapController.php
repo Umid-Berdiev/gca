@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\language;
+use App\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class SitemapController extends Controller
 {
-  public function getlang()
+  public function getLang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
     if ($model)
       return $model->id;
     else {
-      $model = language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
+      $model = Language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
       return $model->id;
     }
   }
@@ -127,7 +127,7 @@ class SitemapController extends Controller
           ->select(['posts.*', 'languages.language_name'])
 
           ->leftJoin("languages", "languages.id", "=", "posts.language_id")
-          ->where("posts.language_id", "=", $this->getlang())
+          ->where("posts.language_id", "=", $this->getLang())
 
           ->orderBy('posts.id', 'desc')
           ->limit(20)->get();
@@ -153,7 +153,7 @@ class SitemapController extends Controller
           ->select(['events.*', 'languages.language_name'])
 
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
-          ->where("events.language_id", "=", $this->getlang())
+          ->where("events.language_id", "=", $this->getLang())
 
           ->orderBy('events.id', 'desc')
           ->limit(20)->get();
@@ -180,7 +180,7 @@ class SitemapController extends Controller
           ->select(['tenders.*', 'languages.language_name'])
 
           ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
-          ->where("tenders.language_id", "=", $this->getlang())
+          ->where("tenders.language_id", "=", $this->getLang())
 
           ->orderBy('tenders.id', 'desc')
           ->limit(20)->get();
@@ -207,7 +207,7 @@ class SitemapController extends Controller
           ->select(['photogalleries.*', 'languages.language_name'])
 
           ->leftJoin("languages", "languages.id", "=", "photogalleries.language_id")
-          ->where("photogalleries.language_id", "=", $this->getlang())
+          ->where("photogalleries.language_id", "=", $this->getLang())
 
           ->orderBy('photogalleries.id', 'desc')
           ->limit(20)->get();
@@ -233,7 +233,7 @@ class SitemapController extends Controller
           ->select(['videogalleries.*', 'languages.language_name'])
 
           ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
-          ->where("videogalleries.language_id", "=", $this->getlang())
+          ->where("videogalleries.language_id", "=", $this->getLang())
 
           ->orderBy('videogalleries.id', 'desc')
           ->limit(20)->get();
@@ -259,7 +259,7 @@ class SitemapController extends Controller
           ->select(['docs.*', 'languages.language_name'])
 
           ->leftJoin("languages", "languages.id", "=", "docs.language_id")
-          ->where("docs.language_id", "=", $this->getlang())
+          ->where("docs.language_id", "=", $this->getLang())
 
           ->orderBy('docs.id', 'desc')
           ->limit(20)->get();

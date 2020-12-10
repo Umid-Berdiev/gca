@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-use App\language as lang;
+use App\Language as lang;
 
 class Language
 {

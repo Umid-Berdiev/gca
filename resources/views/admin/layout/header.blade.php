@@ -15,26 +15,28 @@
             <i class="fa fa-bars"></i>
           </a>
         </li>
-        <li>
-          <div class="body_language" style="z-index: 999999!important;">
-            @foreach(\App\language::all() as $key=>$language)
-            <a href="{{  url('/locale/'.$language->language_prefix) }}">{{'  '.$language->language_name.'   '}}</a>
-            @endforeach
-          </div>
-        </li>
-
       </ul>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="headerbar-right">
       <ul class="header-nav header-nav-profile">
+        @foreach(\App\Language::all() as $key => $language)
+        <li>
+          <div>
+            <a class="text-uppercase" href="{{ url('/locale/' . $language->language_prefix) }}">
+              {{ $language->language_prefix }}
+            </a>
+
+          </div>
+        </li>
+        @endforeach
         <li class="dropdown">
           <a href="javascript:void(0);" class="dropdown-toggle ink-reaction" data-toggle="dropdown">
             <img src="{{asset('assets/img/avatar1.jpg?1403934956')}}" alt="" />
             <span class="profile-info">
               <?php
-                                $user = \Illuminate\Support\Facades\Auth::user();
-                            ?>
+                $user = \Illuminate\Support\Facades\Auth::user();
+              ?>
               {{ $user->name }}
               @switch($user->status)
               @case(1)

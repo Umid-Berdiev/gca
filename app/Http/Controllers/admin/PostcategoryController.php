@@ -2,28 +2,21 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\postcategory;
+use App\PostCategory;
 
 
-class PostcategoryController extends Controller
+class PostCategoryController extends Controller
 {
-  private function getlang()
+  public function index(Request $request)
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
-
-    return $model->id;
-  }
-  public function Index(Request $request)
-  {
-
     if ($request->has("search")) {
       $model = \DB::table("postcategories")
         ->select(['postcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "postcategories.language_id")
-        ->where("postcategories.language_id", "=", $this->getlang())
+        ->where("postcategories.language_id", "=", $this->getLang())
         ->where("postcategories.category_name", "LIKE", '%' . $request->input("search") . '%')
         ->orderBy('id', 'desc')
         ->paginate(10);
@@ -31,95 +24,87 @@ class PostcategoryController extends Controller
       $model = \DB::table("postcategories")
         ->select(['postcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "postcategories.language_id")
-        ->where("language_id", "=", $this->getlang())
+        ->where("language_id", "=", $this->getLang())
         ->orderBy('id', 'desc')
         ->paginate(10);
     }
 
+    $lang = Language::where('status', 1)->get();
 
-    $lang = language::all()->where('status', '=', '1');
-    return view("admin.postcategory", [
+    return view("admin.post_category.index", [
       "table" => $model,
       "language" => $lang,
     ]);
   }
-  public function Insert(Request $request)
+
+  public function create()
   {
-    $validatedData = $request->validate([
-      'category_name' => 'required|max:255',
-      'language_id' => 'required',
+    $languages = Language::all();
+    return view("admin.post_category.create", compact('languages'));
+  }
 
+  public function store(Request $request)
+  {
+    $request->validate([
+      'category_names.*' => 'required|max:50',
     ]);
-    $grp_id = $this->getgroup_id();
-    foreach ($request->input("language_id") as $key => $value) {
-      $model = new postcategory();
-      $model->category_name = $request->input("category_name")[$key];
-      $model->language_id = $value;
-      $model->group = $grp_id;
 
-      $model->save();
+    $grp_id = $this->getGroupId();
+
+    foreach ($request->language_ids as $key => $value) {
+      PostCategory::create([
+        'category_name' => $request->category_names[$key],
+        'language_id' => $value,
+        'group' => $grp_id,
+      ]);
     }
 
-    return redirect("/admin/postcategory");
+    return redirect(route('post-categories.index'))->with('success', 'Created!');
   }
-  public function InsertShow()
+
+  public function edit(Request $request, $id)
   {
-    $lang = language::all();
-    return view("admin.postcategory_add", [
+    $model  = PostCategory::where('group', $id)->get();
+    $lang = Language::all();
 
-      "languages" => $lang,
-    ]);
-  }
-  public function Update(Request $request)
-  {
-    $validatedData = $request->validate([
-      'category_name' => 'required|max:255',
-      'language_id' => 'required',
-      'group' => 'required',
-
-    ]);
-    $grp_id = $request->input("group");
-
-
-    foreach ($request->input("language_id") as $key => $value) {
-      $model = postcategory::all()
-        ->where("group", "=", $grp_id)
-        ->where("language_id", "=", $value)
-        ->first();
-      $model->category_name = $request->input("category_name")[$key];
-
-
-      $model->update();
-    }
-    return redirect("admin/postcategory");
-  }
-  public function UpdateShow(Request $request)
-  {
-    $model  = postcategory::all()->where("group", "=", $request->input("id"));
-    $lang = language::all();
-    return view("admin.postcategory_edit", [
-
+    return view("admin.post_category.edit", [
       "languages" => $lang,
       "model" => $model,
-      "grp_id" => $request->input("id"),
+      "grp_id" => $id,
     ]);
   }
-  public function Delete(Request $request)
+
+  public function update(Request $request, $id)
   {
-    $validatedData = $request->validate([
-
-      'id' => 'required',
-
+    $request->validate([
+      'category_names.*' => 'required|max:50',
     ]);
-    $model = postcategory::all()->where("group", "=", $request->input("id"));
 
-    foreach ($model as $value) {
-      $mod = postcategory::find($value->id)->delete();
+    foreach ($request->language_ids as $key => $value) {
+      $model = PostCategory::where("group", $id)
+        ->where("language_id", $value)
+        ->first();
+      $model->category_name = $request->category_names[$key];
+      $model->update();
     }
 
-    return redirect("admin/postcategory");
+    return redirect(route('post-categories.index'))->with('success', 'Updated!');
   }
-  private function getgroup_id()
+
+  public function destroy(Request $request, $id)
+  {
+    PostCategory::where('group', $id)->delete();
+    return redirect(route('post-categories.index'))->with('success', 'Deleted!');
+  }
+
+  private function getLang()
+  {
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+
+    return $model->id;
+  }
+
+  private function getGroupId()
   {
     return time();
   }

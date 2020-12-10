@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\eventcategory;
@@ -10,20 +10,20 @@ use App\eventcategory;
 
 class EventcategoryController extends Controller
 {
-  private function getlang()
+  private function getLang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
 
     return $model->id;
   }
-  public function Index(Request $request)
+  public function index(Request $request)
   {
 
     if ($request->has("search")) {
       $model = \DB::table("eventcategories")
         ->select(['eventcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
-        ->where("eventcategories.language_id", "=", $this->getlang())
+        ->where("eventcategories.language_id", "=", $this->getLang())
         ->where("eventcategories.category_name", "LIKE", '%' . $request->input("search") . '%')
         ->orderBy('id', 'desc')
         ->paginate(10);
@@ -31,27 +31,27 @@ class EventcategoryController extends Controller
       $model = \DB::table("eventcategories")
         ->select(['eventcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
-        ->where("language_id", "=", $this->getlang())
+        ->where("language_id", "=", $this->getLang())
         ->orderBy('id', 'desc')
         ->paginate(10);
     }
 
 
-    $lang = language::all()->where('status', '=', '1');
+    $lang = Language::where('status', 1)->get();
     return view("admin.eventcategory", [
       "table" => $model,
       "language" => $lang,
     ]);
   }
-  public function Insert(Request $request)
+  public function store(Request $request)
   {
     $validatedData = $request->validate([
       'category_name' => 'required|max:255',
       'language_id' => 'required',
 
     ]);
-    $grp_id = $this->getgroup_id();
-    foreach ($request->input("language_id") as $key => $value) {
+    $grp_id = $this->getGroupId();
+    foreach ($request->language_ids as $key => $value) {
       $model = new eventcategory();
       if (isset($request->input("category_name")[$key]))
         $model->category_name = $request->input("category_name")[$key];
@@ -65,15 +65,15 @@ class EventcategoryController extends Controller
 
     return redirect("/admin/eventcategory");
   }
-  public function InsertShow()
+  public function create()
   {
-    $lang = language::all();
+    $lang = Language::all();
     return view("admin.eventcategory_add", [
 
       "languages" => $lang,
     ]);
   }
-  public function Update(Request $request)
+  public function update(Request $request, $id)
   {
     $validatedData = $request->validate([
       'category_name' => 'required|max:255',
@@ -84,7 +84,7 @@ class EventcategoryController extends Controller
     $grp_id = $request->input("group");
 
 
-    foreach ($request->input("language_id") as $key => $value) {
+    foreach ($request->language_ids as $key => $value) {
       $model = eventcategory::all()
         ->where("group", "=", $grp_id)
         ->where("language_id", "=", $value)
@@ -99,25 +99,25 @@ class EventcategoryController extends Controller
     }
     return redirect("admin/eventcategory");
   }
-  public function UpdateShow(Request $request)
+  public function edit(Request $request, $id)
   {
-    $model  = eventcategory::all()->where("group", "=", $request->input("id"));
-    $lang = language::all();
+    $model  = eventcategory::where('group', $id)->get();
+    $lang = Language::all();
     return view("admin.eventcategory_edit", [
 
       "languages" => $lang,
       "model" => $model,
-      "grp_id" => $request->input("id"),
+      "grp_id" => $id,
     ]);
   }
-  public function Delete(Request $request)
+  public function destroy(Request $request, $id)
   {
     $validatedData = $request->validate([
 
       'id' => 'required',
 
     ]);
-    $model = eventcategory::all()->where("group", "=", $request->input("id"));
+    $model = eventcategory::where('group', $id)->get();
 
     foreach ($model as $value) {
       $mod = eventcategory::find($value->id)->delete();
@@ -125,7 +125,7 @@ class EventcategoryController extends Controller
 
     return redirect("admin/eventcategory");
   }
-  private function getgroup_id()
+  private function getGroupId()
   {
     return time();
   }

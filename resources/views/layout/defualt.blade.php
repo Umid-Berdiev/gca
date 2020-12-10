@@ -2,10 +2,10 @@
 $last_post = \App\post::whereRaw('id = (select max(`id`) from posts)')->first();
 $last_pages = \App\Pages::whereRaw('id = (select max(`id`) from pages)')->first();
 $last_tenders = \App\tender::whereRaw('id = (select max(`id`) from tenders)')->first();
-$last_docs = \App\doc::whereRaw('id = (select max(`id`) from docs)')->first();
+$last_docs = \App\Document::whereRaw('id = (select max(`id`) from docs)')->first();
 $last_events = \App\event::whereRaw('id = (select max(`id`) from events)')->first();
 $last_photogalleries = \App\photogallery::whereRaw('id = (select max(`id`) from photogalleries)')->first();
-$last_videogalleries = \App\videogallery::whereRaw('id = (select max(`id`) from videogalleries)')->first();
+$last_videogalleries = \App\Video::whereRaw('id = (select max(`id`) from videogalleries)')->first();
 $last_users = \App\User::whereRaw('id = (select max(`id`) from users)')->first();
 $last_sorovnomas = \App\sorovvote::whereRaw('id = (select max(`id`) from sorovnomas)')->first();
 $translate_svg = DB::table("translate")->where("type","=","svg")->orderByDesc("id")->first();
@@ -475,7 +475,7 @@ if($translate_svg)
               @section('lan')
               <a href="{{URL('/login')}}" class="btn auth-link"><span class="glyphicon glyphicon-log-in"></span><span
                   class="hidden-xs hidden-sm"> @lang('blog.enter')</span></a>
-              @foreach(\App\language::all() as $key=>$language)
+              @foreach(\App\Language::all() as $key=>$language)
               @if(App::getLocale() == $language->language_prefix)
               <a href="{{  str_replace("/".App::getLocale(),"/".$language->language_prefix,URL::current()) }}"
                 class="btn lang selected"><span class="hidden-xs">{{$language->language_name}}</span><span

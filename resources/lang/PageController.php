@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use App\Pages;
 use App\PagesCategories;
 use App\PagesCategoriesGroup;
@@ -24,9 +24,9 @@ class PageController extends Controller
    */
   public function index()
   {
-    $tenders = tender::take(3)->where('language_id', '=', $this->getlang())->get();
-    $languages = language::all()->where('status', '=', '1');
-    $languages_min = language::min('id');
+    $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
+    $languages = Language::where('status', 1)->get();
+    $languages_min = Language::min('id');
     $pages = DB::table('pages_groups')
       ->leftJoin('pages', 'pages.page_group_id', '=', 'pages_groups.id')
       ->leftJoin('pages_categories', 'pages_categories.category_group_id', '=', 'pages.page_category_group_id')
@@ -42,9 +42,9 @@ class PageController extends Controller
       ->with('pages', $pages);
   }
 
-  public function getlang()
+  public function getLang()
   {
-    $model = language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();
 
     return $model->id;
   }
@@ -56,8 +56,8 @@ class PageController extends Controller
    */
   public function create()
   {
-    $languages = language::all()->where('status', '=', '1');
-    $languages_min = language::min('id');
+    $languages = Language::where('status', 1)->get();
+    $languages_min = Language::min('id');
     $page_categories = DB::table('pages_categories')
       ->Leftjoin('pages_categories_groups', 'pages_categories.category_group_id', '=', 'pages_categories_groups.id')
       ->select('pages_categories.*')
@@ -146,8 +146,8 @@ class PageController extends Controller
    */
   public function edit($id)
   {
-    $languages_min = language::min('id');
-    $languages = language::all()->where('status', '=', '1');
+    $languages_min = Language::min('id');
+    $languages = Language::where('status', 1)->get();
     $page_categories = DB::table('pages_categories')
       ->Leftjoin('pages_categories_groups', 'pages_categories.category_group_id', '=', 'pages_categories_groups.id')
       ->select('pages_categories.*')

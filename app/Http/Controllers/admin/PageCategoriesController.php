@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use App\PagesCategories;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,8 +19,8 @@ class PageCategoriesController extends Controller
    */
   public function index()
   {
-    $languages = language::all()->where('status', '=', '1');
-    $languages_min = language::min('id');
+    $languages = Language::where('status', 1)->get();
+    $languages_min = Language::min('id');
     $page_categories = DB::table('pages_categories')
       ->Leftjoin('pages_categories_groups', 'pages_categories.category_group_id', '=', 'pages_categories_groups.id')
       ->select('pages_categories.*')
@@ -39,7 +39,7 @@ class PageCategoriesController extends Controller
    */
   public function create()
   {
-    $languages = language::all()->where('status', '=', '1');
+    $languages = Language::where('status', 1)->get();
     return view('admin.page_categories_add')->with('languages', $languages);
   }
 
@@ -94,7 +94,7 @@ class PageCategoriesController extends Controller
   }
   public function edit($id)
   {
-    $languages = language::all()->where('status', '=', '1');
+    $languages = Language::where('status', 1)->get();
     $page_categories = PagesCategories::where('category_group_id', '=', $id)->get();
     return view('admin.pages_categories_edit')->with('languages', $languages)->with('page_categories', $page_categories);
   }

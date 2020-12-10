@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\language;
+use App\Language;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\tender;
@@ -14,34 +14,34 @@ class SearchController extends Controller
 {
   public static function languages()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
     if ($model)
       return $model->id;
     else {
-      $model = language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
+      $model = Language::all()->where('status', '=', '1')->where("language_prefix", 'en')->first();
       return $model->id;
     }
   }
 
-  private function getlang()
+  private function getLang()
   {
-    $model = language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where("language_prefix", \App::getLocale())->first();
 
     return $model->id;
   }
 
   public function index(Request $request)
   {
-    $languages = language::get();
+    $languages = Language::get();
     $events = \DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
-    $tenders = tender::take(3)->where('language_id', '=', $this->getlang())->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
+    $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
     $search = $request->input("search");
-    $lang = $this->getlang();
+    $lang = $this->getLang();
     $posts = \DB::select("select * from `posts` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
 
     $page = \DB::select("select * from `pages` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
@@ -65,15 +65,15 @@ class SearchController extends Controller
   public function allin($lang, $name_tip, $category_id, Request $request)
   {
     $model = "";
-    $languages = language::get();
-    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getlang())->orderBy('id', 'desc')->get();
+    $languages = Language::get();
+    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->get();
     $events = \DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->where('events.title', '<>', '')
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->orderBy('id', 'desc')->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->orderBy('id', 'desc')->get();
     switch ($name_tip) {
       case "doc":
         $model = \DB::table("docs")
@@ -81,22 +81,21 @@ class SearchController extends Controller
           ->leftJoin("languages", "languages.id", "=", "docs.language_id")
           ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
           ->where('docs.title', '<>', '')
-          ->where("docs.language_id", "=", $this->getlang())
+          ->where("docs.language_id", "=", $this->getLang())
           ->where("docs.doc_category_id", "=", $category_id)
-          ->where("doccategories.language_id", "=", $this->getlang())
+          ->where("doccategories.language_id", "=", $this->getLang())
           ->orderBy('id', 'desc')
           ->paginate(10);
 
         $category = \DB::table("doccategories")
           ->select(['doccategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "doccategories.language_id")
-          ->where("doccategories.language_id", "=", $this->getlang())->get();
+          ->where("doccategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("doccategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
-
 
         return view('gca.docs', [
           'newscat' => $category,
@@ -117,9 +116,9 @@ class SearchController extends Controller
             ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
             ->where('events.title', '<>', '')
             ->whereDate("datestart", $request->date)
-            ->where("events.language_id", "=", $this->getlang())
+            ->where("events.language_id", "=", $this->getLang())
             ->where("events.event_category_id", "=", $category_id)
-            ->where("eventcategories.language_id", "=", $this->getlang())
+            ->where("eventcategories.language_id", "=", $this->getLang())
             ->orderBy('id', 'desc')
             ->paginate(10);
         } else {
@@ -128,22 +127,21 @@ class SearchController extends Controller
             ->leftJoin("languages", "languages.id", "=", "events.language_id")
             ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
             ->where('events.title', '<>', '')
-            ->where("events.language_id", "=", $this->getlang())
+            ->where("events.language_id", "=", $this->getLang())
             ->where("events.event_category_id", "=", $category_id)
-            ->where("eventcategories.language_id", "=", $this->getlang())
+            ->where("eventcategories.language_id", "=", $this->getLang())
             ->orderBy('id', 'desc')
             ->paginate(10);
         }
 
-
         $category = \DB::table("eventcategories")
           ->select(['eventcategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
-          ->where("eventcategories.language_id", "=", $this->getlang())->get();
+          ->where("eventcategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("eventcategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         return view('gca.events', [
@@ -162,21 +160,20 @@ class SearchController extends Controller
           ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
           ->where('tenders.deadline', '>=', Carbon::now())
           ->where('tenders.title', '<>', '')
-          ->where("tenders.language_id", "=", $this->getlang())
+          ->where("tenders.language_id", "=", $this->getLang())
           ->where("tenders.tender_category_id", "=", $category_id)
-          ->where("tendercategories.language_id", "=", $this->getlang())
+          ->where("tendercategories.language_id", "=", $this->getLang())
           ->orderBy('id', 'desc')
           ->paginate(10);
-
 
         $category = \DB::table("tendercategories")
           ->select(['tendercategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
-          ->where("tendercategories.language_id", "=", $this->getlang())->get();
+          ->where("tendercategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("tendercategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         return view('tender', [
@@ -190,22 +187,21 @@ class SearchController extends Controller
         break;
       case "video":
 
-
         $category = \DB::table("videogallerycategories")
           ->select(['videogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
-          ->where("videogallerycategories.language_id", "=", $this->getlang())->get();
+          ->where("videogallerycategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("videogallerycategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         $model = \DB::table("videogallerycategories")
           ->select(['videogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
           ->where("videogallerycategories.group", "=", $category_id)
-          ->where("videogallerycategories.language_id", "=", $this->getlang())
+          ->where("videogallerycategories.language_id", "=", $this->getLang())
           ->orderBy('id', 'desc')
           ->paginate(10);
 
@@ -217,26 +213,24 @@ class SearchController extends Controller
           'curcat' => $curcat,
         ]);
 
-
         break;
       case "photo":
         $model = \DB::table("photogallerycategories")
           ->select(['photogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
           ->where('photogallerycategories.group', '=', $category_id)
-          ->where("photogallerycategories.language_id", "=", $this->getlang())
+          ->where("photogallerycategories.language_id", "=", $this->getLang())
           ->orderBy('id', 'desc')
           ->paginate(10);
-
 
         $category = \DB::table("photogallerycategories")
           ->select(['photogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
-          ->where("photogallerycategories.language_id", "=", $this->getlang())->get();
+          ->where("photogallerycategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("photogallerycategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         return view('gca.media', [
@@ -252,36 +246,35 @@ class SearchController extends Controller
   public function allinin($lang, $name_tip, $category_id, $id)
   {
     $model = "";
-    $languages = language::get();
-    $tenders = tender::take(3)->where('language_id', '=', $this->getlang())->get();
+    $languages = Language::get();
+    $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
     $events = \DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
     switch ($name_tip) {
       case "doc":
         $model = \DB::table("docs")
           ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "docs.language_id")
           ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
-          ->where("docs.language_id", "=", $this->getlang())
+          ->where("docs.language_id", "=", $this->getLang())
           ->where("docs.doc_category_id", "=", $category_id)
           ->where("docs.group", "=", $id)
-          ->where("doccategories.language_id", "=", $this->getlang())
+          ->where("doccategories.language_id", "=", $this->getLang())
           ->first();
 
         $category = \DB::table("doccategories")
           ->select(['doccategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "doccategories.language_id")
-          ->where("doccategories.language_id", "=", $this->getlang())->get();
+          ->where("doccategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("doccategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
-
 
         return view('gca.doc', [
           'newscat' => $category,
@@ -289,7 +282,6 @@ class SearchController extends Controller
           'events' => $events,
           'tenders' => $tenders,
           'curcat' => $curcat,
-
         ]);
         break;
       case "event":
@@ -297,26 +289,26 @@ class SearchController extends Controller
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-          ->where("events.language_id", "=", $this->getlang())
-          ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+          ->where("events.language_id", "=", $this->getLang())
+          ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
         $model = \DB::table("events")
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-          ->where("events.language_id", "=", $this->getlang())
+          ->where("events.language_id", "=", $this->getLang())
           ->where("events.event_category_id", "=", $category_id)
           ->where("events.group", "=", $id)
-          ->where("eventcategories.language_id", "=", $this->getlang())
+          ->where("eventcategories.language_id", "=", $this->getLang())
           ->first();
 
         $category = \DB::table("eventcategories")
           ->select(['eventcategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
-          ->where("eventcategories.language_id", "=", $this->getlang())->get();
+          ->where("eventcategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("eventcategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         return view('gca.eventin', [
@@ -333,27 +325,27 @@ class SearchController extends Controller
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-          ->where("events.language_id", "=", $this->getlang())
-          ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+          ->where("events.language_id", "=", $this->getLang())
+          ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
         $model = \DB::table("tenders")
           ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
           ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
-          ->where("tenders.language_id", "=", $this->getlang())
+          ->where("tenders.language_id", "=", $this->getLang())
           ->where("tenders.tender_category_id", "=", $category_id)
           ->where("tenders.group", "=", $id)
-          ->where("tendercategories.language_id", "=", $this->getlang())
+          ->where("tendercategories.language_id", "=", $this->getLang())
           ->first();
 
 
         $category = \DB::table("tendercategories")
           ->select(['tendercategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
-          ->where("tendercategories.language_id", "=", $this->getlang())->get();
+          ->where("tendercategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("tendercategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         return view('tenderin', [
@@ -370,24 +362,25 @@ class SearchController extends Controller
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-          ->where("events.language_id", "=", $this->getlang())
-          ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+          ->where("events.language_id", "=", $this->getLang())
+          ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
+
         $model = \DB::table("videogalleries")
           ->select(['videogalleries.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
-          ->where("videogalleries.language_id", "=", $this->getlang())
+          ->where("videogalleries.language_id", "=", $this->getLang())
           ->where("videogalleries.category_id", "=", $category_id)
+          ->orderBy('created_at', 'desc')
           ->paginate(10);
-
 
         $category = \DB::table("videogallerycategories")
           ->select(['videogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
-          ->where("videogallerycategories.language_id", "=", $this->getlang())->get();
+          ->where("videogallerycategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("videogallerycategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         return view('gca.videoin', [
@@ -404,12 +397,12 @@ class SearchController extends Controller
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-          ->where("events.language_id", "=", $this->getlang())
-          ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+          ->where("events.language_id", "=", $this->getLang())
+          ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
         $model = \DB::table("photogalleries")
           ->select(['photogalleries.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogalleries.language_id")
-          ->where("photogalleries.language_id", "=", $this->getlang())
+          ->where("photogalleries.language_id", "=", $this->getLang())
           ->where("photogalleries.category_id", "=", $category_id)
           ->paginate(10);
 
@@ -417,11 +410,11 @@ class SearchController extends Controller
         $category = \DB::table("photogallerycategories")
           ->select(['photogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
-          ->where("photogallerycategories.language_id", "=", $this->getlang())->get();
+          ->where("photogallerycategories.language_id", "=", $this->getLang())->get();
 
         $curcat = \DB::table("photogallerycategories")
           ->where('group', '=', $category_id)
-          ->where("language_id", "=", $this->getlang())
+          ->where("language_id", "=", $this->getLang())
           ->first();
 
         return view('gca.mediain', [
@@ -537,14 +530,14 @@ class SearchController extends Controller
   public function TenderFilter(Request $request)
   {
 
-    $languages = language::get();
-    $tenders = tender::take(3)->where('language_id', '=', $this->getlang())->get();
+    $languages = Language::get();
+    $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
     $events = \DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
     if ($request->has('start') && $request->has('finish') && $request->input('status') == 0) {
       $model = \DB::table("tenders")
         ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
@@ -553,9 +546,9 @@ class SearchController extends Controller
         ->whereBetween('tenders.created_at', array(Input::get('start'), Input::get('finish')))
         ->where('tenders.deadline', '>=', Carbon::now())
         ->where('tenders.title', '<>', '')
-        ->where("tenders.language_id", "=", $this->getlang())
+        ->where("tenders.language_id", "=", $this->getLang())
         ->where("tenders.tender_category_id", "=", Input::get('cutcat'))
-        ->where("tendercategories.language_id", "=", $this->getlang())
+        ->where("tendercategories.language_id", "=", $this->getLang())
         ->orderBy('id', 'desc')
         ->paginate(10);
     } elseif ($request->has('start') && $request->has('finish') && $request->input('status') == 1) {
@@ -566,9 +559,9 @@ class SearchController extends Controller
         ->whereBetween('tenders.created_at', array(Input::get('start'), Input::get('finish')))
         ->where('tenders.deadline', '<', Carbon::now())
         ->where('tenders.title', '<>', '')
-        ->where("tenders.language_id", "=", $this->getlang())
+        ->where("tenders.language_id", "=", $this->getLang())
         ->where("tenders.tender_category_id", "=", Input::get('cutcat'))
-        ->where("tendercategories.language_id", "=", $this->getlang())
+        ->where("tendercategories.language_id", "=", $this->getLang())
         ->orderBy('id', 'desc')
         ->paginate(10);
     }
@@ -579,9 +572,9 @@ class SearchController extends Controller
         ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
         ->where('tenders.deadline', '>=', Carbon::now())
         ->where('tenders.title', '<>', '')
-        ->where("tenders.language_id", "=", $this->getlang())
+        ->where("tenders.language_id", "=", $this->getLang())
         ->where("tenders.tender_category_id", "=", Input::get('cutcat'))
-        ->where("tendercategories.language_id", "=", $this->getlang())
+        ->where("tendercategories.language_id", "=", $this->getLang())
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
@@ -591,9 +584,9 @@ class SearchController extends Controller
         ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
         ->where('tenders.deadline', '<', Carbon::now())
         ->where('tenders.title', '<>', '')
-        ->where("tenders.language_id", "=", $this->getlang())
+        ->where("tenders.language_id", "=", $this->getLang())
         ->where("tenders.tender_category_id", "=", Input::get('cutcat'))
-        ->where("tendercategories.language_id", "=", $this->getlang())
+        ->where("tendercategories.language_id", "=", $this->getLang())
         ->orderBy('id', 'desc')
         ->paginate(10);
     }
@@ -602,11 +595,11 @@ class SearchController extends Controller
     $category = \DB::table("tendercategories")
       ->select(['tendercategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
-      ->where("tendercategories.language_id", "=", $this->getlang())->get();
+      ->where("tendercategories.language_id", "=", $this->getLang())->get();
 
     $curcat = \DB::table("tendercategories")
       ->where('group', '=', Input::get('cutcat'))
-      ->where("language_id", "=", $this->getlang())
+      ->where("language_id", "=", $this->getLang())
       ->first();
 
 
@@ -626,7 +619,7 @@ class SearchController extends Controller
     $savol = \DB::table("sorovnomas")
       ->select(['sorovnomas.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "sorovnomas.language_id")
-      ->where("sorovnomas.language_id", "=", $this->getlang())
+      ->where("sorovnomas.language_id", "=", $this->getLang())
       ->first();
 
     $type = \DB::table("sorovvotes")->where("ip", "=", \Session::getId())->first();
@@ -663,7 +656,7 @@ class SearchController extends Controller
       $tb = \DB::table("sorovnoma_atters")
         ->select(['sorovnoma_atters.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "sorovnoma_atters.language_id")
-        ->where("sorovnoma_atters.language_id", "=", $this->getlang())
+        ->where("sorovnoma_atters.language_id", "=", $this->getLang())
         ->where("sorovnoma_atters.savol_id", "=", $savol->group)->get();
 
       return [
@@ -678,14 +671,14 @@ class SearchController extends Controller
   public function EventFilter(Request $request)
   {
 
-    $languages = language::get();
-    $tenders = tender::take(3)->where('language_id', '=', $this->getlang())->get();
+    $languages = Language::get();
+    $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
     $events = \DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)->get();
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
 
 
     $model = \DB::table("events")
@@ -694,9 +687,9 @@ class SearchController extends Controller
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->whereBetween('events.created_at', array(Input::get('start'), Input::get('finish')))
       ->where('events.title', '<>', '')
-      ->where("events.language_id", "=", $this->getlang())
+      ->where("events.language_id", "=", $this->getLang())
       ->where("events.event_category_id", "=", Input::get('cutcat'))
-      ->where("eventcategories.language_id", "=", $this->getlang())
+      ->where("eventcategories.language_id", "=", $this->getLang())
       ->orderBy('id', 'desc')
       ->paginate(10);
 
@@ -704,11 +697,11 @@ class SearchController extends Controller
     $category = \DB::table("eventcategories")
       ->select(['eventcategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
-      ->where("eventcategories.language_id", "=", $this->getlang())->get();
+      ->where("eventcategories.language_id", "=", $this->getLang())->get();
 
     $curcat = \DB::table("eventcategories")
       ->where('group', '=', Input::get('cutcat'))
-      ->where("language_id", "=", $this->getlang())
+      ->where("language_id", "=", $this->getLang())
       ->first();
 
     return view('event', [

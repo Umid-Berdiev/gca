@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CvForm;
 use Illuminate\Http\Request;
-use App\language;
+use App\Language;
 use App\tender;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
@@ -24,12 +24,12 @@ class CvController extends Controller
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->where('events.title', '<>', '')
-      ->where("events.language_id", "=", $this->getlang())
-      ->where("eventcategories.language_id", "=", $this->getlang())->take(5)
+      ->where("events.language_id", "=", $this->getLang())
+      ->where("eventcategories.language_id", "=", $this->getLang())->take(5)
       ->orderBy('id', 'desc')
       ->get();
-    $languages = language::where('status', 1)->get();
-    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getlang())->get();
+    $languages = Language::where('status', 1)->get();
+    $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->get();
     return view('cv_form')
       ->with('languages', $languages)
       ->with('tenders', $tenders)
@@ -124,9 +124,9 @@ class CvController extends Controller
     //
   }
 
-  public function getlang()
+  public function getLang()
   {
-    $model = language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();
 
     return $model->id;
   }

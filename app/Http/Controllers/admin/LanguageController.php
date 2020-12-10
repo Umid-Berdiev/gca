@@ -2,92 +2,72 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\language;
+use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use DB;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
 
 class LanguageController extends Controller
 {
-    public function index() {
-        $model = DB::table("languages")->paginate(10);
-     return view('admin.lang',[
-            'table'=>$model
+  public function index()
+  {
+    $langs = Language::paginate(10);
+    return view('admin.language.index', compact('langs'));
+  }
 
-        ]);
-    }
-    public function Insert(Request $request) {
-        $validatedData = $request->validate([
-            'language_name' => 'required|max:255',
-            'language_prefix' => 'required|max:255',
+  public function create(Request $request)
+  {
+    return view('admin.language.create');
+  }
 
-        ]);
+  public function store(Request $request)
+  {
+    $request->validate([
+      'language_name' => 'required|min:3|max:20',
+      'language_prefix' => 'required|min:2|max:3',
+    ]);
 
-            $model = new language();
-            $model->language_name = $request->post("language_name");
-            $model->language_prefix = $request->post("language_prefix");
-            $model->status = 1;
-            $model->save();
+    Language::create([
+      'language_name' => $request->language_name,
+      'language_prefix' => $request->language_prefix,
+      'status' => 1
+    ]);
 
-            return redirect("admin/language");
+    return redirect(route('languages.index'))->with('success', 'Created!');
+  }
 
-    }
-    public function Update(Request $request) {
+  public function edit(Request $request, $id)
+  {
+    $model = Language::findOrFail($id);
+    return view("admin.language.edit", compact('model'));
+  }
 
-        $validatedData = $request->validate([
-            'language_name' => 'required|max:255',
-            'id' => 'required',
-            'language_prefix' => 'required|max:255',
+  public function update(Request $request, $id)
+  {
+    // Validator::make($request->all(), [
+    //   'language_name' => 'required|min:3|max:20',
+    //   'language_prefix' => 'required|min:2|max:3',
+    // ]);
 
-        ]);
+    $request->validate([
+      'language_name' => 'required|min:3|max:20',
+      'language_prefix' => 'required|min:2|max:3',
+    ]);
 
-        $model = language::all()->where("id","=",$request->post("id"))->first();
-        $model->language_name = $request->post("language_name");
-        $model->language_prefix = $request->post("language_prefix");
+    Language::whereId($id)->update([
+      'language_name' => $request->language_name,
+      'language_prefix' => $request->language_prefix
+    ]);
 
-        $model->update();
+    return redirect(route('languages.index'))->with('success', 'Updated!');
+  }
 
-        return redirect("admin/language");
+  public function destroy(Request $request, $id)
+  {
+    $model = Language::whereId($id)->first();
+    $model->status = 0;
+    $model->delete();
 
-    }
-    public function UpdateShow(Request $request) {
-
-
-        $model = language::all()->where("id","=",$request->get("id"))->first();
-
-
-        return view("admin.langedit",[
-            'model'=>$model
-        ]);
-
-
-
-    }
-    public function Delete(Request $request) {
-
-
-        $validatedData = $request->validate([
-
-            'id' => 'required',
-
-
-        ]);
-
-
-	    $model = language::all()->where("id","=",$request->post("id"))->first();
-	    $model->status = 0;
-	    $model->delete();
-
-
-
-        return redirect("admin/language");
-
-    }
-    public function Show() {
-
-
-        return view('admin.langinser');
-    }
-
+    return redirect(route('languages.index'))->with('success', 'Deleted!');
+  }
 }
