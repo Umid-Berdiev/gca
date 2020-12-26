@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Document;
-use App\event;
+use App\Event;
 use App\Language;
 use App\Mail\DemoMail;
 use App\Raxbariyat;
 use App\Statistica;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Mail;
-use App\post;
+use App\Post;
 use App\tender;
 use DateTime;
 use Illuminate\Http\Request;
@@ -99,16 +99,16 @@ class FrontController extends Controller
     $media_gallery = $photos->merge($videos)->sortByDesc('created_at');
     // dd($media_gallery);
 
-    if (count($docs = doc::where('doc_category_id', 1603263016)
+    if (count($docs = Document::where('doc_category_id', 1603263016)
       ->where('language_id', $this->getLang())
       ->orderBy('id', 'desc')
       ->get()) < 4) {
-      $docs = doc::where('doc_category_id', 1603263016)
+      $docs = Document::where('doc_category_id', 1603263016)
         ->where('language_id', $this->getLang())
         ->orderBy('id', 'desc')
         ->get();
     } else {
-      $docs = doc::where('doc_category_id', 1603263016)
+      $docs = Document::where('doc_category_id', 1603263016)
         ->where('language_id', $this->getLang())
         ->orderBy('id', 'desc')
         ->get()->take(3);

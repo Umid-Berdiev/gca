@@ -159,7 +159,7 @@ class TenderController extends Controller
       $model->viewcount = 0;
       $model->language_id = $value;
       if ($request->hasFile("cover")) {
-        $model->photo_url = Storage::putFile('public', $request->file('cover'));
+        $model->photo_url = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
 

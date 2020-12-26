@@ -5,13 +5,13 @@
 @endif
 
 @if (session('warning'))
-<div class="alert small alert-warning text-center mb-0 py-2">
+<div class="alert alert-warning small text-center mb-0 py-2">
   {{ session('warning') }}
 </div>
 @endif
-
+{{-- @dd($errors->all()) --}}
 @if ($errors->any())
-<div class="alert small alert-danger">
+<div class="alert alert-danger small">
   <p>Ошибки:</p>
   @foreach ($errors->all() as $error)
   <p>{{ $error }}</p>

@@ -107,7 +107,7 @@ class LinksController extends Controller
       $model->link = Input::get('link');
 
       if ($request->hasFile('cover')) {
-        $model->photo_url =  Storage::putFile('public', $request->file('cover'));
+        $model->photo_url =  Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
 
@@ -231,7 +231,7 @@ class LinksController extends Controller
       $model->group = $grp_id;
       $model->language_id = $value;
       if ($request->hasFile('cover')) {
-        $model->photo_url =  Storage::putFile('public', $request->file('cover'));
+        $model->photo_url =  Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
 

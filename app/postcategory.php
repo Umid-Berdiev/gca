@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class postcategory extends Model
+class PostCategory extends Model
 {
   protected $table = 'postcategories';
   protected $guarded = [];

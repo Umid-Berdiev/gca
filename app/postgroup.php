@@ -4,7 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class postgroup extends Model
+class PostGroup extends Model
 {
-
+  protected $table = 'postgroups';
+  protected $guarded = [];
 }

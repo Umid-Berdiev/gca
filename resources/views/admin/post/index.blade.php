@@ -2,54 +2,77 @@
 
 @section("content")
 
-    <div class="col-md-12" style="background-color: white;padding: 25px;">
-        <div class="col-md-12">
-            <div class="form-group">
-                <p><button type="button" class="btn ink-reaction btn-floating-action btn-lg btn-primary" onclick="window.location.href='{{ URL("/admin/post/create") }}'"><i class="fa fa-plus"></i></button></p>
-                <form action="{{URL('admin/post')}}" method="get">
-                    <div class="input-group">
-                        <div class="input-group-content">
-                            <input type="text" class="form-control" name="search" placeholder="SEARCH" id="groupbutton9">
-                            <label for="groupbutton9"></label>
-                        </div>
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit">Go!</button>
-                        </div>
-
-                    </div>
-                </form>
-            </div>
-            <table class="table table-condensed no-margin">
-                <thead>
-                <tr>
-                    <td width="80px">№</td>
-                    <td width="80px">title</td>
-                    <td width="80px">decription</td>
-                    <td width="80px">language_name</td>
-
-
-                    <td width="80px"></td>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($table as $key => $page)
-                    <tr>
-                        <td><p><strong>{{$key+1}}</strong></p> <img class="img-responsive" width="100" src="{{ URL(App::getLocale().'/downloads?type=post&id='.$page->group) }}"></td>
-
-                        <td>{{$page->title}}</td>
-                        <td>{{$page->decription}}</td>
-                        <td>{{$page->language_name}}</td>
-                        <td>
-                            <span><a href="{{URL('/admin/post/edit?id='.$page->group)}}"><i class="fa fa-edit"></i></a></span>
-                            <span><a onclick="return confirm('Are you sure you want to delete this thing into the database?')" href="{{URL('/admin/post/delete?id='.$page->group)}}"><i class="fa fa-remove"></i></a></span>
-
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            {{ $table->links() }}
-        </div>
+<div class="container">
+  <div class="row justify-content-right">
+    <div class="col-auto">
+      @include('partials.alerts')
     </div>
+  </div>
+</div>
+
+<div class="col-md-12" style="background-color: white;padding: 25px;">
+  <div class="col-md-12">
+    <div class="form-group">
+      <a class="btn ink-reaction btn-floating-action btn-lg btn-primary" href="{{ route('posts.create') }}">
+        <i class="fa fa-plus"></i>
+      </a>
+      <br />
+      <br />
+      <form action="{{ route('posts.index') }}" method="get">
+        <div class="input-group">
+          <div class="input-group-content">
+            <input type="text" class="form-control" name="search" placeholder="SEARCH" id="groupbutton9">
+            <label for="groupbutton9"></label>
+          </div>
+          <div class="input-group-btn">
+            <button class="btn btn-default" type="submit">Go!</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <table class="table table-condensed no-margin">
+      <thead>
+        <tr>
+          <td>№</td>
+          <td>COVER</td>
+          <td>TITLE</td>
+          <td>DESCRIPTION</td>
+          <td>ACTIONS</td>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($table as $key => $page)
+        <tr>
+          <td>{{ $key + 1 }}</td>
+
+          {{-- @dd(Storage::disk('local')->exists('public/ILXKvgviDRS8ePvQUu1O4NEU5WdF7eftruLg3ctC.jpeg')) --}}
+          <td>
+            @if ($page->cover != "null")
+            <img alt="cover" class="img-responsive" width="100" src="{{ asset('storage/' . $page->cover) }}">
+            @endif
+          </td>
+          <td width="40%">{{ $page->title }}</td>
+          <td width="40%">{{ $page->decription }}</td>
+          <td>
+            <form style="display: inline;" action="{{ route('posts.edit', $page->group) }}" method="get">
+              <button>
+                <i class="fa fa-edit"></i>
+              </button>
+            </form>
+            <form style="display: inline;" action="{{ route('posts.destroy', $page->group) }}" method="POST">
+              @csrf
+              @method('delete')
+              <button class="" type="submit" onclick="return confirm('Вы уверены?');">
+                <i class="fa fa-remove"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+    {{ $table->links() }}
+  </div>
+</div>
 
 @endsection

@@ -63,7 +63,7 @@ class PhotoCategoryController extends Controller
       $model->Description = $request->descriptions[$key] ?? null;
       $model->language_id = $value;
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'));
+        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
       $model->group = $grp_id;
@@ -107,7 +107,7 @@ class PhotoCategoryController extends Controller
       $model->Description = $request->descriptions[$key] ?? null;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'));
+        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
 

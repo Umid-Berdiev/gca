@@ -5,20 +5,14 @@ namespace App\Http\Controllers\admin;
 use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\eventcategory;
+use App\EventCategory;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
+use Illuminate\Validation\Validator;
 
-
-class EventcategoryController extends Controller
+class EventCategoryController extends Controller
 {
-  private function getLang()
-  {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
-
-    return $model->id;
-  }
   public function index(Request $request)
   {
-
     if ($request->has("search")) {
       $model = \DB::table("eventcategories")
         ->select(['eventcategories.*', 'languages.language_name'])
@@ -36,97 +30,101 @@ class EventcategoryController extends Controller
         ->paginate(10);
     }
 
-
     $lang = Language::where('status', 1)->get();
-    return view("admin.eventcategory", [
+
+    return view("admin.event_category.index", [
       "table" => $model,
       "language" => $lang,
     ]);
   }
-  public function store(Request $request)
-  {
-    $validatedData = $request->validate([
-      'category_name' => 'required|max:255',
-      'language_id' => 'required',
 
-    ]);
-    $grp_id = $this->getGroupId();
-    foreach ($request->language_ids as $key => $value) {
-      $model = new eventcategory();
-      if (isset($request->input("category_name")[$key]))
-        $model->category_name = $request->input("category_name")[$key];
-      else
-        $model->category_name = "";
-      $model->language_id = $value;
-      $model->group = $grp_id;
-
-      $model->save();
-    }
-
-    return redirect("/admin/eventcategory");
-  }
   public function create()
   {
-    $lang = Language::all();
-    return view("admin.eventcategory_add", [
-
-      "languages" => $lang,
-    ]);
+    $languages = Language::all();
+    return view("admin.event_category.create", compact('languages'));
   }
-  public function update(Request $request, $id)
+
+  public function store(Request $request)
   {
-    $validatedData = $request->validate([
-      'category_name' => 'required|max:255',
-      'language_id' => 'required',
-      'group' => 'required',
+    // dd($request->all());
+    $validator = FacadesValidator::make($request->all(), [
+      'category_names.*' => 'required|max:40|min:3|unique:eventcategories,category_name',
+      'language_ids.*' => 'required|exists:languages,id',
+    ], $this->validationMessages());
 
-    ]);
-    $grp_id = $request->input("group");
+    if ($validator->fails()) {
+      return redirect(route('event-categories.create'))
+        ->withErrors($validator)
+        ->withInput();
+    }
 
+    $grp_id = $this->getGroupId();
 
     foreach ($request->language_ids as $key => $value) {
-      $model = eventcategory::all()
-        ->where("group", "=", $grp_id)
-        ->where("language_id", "=", $value)
-        ->first();
-      if (isset($request->input("category_name")[$key]))
-        $model->category_name = $request->input("category_name")[$key];
-      else
-        $model->category_name = "";
-
-
-      $model->update();
+      EventCategory::create([
+        'category_name' => $request->category_names[$key],
+        'language_id' => $value,
+        'group' => $grp_id
+      ]);
     }
-    return redirect("admin/eventcategory");
+
+    return redirect(route('event-categories.index'))->with('success', 'Created!');
   }
+
   public function edit(Request $request, $id)
   {
-    $model  = eventcategory::where('group', $id)->get();
+    $model  = EventCategory::where('group', $id)->get();
     $lang = Language::all();
-    return view("admin.eventcategory_edit", [
 
+    return view("admin.event_category.edit", [
       "languages" => $lang,
       "model" => $model,
       "grp_id" => $id,
     ]);
   }
-  public function destroy(Request $request, $id)
+
+  public function update(Request $request, $id)
   {
-    $validatedData = $request->validate([
-
-      'id' => 'required',
-
+    $request->validate([
+      'category_names.*' => 'required|max:255',
     ]);
-    $model = eventcategory::where('group', $id)->get();
 
-    foreach ($model as $value) {
-      $mod = eventcategory::find($value->id)->delete();
+    foreach ($request->language_ids as $key => $value) {
+      EventCategory::where("group", $id)
+        ->where("language_id", $value)
+        ->update(['category_name' => $request->category_names[$key]]);
     }
 
-    return redirect("admin/eventcategory");
+    return redirect(route('event-categories.index'))->with('success', 'Updated!');
   }
+
+  public function destroy(Request $request, $id)
+  {
+    EventCategory::where('group', $id)->delete();
+    return redirect(route('event-categories.index'))->with('success', 'Deleted!');
+  }
+
   private function getGroupId()
   {
     return time();
+  }
+
+  private function getLang()
+  {
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+
+    return $model->id;
+  }
+
+  private function validationMessages()
+  {
+    return [
+      'required' => 'Обязательное :attribute поле',
+      'unique' => ':input уже есть в базе',
+      'exists' => ':input нет в базе',
+      'min' => ':input минимум 3 буквы',
+      'max' => ':input максимум 40 буквы',
+
+    ];
   }
 }

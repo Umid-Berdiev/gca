@@ -29,11 +29,9 @@
       @method('put')
       <input type="hidden" name="group" value="{{ $grp_id }}">
       <div class="card-body tab-content">
-        @foreach($languages as $key =>$language)
+        @foreach($languages as $key => $language)
         @if($key == 0)
-
         @foreach($model as $val)
-
         @if($val->language_id ==$language->id)
         <div class="tab-pane active" id="{{$language->id}}">
           <div class="form" role="form">
@@ -68,7 +66,7 @@
         @if($val->language_id == $language->id)
         <div class="tab-pane" id="{{ $language->id }}">
           <div class="form" role="form">
-            <input type="hidden" name="language_ids[]" value="{{$language->id}}">
+            <input type="hidden" name="language_ids[]" value="{{ $language->id }}">
             <div class="form-group floating-label">
               <input type="text" name="names[]" class="form-control" value="{{ $val->name }}" id="names">
               <label for="names">name</label>
@@ -93,5 +91,4 @@
   </div>
 </div>
 <!--end .table-responsive -->
-
 @endsection

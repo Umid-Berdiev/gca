@@ -51,7 +51,6 @@ class PhotoController extends Controller
     $lang = Language::where('status', 1)->get();
     $doccat = PhotoCategory::where("language_id", $this->getLang())->get();
     return view("admin.photo.create", [
-
       "languages" => $lang,
       "category" => $doccat,
     ]);

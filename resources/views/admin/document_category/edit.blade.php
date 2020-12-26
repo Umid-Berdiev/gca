@@ -20,7 +20,6 @@
         @else
         <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endif
-
         @endforeach
       </ul>
     </div>
@@ -28,7 +27,7 @@
       action="{{ route('document-categories.update', $grp_id) }}">
       @csrf
       @method('put')
-      <input type="hidden" name="group" value="{{ $grp_id }}">
+
       <div class="card-body tab-content">
         @foreach($languages as $key =>$language)
         @if($key == 0)
@@ -42,15 +41,12 @@
                 id="regular2">
               <label for="regular2">Category name</label>
             </div>
-
-
           </div>
         </div>
         @endif
         @endforeach
         @else
         @foreach($model as $val)
-
         @if($val->language_id ==$language->id)
         <div class="tab-pane" id="{{$language->id}}">
           <div class="form" role="form">

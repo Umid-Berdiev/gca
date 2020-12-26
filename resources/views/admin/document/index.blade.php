@@ -18,7 +18,7 @@
       </a>
       <br />
       <br />
-      <form action="{{URL('admin/doc')}}" method="get">
+      <form action="{{ route('documents.index') }}" method="get">
         <div class="input-group">
           <div class="input-group-content">
             <input type="text" class="form-control" name="search" placeholder="SEARCH" id="groupbutton9">
@@ -34,10 +34,10 @@
       <thead>
         <tr>
           <td>№</td>
-          <td>title</td>
-          <td>register No</td>
-          <td>category</td>
-          <td>action</td>
+          <td>TITLE</td>
+          <td>REGISTER No</td>
+          <td>CATEGORY</td>
+          <td>ACTIONS</td>
         </tr>
       </thead>
       <tbody>

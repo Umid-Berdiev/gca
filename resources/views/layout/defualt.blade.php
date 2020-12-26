@@ -1,9 +1,9 @@
 <?php
-$last_post = \App\post::whereRaw('id = (select max(`id`) from posts)')->first();
+$last_post = \App\Post::whereRaw('id = (select max(`id`) from posts)')->first();
 $last_pages = \App\Pages::whereRaw('id = (select max(`id`) from pages)')->first();
 $last_tenders = \App\tender::whereRaw('id = (select max(`id`) from tenders)')->first();
 $last_docs = \App\Document::whereRaw('id = (select max(`id`) from docs)')->first();
-$last_events = \App\event::whereRaw('id = (select max(`id`) from events)')->first();
+$last_events = \App\Event::whereRaw('id = (select max(`id`) from events)')->first();
 $last_photogalleries = \App\photogallery::whereRaw('id = (select max(`id`) from photogalleries)')->first();
 $last_videogalleries = \App\Video::whereRaw('id = (select max(`id`) from videogalleries)')->first();
 $last_users = \App\User::whereRaw('id = (select max(`id`) from users)')->first();

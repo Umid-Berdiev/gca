@@ -5,24 +5,18 @@ namespace App\Http\Controllers\admin;
 use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\eventcategory;
-use App\event;
+use App\EventCategory;
+use App\Event;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
-  private function getLang()
-  {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
-
-    return $model->id;
-  }
   public function index(Request $request)
   {
 
     if ($request->has("search")) {
-      $model = \DB::table("events")
+      $table = \DB::table("events")
         ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "events.language_id")
         ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -34,7 +28,7 @@ class EventController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $model = \DB::table("events")
+      $table = \DB::table("events")
         ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "events.language_id")
         ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -44,156 +38,133 @@ class EventController extends Controller
         ->paginate(10);
     }
 
+    $languages = Language::where('status', 1)->get();
+    $categories = EventCategory::where("language_id", $this->getLang())->get();
 
-    $lang = Language::where('status', 1)->get();
-    $doccat = eventcategory::where("language_id", $this->getLang())->get();
-    return view("admin.event", [
-      "table" => $model,
-      "language" => $lang,
-      "category" => $doccat,
-    ]);
+    return view("admin.event.index", compact(
+      "table",
+      "languages",
+      "categories"
+    ));
   }
-  public function store(Request $request)
-  {
-    $validatedData = $request->validate([
-      'language_id' => 'required',
-      'event_category_id' => 'required',
-      'dateend' => 'required',
-      'datestart' => 'required',
 
-
-    ]);
-    $grp_id = $this->getGroupId();
-    foreach ($request->language_ids as $key => $value) {
-      $model = new event();
-      if (isset($request->input("title")[$key]))
-        $model->title = $request->input("title")[$key];
-      else
-        $model->title = "";
-      if (isset($request->input("description")[$key]))
-        $model->description = $request->input("description")[$key];
-      else
-        $model->description = "";
-      if (isset($request->input("content")[$key]))
-        $model->content = $request->input("content")[$key];
-      else
-        $model->content = "";
-      if ($request->input("organization")[$key])
-        $model->organization = $request->input("organization")[$key];
-      else
-        $model->organization = "";
-
-      $model->dateend = $request->input("dateend");
-      $model->datestart = $request->input("datestart");
-      $model->event_category_id = $request->input("event_category_id");
-      $model->group = $grp_id;
-      $model->language_id = $value;
-      if ($request->hasFile("cover")) {
-        $model->cover = Storage::disk('public')->put('photos/1', $request->file('cover'), 'public');
-      } else {
-        $model->cover = "";
-      }
-
-
-      $model->save();
-    }
-
-    return redirect("/admin/event");
-  }
   public function create()
   {
-    $lang = Language::where('status', 1)->get();
-    $doccat = eventcategory::where("language_id", $this->getLang())->get();
-    return view("admin.event_add", [
+    $languages = Language::where('status', 1)->get();
+    $categories = EventCategory::where("language_id", $this->getLang())->get();
 
-      "languages" => $lang,
-      "category" => $doccat,
-    ]);
+    return view("admin.event.create", compact("languages", "categories"));
   }
-  public function update(Request $request, $id)
+
+  public function store(Request $request)
   {
-    $validatedData = $request->validate([
-      'language_id' => 'required',
+    $validator = Validator::make($request->all(), [
+      'category_id' => 'required',
+      'titles.*' => 'required|max:200|min:3|unique:events,title',
       'dateend' => 'required',
       'datestart' => 'required',
-      'event_category_id' => 'required',
-      'group' => 'required',
-
+      'cover' => 'required',
     ]);
+    // dd($request->language_ids);
 
+    if ($validator->fails()) {
+      return redirect(route('events.create'))
+        ->withErrors($validator)
+        ->withInput();
+    }
 
-    $grp_id = $request->input("group");
-
+    $grp_id = $this->getGroupId();
 
     foreach ($request->language_ids as $key => $value) {
-      $model = event::all()
-        ->where("group", "=", $grp_id)
-        ->where("language_id", "=", $value)
-        ->first();
-      if (isset($request->input("title")[$key]))
-        $model->title = $request->input("title")[$key];
-      else
-        $model->title = "";
-      if (isset($request->input("description")[$key]))
-        $model->description = $request->input("description")[$key];
-      else
-        $model->description = "";
+      $model = Event::create([
+        'title' => $request->titles[$key],
+        'description' => $request->descriptions[$key],
+        'content' => $request->contents[$key],
+        'organization' => $request->organizations[$key],
+        'dateend' => $request->dateend,
+        'datestart' => $request->datestart,
+        'event_category_id' => $request->category_id,
+        'group' => $grp_id,
+        'language_id' => $value,
+        'cover' => $request->file('cover')->getClientOriginalName(),
+      ]);
 
-      if (isset($request->input("content")[$key]))
-        $model->content = $request->input("content")[$key];
-      else
-        $model->content = "";
-      if (isset($request->input("organization")[$key]))
-        $model->organization = $request->input("organization")[$key];
-      else
-        $model->organization = "";
-      $model->dateend = $request->input("dateend");
-      $model->datestart = $request->input("datestart");
-      $model->event_category_id = $request->input("event_category_id");
-
-      $model->language_id = $value;
-      if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'));
+      if ($request->hasFile('cover')) {
+        Storage::putFileAs('public/photos', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
-
-
-
-
-
-      $model->update();
     }
-    return redirect("admin/event");
+
+    return redirect(route('events.edit', $model->group))->with('success', 'Created!');
   }
+
   public function edit(Request $request, $id)
   {
-    $model  = event::where('group', $id)->get();
-    $lang = Language::all();
-    $doccat = eventcategory::where("language_id", $this->getLang())->get();;
-    return view("admin.event_edit", [
+    $model  = Event::where('group', $id)->get();
+    $languages = Language::all();
+    $categories = EventCategory::where("language_id", $this->getLang())->get();;
 
-      "languages" => $lang,
+    return view("admin.event.edit", [
       "model" => $model,
+      "languages" => $languages,
       "grp_id" => $id,
-      "category" => $doccat,
+      "categories" => $categories,
     ]);
   }
-  public function destroy(Request $request, $id)
+
+  public function update(Request $request, $id)
   {
-    $validatedData = $request->validate([
-
-      'id' => 'required',
-
+    $validator = Validator::make($request->all(), [
+      'category_id' => 'required',
+      'titles.*' => 'required|max:200|min:3|unique:events,title',
+      'dateend' => 'required',
+      'datestart' => 'required',
+      'cover' => 'required',
     ]);
-    $model = event::where('group', $id)->get();
 
-    foreach ($model as $value) {
-      $mod = event::find($value->id)->delete();
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
     }
 
-    return redirect("admin/event");
+    foreach ($request->language_ids as $key => $value) {
+      Event::where("group", $id)
+        ->where("language_id", "=", $value)
+        ->update([
+          'title' => $request->titles[$key],
+          'description' => $request->descriptions[$key],
+          'content' => $request->contents[$key],
+          'organization' => $request->organizations[$key],
+          'dateend' => $request->dateend,
+          'datestart' => $request->datestart,
+          'event_category_id' => $request->category_id,
+          'language_id' => $value,
+          'cover' => $request->file('cover')->getClientOriginalName(),
+        ]);
+
+      if ($request->hasFile("cover")) {
+        Storage::putFileAs('public/photos', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      }
+    }
+
+    return back()->with('success', 'Updated!');
   }
+
+  public function destroy(Request $request, $id)
+  {
+    Event::where('group', $id)->delete();
+    return redirect(route('events.index'))->with('success', 'Deleted!');
+  }
+
   private function getGroupId()
   {
     return time();
+  }
+
+  private function getLang()
+  {
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+
+    return $model->id;
   }
 }

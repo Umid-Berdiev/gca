@@ -61,45 +61,42 @@
               <input type="text" name="links[]" class="form-control" id="links" value="{{ $val->youtube_link }}">
               <label for="links">youtube link id</label>
             </div>
-            {{-- <div class="form-group floating-label">
-              <input type="file" name="cover" class="form-control" id="cover" value="{{ $val->cover }}">
-          </div> --}}
-        </div>
-      </div>
-      @endif
-      @endforeach
-      @else
-      @foreach($model as $val)
-      @if($val->language_id ==$language->id)
-      <div class="tab-pane" id="{{$language->id}}">
-        <div class="form" role="form">
-          <input type="hidden" name="language_ids[]" value="{{$language->id}}">
-          <div class="form-group floating-label">
-            <input type="text" name="names[]" class="form-control" value="{{ $val->name }}" id="names">
-            <label for="names">name</label>
-          </div>
-          <div class="form-group floating-label">
-            <input type="text" name="descriptions[]" class="form-control" value="{{ $val->description }}"
-              id="descriptions">
-            <label for="descriptions">description</label>
-          </div>
-          <div class="form-group floating-label">
-            <input type="text" name="links[]" class="form-control" value="{{ $val->youtube_link }}" id="links">
-            <label for="links">youtube link id</label>
           </div>
         </div>
+        @endif
+        @endforeach
+        @else
+        @foreach($model as $val)
+        @if($val->language_id ==$language->id)
+        <div class="tab-pane" id="{{$language->id}}">
+          <div class="form" role="form">
+            <input type="hidden" name="language_ids[]" value="{{$language->id}}">
+            <div class="form-group floating-label">
+              <input type="text" name="names[]" class="form-control" value="{{ $val->name }}" id="names">
+              <label for="names">name</label>
+            </div>
+            <div class="form-group floating-label">
+              <input type="text" name="descriptions[]" class="form-control" value="{{ $val->description }}"
+                id="descriptions">
+              <label for="descriptions">description</label>
+            </div>
+            <div class="form-group floating-label">
+              <input type="text" name="links[]" class="form-control" value="{{ $val->youtube_link }}" id="links">
+              <label for="links">youtube link id</label>
+            </div>
+          </div>
+        </div>
+        @endif
+        @endforeach
+        @endif
+        @endforeach
+        <div class="card-actionbar-row">
+          <a href="{{ route('video.index') }}" class="btn btn-secondary">Back</a>
+          <button type="submit" class="btn btn-primary ink-reaction">Update</button>
+        </div>
       </div>
-      @endif
-      @endforeach
-      @endif
-      @endforeach
-      <div class="card-actionbar-row">
-        <a href="{{ route('video.index') }}" class="btn btn-secondary">Back</a>
-        <button type="submit" class="btn btn-primary ink-reaction">Update</button>
-      </div>
+    </form>
   </div>
-  </form>
-</div>
 </div>
 <!--end .table-responsive -->
 

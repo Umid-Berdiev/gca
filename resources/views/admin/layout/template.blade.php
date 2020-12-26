@@ -154,64 +154,23 @@ $user = \Illuminate\Support\Facades\Auth::user();
             </ul>
           </li>
           <li class="gui-folder" id="pager">
-            @if(
-            Route::current()->getName() == 'eventcategory' ||
-            Route::current()->getName() == 'eventcategory_edit' ||
-            Route::current()->getName() == 'eventcategory_delete' ||
-            Route::current()->getName() == 'eventcategory_create' ||
-            Route::current()->getName() == 'event' ||
-            Route::current()->getName() == 'event_edit' ||
-            Route::current()->getName() == 'event_delete' ||
-            Route::current()->getName() == 'event_create'
-            )
-            <a class="active">
+            <a class="{{ starts_with(Route::current()->uri, 'admin/event') ? 'active' : '' }}">
               <div class="gui-icon"><i class="md md-computer"></i></div>
               <span class="title">Мероприятия</span>
             </a>
-            @else
-            <a>
-              <div class="gui-icon"><i class="md md-computer"></i></div>
-              <span class="title">Мероприятия</span>
-            </a>
-            @endif
 
             <ul>
-              @if(
-              Route::current()->getName() == 'eventcategory' ||
-              Route::current()->getName() == 'eventcategory_edit' ||
-              Route::current()->getName() == 'eventcategory_delete' ||
-              Route::current()->getName() == 'eventcategory_create'
-              )
-              <li class="active">
-                <a href="{{URL('/admin/eventcategory/')}}">
+              <li class="{{ starts_with(Route::current()->uri, 'admin/event-categories') ? 'active' : '' }}">
+                <a href="{{ route('event-categories.index') }}">
                   <span class="title">Категория мероприятия</span>
                 </a>
               </li>
-              @else
-              <li>
-                <a href="{{URL('/admin/eventcategory/')}}">
-                  <span class="title">Категория мероприятия</span>
-                </a>
-              </li>
-              @endif
-              @if(
-              Route::current()->getName() == 'event' ||
-              Route::current()->getName() == 'event_edit' ||
-              Route::current()->getName() == 'event_delete' ||
-              Route::current()->getName() == 'event_create'
-              )
-              <li class="active">
-                <a href="{{URL('/admin/event/')}}">
+
+              <li class="{{ starts_with(Route::current()->uri, 'admin/events') ? 'active' : '' }}">
+                <a href="{{ route('events.index') }}">
                   <span class="title">Мероприятие</span>
                 </a>
               </li>
-              @else
-              <li>
-                <a href="{{URL('/admin/event/')}}">
-                  <span class="title">Мероприятие</span>
-                </a>
-              </li>
-              @endif
             </ul>
           </li>
 

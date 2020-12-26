@@ -83,7 +83,7 @@ class VideoController extends Controller
       $model->language_id = $value;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'));
+        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       } else {
         $model->cover = "null";
       }
@@ -130,7 +130,7 @@ class VideoController extends Controller
       $model->language_id = $value;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'));
+        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       } else {
         $model->cover = "null";
       }

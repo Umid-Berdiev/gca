@@ -115,12 +115,13 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::get('tendercategory/create', 'admin\TendercategoryController@InsertShow')->name('tendercategory_create');
   Route::post('tendercategory/insert', 'admin\TendercategoryController@Insert');
 
-  Route::get('eventcategory', 'admin\EventcategoryController@index')->name('eventcategory');
-  Route::post('eventcategory/edit', 'admin\EventcategoryController@Update');
-  Route::get('eventcategory/edit', 'admin\EventcategoryController@UpdateShow')->name('eventcategory_edit');
-  Route::get('eventcategory/delete', 'admin\EventcategoryController@Delete')->name('eventcategory_delete');
-  Route::get('eventcategory/create', 'admin\EventcategoryController@InsertShow')->name('eventcategory_create');
-  Route::post('eventcategory/insert', 'admin\EventcategoryController@Insert');
+  Route::resource('event-categories', 'admin\EventcategoryController');
+  // Route::get('eventcategory', 'admin\EventcategoryController@index')->name('eventcategory');
+  // Route::post('eventcategory/edit', 'admin\EventcategoryController@Update');
+  // Route::get('eventcategory/edit', 'admin\EventcategoryController@UpdateShow')->name('eventcategory_edit');
+  // Route::get('eventcategory/delete', 'admin\EventcategoryController@Delete')->name('eventcategory_delete');
+  // Route::get('eventcategory/create', 'admin\EventcategoryController@InsertShow')->name('eventcategory_create');
+  // Route::post('eventcategory/insert', 'admin\EventcategoryController@Insert');
 
   Route::resource('photo-categories', 'admin\PhotocategoryController');
   // Route::get('photocategory', 'admin\PhotocategoryController@index')->name('photocategory');
@@ -137,12 +138,13 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   // Route::get('videoalbum/create', 'admin\VideoalbumController@InsertShow')->name('videocategory_create');
   // Route::post('videoalbum/insert', 'admin\VideoalbumController@Insert');
 
-  Route::get('event', 'admin\EventController@index')->name('event');
-  Route::post('event/edit', 'admin\EventController@Update');
-  Route::get('event/edit', 'admin\EventController@UpdateShow')->name('event_edit');
-  Route::get('event/delete', 'admin\EventController@Delete')->name('event_delete');
-  Route::get('event/create', 'admin\EventController@InsertShow')->name('event_create');
-  Route::post('event/insert', 'admin\EventController@Insert');
+  Route::resource('events', 'admin\EventController');
+  // Route::get('event', 'admin\EventController@index')->name('event');
+  // Route::post('event/edit', 'admin\EventController@Update');
+  // Route::get('event/edit', 'admin\EventController@UpdateShow')->name('event_edit');
+  // Route::get('event/delete', 'admin\EventController@Delete')->name('event_delete');
+  // Route::get('event/create', 'admin\EventController@InsertShow')->name('event_create');
+  // Route::post('event/insert', 'admin\EventController@Insert');
 
   Route::get('tender', 'admin\TenderController@index')->name('tender');
   Route::post('tender/edit', 'admin\TenderController@Update');
