@@ -4,4 +4,4 @@ vendor
 composer.lock
 yarn-error.log
 bootstrap/cache
-storage/framework
+storage
