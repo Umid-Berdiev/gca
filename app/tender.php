@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class tender extends Model
+class Tender extends Model
 {
-    //
+  //
 }

@@ -11,6 +11,7 @@ use App\PostCategory;
 use App\PostGroup;
 use DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -58,13 +59,19 @@ class PostController extends Controller
 
   public function store(Request $request)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'post_category_id' => 'required',
       'datetime' => 'required',
       'country_id' => 'required',
       'titles.*' => 'required',
-      // 'descriptions.*' => 'required',
+      'descriptions.*' => 'required',
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $this->postGroup($request->input("post_category_id"));
 
@@ -76,7 +83,7 @@ class PostController extends Controller
       $model->content = $request->contents[$key];
 
       if ($request->hasFile('cover')) {
-        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        Storage::putFileAs('public/posts', $request->file('cover'), $request->file('cover')->getClientOriginalName());
         $model->cover = $request->file('cover')->getClientOriginalName();
       } else {
         $model->cover = "null";
@@ -90,7 +97,7 @@ class PostController extends Controller
       $model->save();
     }
 
-    return redirect(route('posts.edit', $model->id))->with('success', 'Created!');
+    return redirect(route('posts.edit', $model->group))->with('success', 'Created!');
   }
 
   public function edit(Request $request, $id)
@@ -115,13 +122,19 @@ class PostController extends Controller
 
   public function update(Request $request, $id)
   {
-    // dd($request->all());
-
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'post_category_id' => 'required',
+      'datetime' => 'required',
       'country_id' => 'required',
       'titles.*' => 'required',
+      'descriptions.*' => 'required',
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grpupd = PostGroup::whereId($id)->first();
     $grpupd->post_category_group_id = $request->post_category_id;
@@ -136,8 +149,7 @@ class PostController extends Controller
       $model->gcainfo_id = $request->country_id;
 
       if ($request->hasFile("cover")) {
-        // dd($request->cover);
-        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        Storage::putFileAs('public/posts', $request->file('cover'), $request->file('cover')->getClientOriginalName());
         $model->cover = $request->file('cover')->getClientOriginalName();
       }
 

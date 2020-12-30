@@ -310,7 +310,6 @@ class SearchController extends Controller
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
-
         return view('gca.eventin', [
           'newscat' => $category,
           'table' => $model,

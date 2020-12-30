@@ -50,7 +50,7 @@
               <label for="regular2">title</label>
             </div>
             <div class="form-group floating-label">
-              <textarea name="description[]" class="form-control" id="regular2"></textarea>
+              <textarea name="descriptions[]" class="form-control" id="regular2"></textarea>
             </div>
 
             <div class="form-group floating-label">
@@ -87,7 +87,7 @@
               <label for="regular2">title</label>
             </div>
             <div class="form-group floating-label">
-              <textarea name="description[]" class="form-control" id="regular2"></textarea>
+              <textarea name="descriptions[]" class="form-control" id="regular2"></textarea>
             </div>
 
 

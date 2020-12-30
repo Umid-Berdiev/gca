@@ -12,6 +12,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="keywords" content="your,keywords">
   <meta name="description" content="Short explanation about this website">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- END META -->
 
   <!-- BEGIN STYLESHEETS -->
@@ -238,65 +239,26 @@ $user = \Illuminate\Support\Facades\Auth::user();
 
           <!-- BEGIN PAGES -->
           <li class="gui-folder" id="pager">
-            @if('page_categories' == Route::current()->getName()
-            || 'page_categories_create' == Route::current()->getName()
-            || 'page_categories_edit' == Route::current()->getName()
-            || 'pages' == Route::current()->getName()
-            || 'pages_create' == Route::current()->getName())
-            <a class="active">
+            <a class="{{ starts_with(Route::current()->uri, 'admin/page') ? 'active' : '' }}">
               <div class="gui-icon"><i class="md md-computer"></i></div>
               <span class="title">Страницы</span>
             </a>
-            @else
-            <a>
-              <div class="gui-icon"><i class="md md-computer"></i></div>
-              <span class="title">Страницы</span>
-            </a>
-            @endif
 
-            <!--start submenu -->
             <ul>
-              @if('page_categories' == Route::current()->getName()
-              || 'page_categories_create' == Route::current()->getName()
-              || 'page_categories_edit' == Route::current()->getName())
-              <li class="active">
-                <a href="{{URL('/admin/pages/categories/')}}">
+              <li class="{{ starts_with(Route::current()->uri, 'admin/page-categories') ? 'active' : '' }}">
+                <a href="{{ route('page-categories.index') }}">
                   <span class="title">Рубрики страниц</span>
                 </a>
               </li>
-              @else
-              <li>
-                <a href="{{URL('/admin/pages/categories/')}}">
-                  <span class="title">Рубрики страниц</span>
-                </a>
-              </li>
-              @endif
 
-
-
-
-              @if('pages' == Route::current()->getName()
-              || 'pages_create' == Route::current()->getName())
-              <li class="active">
-                <a href="{{URL('/admin/pages/')}}">
+              <li class="{{ starts_with(Route::current()->uri, 'admin/pages') ? 'active' : '' }}">
+                <a href="{{ route('pages.index') }}">
                   <span class="title">Страницы</span>
                 </a>
               </li>
-              @else
-              <li>
-                <a href="{{URL('/admin/pages/')}}">
-                  <span class="title">Страницы</span>
-                </a>
-              </li>
-              @endif
-
-
-
-
-
             </ul>
-            <!--end /submenu -->
           </li>
+
           <li class="gui-folder" id="pager">
             @if(
             'contact' == Route::current()->getName() ||
@@ -503,121 +465,49 @@ $user = \Illuminate\Support\Facades\Auth::user();
   <script src="{{ URL::asset("assets/js/core/demo/Demo.js") }}"></script>
   <!--<script src="{{ URL::asset("assets/js/core/demo/DemoDashboard.js") }}"></script>-->
 
-
-
   <script>
-    /*  $apps = new Vue({
-        el:'#pager',
-        data:{
-            menu:[],
-        },
+    let editor_config = {
+      path_absolute: "/",
+      selector: "textarea",
+      theme: "modern",
+      height: 300,
+      plugins: [
+        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+        "searchreplace wordcount visualblocks visualchars code fullscreen",
+        "insertdatetime media nonbreaking save table contextmenu directionality",
+        "emoticons template paste textcolor colorpicker textpattern"
+      ],
+      toolbar1: "responsivefilemanager undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect | sizeselect | fontselect | fontsizeselect",
+      toolbar2: "link image media |link unlink anchor | image media | forecolor backcolor  | print preview code  fullscreen insertdatetime ",
+
+      fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+      relative_urls: false,
 
 
-        created:function(){
-            var _this = this;
+      file_browser_callback: function (field_name, url, type, win) {
+        let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+        let y = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
 
-            _this.getmenu();
-        },
-
-        methods:{
-            getmenu:function () {
-                var _this = this;
-                $.getJSON("{{ URL(App::getLocale()."/admin/pages/json") }}", function(result){
-
-                    _this.menu= result;
-
-                    console.log(result);
-                });
-
-            }
+        let cmsURL = editor_config.path_absolute + 'public/laravel-filemanager?field_name=' + field_name;
+        if (type == 'image') {
+          cmsURL = cmsURL + "&type=Images";
+        } else {
+          cmsURL = cmsURL + "&type=Files";
         }
 
-    });*/
+        tinyMCE.activeEditor.windowManager.open({
+          file: cmsURL,
+          title: 'Filemanager',
+          width: x * 0.8,
+          height: y * 0.8,
+          resizable: "yes",
+          close_previous: "no"
+        });
+      }
+    };
+
+    tinymce.init(editor_config);
   </script>
-
-  <script>
-    /* tinymce.init({
-        selector: "textarea",theme: "modern",height: 300,
-        plugins: [
-            "advlist autolink link image lists charmap print preview hr  pagebreak",
-            "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-            "table contextmenu directionality emoticons paste textcolor responsivefilemanager code"
-        ],
-        toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect | sizeselect | fontselect | fontsizeselect",
-        toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code ",
-        image_advtab: true ,
-        fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
-        relative_urls: false,
-        file_browser_callback : function(field_name, url, type, win) {
-            var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-            var y = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
-
-            var cmsURL = editor_config.path_absolute + 'laravel-filemanager?field_name=' + field_name;
-            if (type == 'image') {
-                cmsURL = cmsURL + "&type=Images";
-            } else {
-                cmsURL = cmsURL + "&type=Files";
-            }
-
-            tinyMCE.activeEditor.windowManager.open({
-                file: cmsURL,
-                title: 'Filemanager',
-                width: x * 0.8,
-                height: y * 0.8,
-                resizable: "yes",
-                close_previous: "no"
-            });
-        }
-    });*/
-
-
-   var editor_config = {
-       path_absolute : "/",
-       selector: "textarea",theme: "modern",height: 300,
-       plugins: [
-           "advlist autolink lists link image charmap print preview hr anchor pagebreak",
-           "searchreplace wordcount visualblocks visualchars code fullscreen",
-           "insertdatetime media nonbreaking save table contextmenu directionality",
-           "emoticons template paste textcolor colorpicker textpattern"
-       ],
-       toolbar1: "responsivefilemanager undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect | sizeselect | fontselect | fontsizeselect",
-       toolbar2: "link image media |link unlink anchor | image media | forecolor backcolor  | print preview code  fullscreen insertdatetime ",
-
-       fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
-       relative_urls: false,
-
-
-       file_browser_callback : function(field_name, url, type, win) {
-           var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-           var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
-
-           var cmsURL = editor_config.path_absolute + 'public/laravel-filemanager?field_name=' + field_name;
-           if (type == 'image') {
-               cmsURL = cmsURL + "&type=Images";
-           } else {
-               cmsURL = cmsURL + "&type=Files";
-           }
-
-           tinyMCE.activeEditor.windowManager.open({
-               file : cmsURL,
-               title : 'Filemanager',
-               width : x * 0.8,
-               height : y * 0.8,
-               resizable : "yes",
-               close_previous : "no"
-           });
-       }
-
-
-
-   };
-
-   tinymce.init(editor_config);
-  </script>
-
-
-  <!-- END JAVASCRIPT -->
-
 </body>
 
 </html>

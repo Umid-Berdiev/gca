@@ -7,6 +7,7 @@ use App\Videoalbum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class VideoalbumController extends Controller
 {
@@ -46,32 +47,36 @@ class VideoalbumController extends Controller
 
   public function store(Request $request)
   {
-    // $request->validate([
-    //   'titles' => 'required|array',
-    //   'titles.*' => 'required|max:255',
-    //   'language_ids.*' => 'required',
-    //   'cover' => 'required',
-    //   'descriptions.*' => 'required',
-    // ]);
+    $validator = Validator::make($request->all(), [
+      'titles.*' => 'required|max:40',
+      'language_ids.*' => 'required',
+      'descriptions.*' => 'required',
+    ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $this->getGroupId();
 
-    foreach ($request->input("language_ids") as $key => $value) {
+    foreach ($request->language_ids as $key => $value) {
       $model = new Videoalbum();
-      $model->title = $request->input("titles")[$key];
-      $model->Description = $request->input("descriptions")[$key];
+      $model->title = $request->titles[$key];
+      $model->Description = $request->descriptions[$key];
       $model->language_id = $value;
+      $model->group = $grp_id;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      } else $model->cover = "null";
-
-      $model->group = $grp_id;
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      } else $model->cover = "videogallery.png";
 
       $model->save();
     }
 
-    return redirect(route('videoalbum.index'));
+    return redirect(route('videoalbum.edit', $model->group))->with('success', 'Created!');
   }
 
   public function edit(Request $request, $id)
@@ -88,42 +93,46 @@ class VideoalbumController extends Controller
 
   public function update(Request $request, $id)
   {
-    // dd($request->all());
-    $request->validate([
-      'titles.*' => 'required|max:255',
+    $validator = Validator::make($request->all(), [
+      'titles.*' => 'required|max:40',
       'language_ids.*' => 'required',
       'descriptions.*' => 'required',
-      'group' => 'required',
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $id;
 
-    foreach ($request->input("language_ids") as $key => $value) {
-      $model = Videoalbum::all()
-        ->where("group", $grp_id)
+    foreach ($request->language_ids as $key => $value) {
+      $model = Videoalbum::where("group", $grp_id)
         ->where("language_id", $value)
         ->first();
-      $model->title = $request->input("titles")[$key];
-      $model->Description = $request->input("descriptions")[$key];
+      $model->title = $request->titles[$key];
+      $model->Description = $request->descriptions[$key];
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      }
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      } else $model->cover = "videogallery.png";
 
       if ($request->remove_cover == "on") {
-        $model->cover = "null";
+        $model->cover = "videogallery.png";
       }
 
       $model->update();
     }
 
-    return back();
+    return back()->with('success', 'Updated!');
   }
 
   public function destroy(Request $request, $id)
   {
     Videoalbum::where("group", $id)->delete();
-    return back();
+    return redirect(route('videoalbum.index'))->with('success', 'Deleted!');
   }
 
   private function getGroupId()

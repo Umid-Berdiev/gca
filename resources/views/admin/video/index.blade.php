@@ -37,7 +37,7 @@
           <td>NAME</td>
           <td>DESCRIPTION</td>
           <td>CATEGORY</td>
-          <td>ACTION</td>
+          <td>ACTIONS</td>
         </tr>
       </thead>
       <tbody>

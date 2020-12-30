@@ -15,12 +15,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
-
+        <li @if($key==0) class="active" @endif><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -28,7 +23,6 @@
       action="{{ route('videoalbum.update', $grp_id) }}">
       @csrf
       @method('put')
-      <input type="hidden" name="group" value="{{ $grp_id }}">
       <div class="card-body tab-content">
         @foreach($languages as $key =>$language)
         @if($key == 0)
@@ -47,11 +41,11 @@
             </div>
             <div class="form-group floating-label">
               <label for="file" for="cover">Choose album cover</label>
-              <input type="file" name="cover" class="form-control" id="cover" value="{{ $val->cover }}">
+              <input type="file" name="cover" class="form-control" id="cover">
               {{-- <input type="text" value="document.getElementById('cover').value"> --}}
             </div>
             @if ($val->cover && $val->cover != "null")
-            <img src="{{ asset('storage/app/' . $val->cover) }}" height="30px" width="30px" />
+            <img src="{{ asset('storage/' . $val->cover) }}" width="100px" />
             <input type="checkbox" name="remove_cover" id="remove-cover">
             <label for="remove-cover">Remove cover</label>
             @else <span>No image</span>

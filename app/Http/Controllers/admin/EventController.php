@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\EventCategory;
 use App\Event;
+use DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class EventController extends Controller
 {
@@ -64,6 +66,7 @@ class EventController extends Controller
       'dateend' => 'required',
       'datestart' => 'required',
       'cover' => 'required',
+      'descriptions.*' => 'required',
     ]);
     // dd($request->language_ids);
 
@@ -86,11 +89,11 @@ class EventController extends Controller
         'event_category_id' => $request->category_id,
         'group' => $grp_id,
         'language_id' => $value,
-        'cover' => $request->file('cover')->getClientOriginalName(),
       ]);
 
       if ($request->hasFile('cover')) {
-        Storage::putFileAs('public/photos', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public/events', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
     }
 
@@ -115,10 +118,14 @@ class EventController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'category_id' => 'required',
-      'titles.*' => 'required|max:200|min:3|unique:events,title',
+      'titles.*' => 'required|max:200|min:3',
       'dateend' => 'required',
       'datestart' => 'required',
-      'cover' => 'required',
+      'cover' => Rule::requiredIf(function () use ($id) {
+        $obj = Event::where("group", $id)->first();
+        return $obj->cover == 'null';
+      }),
+      'descriptions.*' => 'required',
     ]);
 
     if ($validator->fails()) {
@@ -128,22 +135,27 @@ class EventController extends Controller
     }
 
     foreach ($request->language_ids as $key => $value) {
-      Event::where("group", $id)
-        ->where("language_id", "=", $value)
-        ->update([
-          'title' => $request->titles[$key],
-          'description' => $request->descriptions[$key],
-          'content' => $request->contents[$key],
-          'organization' => $request->organizations[$key],
-          'dateend' => $request->dateend,
-          'datestart' => $request->datestart,
-          'event_category_id' => $request->category_id,
-          'language_id' => $value,
-          'cover' => $request->file('cover')->getClientOriginalName(),
-        ]);
+      $model = Event::where("group", $id)
+        ->where("language_id", $value)->first();
+
+      $model->update([
+        'title' => $request->titles[$key],
+        'description' => $request->descriptions[$key],
+        'content' => $request->contents[$key],
+        'organization' => $request->organizations[$key],
+        'dateend' => $request->dateend,
+        'datestart' => $request->datestart,
+        'event_category_id' => $request->category_id,
+        'language_id' => $value,
+      ]);
 
       if ($request->hasFile("cover")) {
-        Storage::putFileAs('public/photos', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        $model->update(['cover' => $request->file('cover')->getClientOriginalName()]);
+        Storage::putFileAs('public/events', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      }
+
+      if ($request->remove_cover == "on") {
+        $model->update(['cover' => 'null']);
       }
     }
 
@@ -163,8 +175,28 @@ class EventController extends Controller
 
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
-
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     return $model->id;
+  }
+
+  public function getEvents(Request $request)
+  {
+    if ($request->date) {
+      $upcoming_events = Event::where('language_id', $this->getLang())
+        ->whereDate('datestart', '<=', $request->date)
+        ->whereDate('dateend', '>=', $request->date)->paginate(10);
+    } else $upcoming_events = Event::where('language_id', $this->getLang())->whereDate('dateend', '>=', date('Y-m-d'))->paginate(10);
+
+    $category = EventCategory::where("language_id", $this->getLang())->first();
+
+    return view('gca.events', compact('upcoming_events', 'category'));
+  }
+
+  public function getEvent(Request $request)
+  {
+    // dd($request->id);
+    $event = Event::whereId($request->id)->where('language_id', $this->getLang())->with('category')->first();
+    $upcoming_events = Event::where('language_id', $this->getLang())->whereDate('dateend', '>=', date('Y-m-d'))->take(5)->get()->except($request->id);
+    return view('gca.eventin', compact('event', 'upcoming_events'));
   }
 }

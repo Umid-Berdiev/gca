@@ -35,10 +35,10 @@
       <thead>
         <tr>
           <td>№</td>
-          <td>title</td>
-          <td>description</td>
-          <td>category</td>
-          <td>action</td>
+          <td>TITLE</td>
+          <td>DESCRIPTION</td>
+          <td>CATEGORY</td>
+          <td>ACTIONS</td>
         </tr>
       </thead>
       <tbody>
@@ -69,5 +69,4 @@
     {{ $table->links() }}
   </div>
 </div>
-
 @endsection

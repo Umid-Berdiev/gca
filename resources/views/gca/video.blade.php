@@ -16,8 +16,8 @@
     <div class="row for_med">
       @foreach($table as $value)
       <div class="col-sm-3 col-4">
-        <a href="{{ URL(App::getLocale()."/video/".$value->group."/all") }}" class="over">
-          <img src="{{URL(App::getLocale().'/downloads?type=video&id='.$value->group)}}">
+        <a href="{{ url(app()->getLocale() . '/video/' . $value->group . '/all') }}" class="over">
+          <img src="{{ asset('storage/' . $value->cover) }}">
           <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M29 15C29 7.27083 22.7292 1 15 1C7.27083 1 1 7.27083 1 15C1 22.7292 7.27083 29 15 29C22.7292 29 29 22.7292 29 15Z"

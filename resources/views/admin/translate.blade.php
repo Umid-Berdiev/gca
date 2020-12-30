@@ -88,7 +88,7 @@ $myar = [
           <div class="col-md-3">
             <div class="form-group">
               <h4>{{ $value->language_prefix }}</h4>
-              <input class="form-control" name="description[]" value="{{ $json->description[$key] }}">
+              <input class="form-control" name="descriptions[]" value="{{ $json->description[$key] }}">
 
             </div>
           </div>

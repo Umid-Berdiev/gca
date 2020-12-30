@@ -15,11 +15,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
+        <li @if($key==0) class="active" @endif><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -27,7 +23,6 @@
       action="{{ route('photos.update', $grp_id) }}">
       @csrf
       @method('put')
-      <input type="hidden" name="group" value="{{ $grp_id }}">
       <div class="card-body tab-content">
         @foreach($languages as $key => $language)
         @if($key == 0)
@@ -39,7 +34,7 @@
             <div class="form-group floating-label">
               <select class="form-control" name="category_id" id="category_id">
                 @foreach($category as $value)
-                <option value="{{ $value->group }}" selected="{{ $val->event_category_id == $value->group }}">
+                <option value="{{ $value->group }}" @if($val->event_category_id == $value->group) selected @endif>
                   {{ $value->title }}</option>
                 @endforeach
               </select>
@@ -47,16 +42,23 @@
             </div>
             <div class="form-group floating-label">
               <input type="text" name="names[]" class="form-control" value="{{ $val->name }}" id="names">
-              <label for="names">name</label>
+              <label for="names">Name</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" value="{{ $val->description }}"
                 id="descriptions">
-              <label for="descriptions">description</label>
+              <label for="descriptions">Description</label>
             </div>
             <div class="form-group floating-label">
-              <input type="file" name="cover" class="form-control" id="cover" value="{{ $val->cover }}">
+              <label for="cover">Cover</label>
+              <input type="file" name="cover" class="form-control" id="cover">
             </div>
+            @if ($val->cover && $val->cover != "null")
+            <img src="{{ asset('storage/' . $val->cover) }}" width="100" />
+            <input type="checkbox" name="remove_cover" id="remove-cover">
+            <label for="remove-cover">Remove cover</label>
+            @else <span>No image</span>
+            @endif
           </div>
         </div>
         @endif
@@ -69,12 +71,12 @@
             <input type="hidden" name="language_ids[]" value="{{ $language->id }}">
             <div class="form-group floating-label">
               <input type="text" name="names[]" class="form-control" value="{{ $val->name }}" id="names">
-              <label for="names">name</label>
+              <label for="names">Name</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" value="{{ $val->description }}"
                 id="descriptions">
-              <label for="descriptions">description</label>
+              <label for="descriptions">Description</label>
             </div>
           </div>
         </div>
@@ -90,5 +92,4 @@
     </form>
   </div>
 </div>
-<!--end .table-responsive -->
 @endsection

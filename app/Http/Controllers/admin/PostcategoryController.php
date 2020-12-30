@@ -6,7 +6,7 @@ use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\PostCategory;
-
+use Illuminate\Support\Facades\Validator;
 
 class PostCategoryController extends Controller
 {
@@ -45,9 +45,15 @@ class PostCategoryController extends Controller
 
   public function store(Request $request)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_names.*' => 'required|max:50',
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $this->getGroupId();
 
@@ -76,9 +82,15 @@ class PostCategoryController extends Controller
 
   public function update(Request $request, $id)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_names.*' => 'required|max:50',
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     foreach ($request->language_ids as $key => $value) {
       $model = PostCategory::where("group", $id)

@@ -37,7 +37,7 @@
           <td>№</td>
           <td>TITLE</td>
           <td>DESCRIPTION</td>
-          <td>ACTION</td>
+          <td>ACTIONS</td>
         </tr>
       </thead>
       <tbody>

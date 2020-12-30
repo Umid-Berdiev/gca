@@ -15,11 +15,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
+        <li @if($key==0) class="active" @endif><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -46,18 +42,21 @@
               <label for="post_category_id">Event category</label>
             </div>
             <div class="form-group floating-label">
-              <input type="date" name="datestart" class="form-control" value="{{ $val->datestart }}" id="datestart">
+              <input type="date" name="datestart" class="form-control" value="{{ $val->datestart->format('Y-m-d') }}"
+                id="datestart">
               <label for="datestart">Date start</label>
             </div>
             <div class="form-group floating-label">
-              <input type="date" name="dateend" class="form-control" value="{{ $val->dateend }}" id="dateend">
+              <input type="date" name="dateend" class="form-control" value="{{ $val->dateend->format('Y-m-d') }}"
+                id="dateend">
               <label for="dateend">Date end</label>
             </div>
             <div class="form-group floating-label">
+              <label for="cover">Cover</label>
               <input type="file" name="cover" class="form-control" id="cover">
             </div>
             @if ($val->cover && $val->cover != "null")
-            <img src="{{ asset('storage/photos/' . $val->cover) }}" width="100" />
+            <img src="{{ asset('storage/events/' . $val->cover) }}" width="100" />
             <input type="checkbox" name="remove_cover" id="remove-cover">
             <label for="remove-cover">Remove cover</label>
             @else <span>No image</span>

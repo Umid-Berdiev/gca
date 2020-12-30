@@ -37,8 +37,7 @@
         <tr>
           <td>№</td>
           <td>NAME</td>
-          <td>LANGUAGE</td>
-          <td>ACTION</td>
+          <td>ACTIONS</td>
         </tr>
       </thead>
       <tbody>
@@ -46,7 +45,6 @@
         <tr>
           <td>{{$key + 1}}</td>
           <td>{{$page->category_name}}</td>
-          <td>{{$page->language_name}}</td>
           <td>
             <form style="display: inline;" action="{{ route('document-categories.edit', $page->group) }}" method="get">
               <button>

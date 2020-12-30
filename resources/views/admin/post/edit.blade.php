@@ -15,11 +15,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
+        <li @if($key==0) class="active" @endif><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -27,6 +23,7 @@
       action="{{ route('posts.update', $group) }}">
       @csrf
       @method('put')
+
       <input type="hidden" name="group" value="{{ $group }}">
       <div class="card-body tab-content">
         @foreach($languages as $key => $language)
@@ -82,7 +79,6 @@
             </select>
             <label for="country">Country</label>
           </div>
-
         </div>
         @endif
         @endforeach
@@ -117,5 +113,4 @@
     </form>
   </div>
 </div>
-<!--end .table-responsive -->
 @endsection

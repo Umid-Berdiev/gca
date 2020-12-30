@@ -14,12 +14,8 @@
   <div class="col-md-12">
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
-        @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
+        @foreach($languages as $key => $language)
+        <li @if($key==0) class="active" @endif><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -70,8 +66,4 @@
     </form>
   </div>
 </div>
-<!--end .table-responsive -->
-
-
-
 @endsection

@@ -8,4 +8,18 @@ class Event extends Model
 {
   protected $table = 'events';
   protected $guarded = [];
+  protected $casts = [
+    'datestart' => 'datetime:Y-m-d',
+    'dateend' => 'datetime:Y-m-d',
+  ];
+
+  public function category()
+  {
+    return $this->belongsTo('App\EventCategory', 'event_category_id', 'group');
+  }
+
+  public function language()
+  {
+    return $this->belongsTo('App\Language', 'language_id');
+  }
 }

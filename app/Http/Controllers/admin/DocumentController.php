@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\DocumentCategory;
 use App\Document;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
 
 class DocumentController extends Controller
 {
@@ -62,46 +60,50 @@ class DocumentController extends Controller
 
   public function store(Request $request)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'titles.*' => 'required|max:255',
-      'descriptions.*' => 'required|max:255',
+      'descriptions.*' => 'required',
       'language_ids.*' => 'required',
       'files.*' => 'required',
       'register_numbers.*' => 'required',
-      'register_date.*' => 'required',
-      'doc_category_id' => 'required',
+      'register_dates.*' => 'required',
+      'category_id' => 'required',
     ]);
 
-    $grp_id = $this->getGroupId();
-    // dd($request->all());
-    foreach ($request->input("language_ids") as $key => $value) {
-      $model = new Document();
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
-      $model->title = $request->input("titles")[$key];
-      $model->description = $request->input("descriptions")[$key];
-      $model->link = $request->input("links")[$key];
-      $model->other_link = $request->input("other_link");
-      $model->r_number = $request->input("register_numbers")[$key];
-      $model->r_date = $request->input("register_dates")[$key];
-      $model->group = $grp_id;
-      $model->language_id = $value;
+    $grp_id = $this->getGroupId();
+
+    foreach ($request->input("language_ids") as $key => $value) {
+      $model = Document::create([
+        'title' => $request->titles[$key],
+        'description' => $request->descriptions[$key],
+        'link' => $request->links[$key],
+        'other_link' => $request->other_link,
+        'r_number' => $request->register_numbers[$key],
+        'r_date' => $request->register_dates[$key],
+        'group' => $grp_id,
+        'language_id' => $value,
+        'doc_category_id' => $request->category_id
+      ]);
 
       if (isset($request->file("files")[$key])) {
         $file = $request->file("files")[$key];
-        $model->files = Storage::put('public/upload', $request->file('files')[$key]);
-        $model->file_type = $file->clientExtension();
-        $model->file_size = $file->getClientSize();
-      } else {
-        $model->files = "";
-        $model->file_type = '';
-        $model->file_size = '';
+        $file_name = $file->getClientOriginalName();
+        $model->update([
+          'files' => $file_name,
+          'file_type' => $file->clientExtension(),
+          'file_size' => $file->getClientSize()
+        ]);
+        Storage::putFileAs('public/upload', $file, $file_name);
       }
-
-      $model->doc_category_id = $request->input("category_id");
-      $model->save();
     }
 
-    return redirect(route('documents.index'));
+    return redirect(route('documents.edit', $model->group))->with('success', 'Created!');
   }
 
   public function edit(Request $request, $id)
@@ -121,51 +123,58 @@ class DocumentController extends Controller
 
   public function update(Request $request, $id)
   {
-    // dd($request->all(), $id);
-    $request->validate([
-      // 'titles.*' => 'required|max:255',
-      // 'descriptions.*' => 'required|max:255',
-      // 'language_ids.*' => 'required',
-      // 'files.*' => 'required',
-      // 'register_numbers.*' => 'required',
-      // 'register_date.*' => 'required',
-      // 'doc_category_id' => 'required',
+    $validator = Validator::make($request->all(), [
+      'titles.*' => 'required|max:255',
+      'descriptions.*' => 'required',
+      'language_ids.*' => 'required',
+      'files.*' => 'required',
+      'register_numbers.*' => 'required',
+      'register_dates.*' => 'required',
+      'category_id' => 'required'
     ]);
 
-    $grp_id = $request->input("group");
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     foreach ($request->input("language_ids") as $key => $value) {
-      $model = Document::where("group", $grp_id)
+      $model = Document::where("group", $id)
         ->where("language_id", $value)
-        ->first();
+        ->update([
+          'title' => $request->titles[$key],
+          'description' => $request->descriptions[$key],
+          'link' => $request->links[$key],
+          'other_link' => $request->other_link,
+          'r_number' => $request->register_numbers[$key],
+          'r_date' => $request->register_dates[$key],
+          'doc_category_id' => $request->category_id
+        ]);
 
-      $model->title = $request->input("titles")[$key];
-      $model->description = $request->input("descriptions")[$key];
-      $model->link = $request->input("links")[$key];
-      $model->other_link = $request->input("other_link");
-      $model->r_number = $request->input("register_numbers")[$key];
-      $model->r_date = $request->input("register_dates")[$key];
-      $model->doc_category_id = $request->input("category_id");
-      // dd($request->file('files')[$key]->getClientOriginalName());
       if (isset($request->file("files")[$key])) {
         $file = $request->file("files")[$key];
-        $extension = $file->getClientOriginalExtension();  //Get Image Extension
         $file_name = $file->getClientOriginalName();
-
-        $model->files = Storage::putFileAs('public/upload', $file, $file_name);
-        $model->file_type = $file->clientExtension();
-        $model->file_size = $file->getClientSize();
+        $model->update([
+          'files' => $file_name,
+          'file_type' => $file->clientExtension(),
+          'file_size' => $file->getClientSize()
+        ]);
+        Storage::putFileAs('public/upload', $file, $file_name);
       }
 
-      $model->update();
+      if ($request->remove_cover == "on") {
+        $model->cover = "null";
+      }
     }
-    return back();
+
+    return back()->with('success', 'Updated!');
   }
 
   public function destroy(Request $request, $id)
   {
     Document::where("group", $id)->delete();
-    return back();
+    return back()->with('success', 'Deleted!');
   }
 
   private function getGroupId()

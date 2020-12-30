@@ -8,6 +8,7 @@ use App\PhotoCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class PhotoCategoryController extends Controller
 {
@@ -42,18 +43,24 @@ class PhotoCategoryController extends Controller
   {
     $languages = Language::where('status', 1)->get();
 
-    return view("admin.photocategory_add", [
+    return view("admin.photo_category.create", [
       "languages" => $languages,
     ]);
   }
 
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
-      'titles.*' => 'required|max:255',
-      'cover' => 'required',
+    $validator = Validator::make($request->all(), [
+      'titles.*' => 'required|max:40',
       'descriptions.*' => 'required',
+      'cover' => 'required'
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $this->getGroupId();
 
@@ -62,16 +69,17 @@ class PhotoCategoryController extends Controller
       $model->title = $request->titles[$key] ?? null;
       $model->Description = $request->descriptions[$key] ?? null;
       $model->language_id = $value;
-      if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      }
-
       $model->group = $grp_id;
+
+      if ($request->hasFile("cover")) {
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      }
 
       $model->save();
     }
 
-    return redirect(route('photo-categories.index'))->with('success', 'Created!');
+    return redirect(route('photo-categories.edit', $model->group))->with('success', 'Created!');
   }
 
   public function edit(Request $request, $id)
@@ -88,39 +96,44 @@ class PhotoCategoryController extends Controller
 
   public function update(Request $request, $id)
   {
-    $validatedData = $request->validate([
-      'title' => 'required|max:255',
-      'language_id' => 'required',
-      'cover' => 'required',
-      'Description' => 'required',
-      'group' => 'required',
+    $validator = Validator::make($request->all(), [
+      'titles.*' => 'required|max:40',
+      'descriptions.*' => 'required',
+      'cover' => 'required'
     ]);
 
-    $grp_id = $request->input("group");
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     foreach ($request->language_ids as $key => $value) {
-      $model = PhotoCategory::all()
-        ->where("group", "=", $grp_id)
-        ->where("language_id", "=", $value)
+      $model = PhotoCategory::where("group", $id)
+        ->where("language_id", $value)
         ->first();
-      $model->title = $request->input("title")[$key] ?? null;
+      $model->title = $request->titles[$key] ?? null;
       $model->Description = $request->descriptions[$key] ?? null;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
+      if ($request->remove_cover == "on") {
+        $model->cover = "null";
+      }
 
       $model->update();
     }
 
-    return redirect(route('photo-categories.index'))->with('success', 'Updated!');
+    return back()->with('success', 'Updated!');
   }
 
   public function destroy(Request $request, $id)
   {
     PhotoCategory::where("group", $id)->delete();
-    return redirect(route('photo-categories.index'))->with('success', 'Deleted!');
+    return back()->with('success', 'Deleted!');
   }
 
   private function getLang()

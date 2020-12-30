@@ -20,12 +20,9 @@ class Language
     $model = lang::where("language_prefix", $request->segment(1))->first();
 
     if ($model) {
-
       \App::setLocale($model->language_prefix);
       return $next($request);
     } else {
-
-
       if (
         $request->segment(1) == "locale"
         || $request->segment(1) == "admin"

@@ -15,12 +15,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
-
+        <li class="{{ $key==0 ? 'active' : ''}}"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -42,13 +37,14 @@
             <input type="hidden" name="language_ids[]" value="{{$language->id}}">
             <div class="form-group floating-label">
               <input type="text" name="names[]" class="form-control" id="names">
-              <label for="names">name</label>
+              <label for="names">Name</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" id="descriptions">
-              <label for="descriptions">description</label>
+              <label for="descriptions">Description</label>
             </div>
             <div class="form-group floating-label">
+              <label for="file">Cover</label>
               <input type="file" name="cover" class="form-control" id="cover">
             </div>
           </div>
@@ -60,11 +56,11 @@
 
             <div class="form-group floating-label">
               <input type="text" name="names[]" class="form-control" id="names">
-              <label for="names">name</label>
+              <label for="names">Name</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" id="descriptions">
-              <label for="descriptions">description</label>
+              <label for="descriptions">Description</label>
             </div>
           </div>
         </div>
@@ -78,8 +74,4 @@
     </form>
   </div>
 </div>
-<!--end .table-responsive -->
-
-
-
 @endsection

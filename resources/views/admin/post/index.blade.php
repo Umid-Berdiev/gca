@@ -44,8 +44,6 @@
         @foreach($table as $key => $page)
         <tr>
           <td>{{ $key + 1 }}</td>
-
-          {{-- @dd(Storage::disk('local')->exists('public/ILXKvgviDRS8ePvQUu1O4NEU5WdF7eftruLg3ctC.jpeg')) --}}
           <td>
             @if ($page->cover != "null")
             <img alt="cover" class="img-responsive" width="100" src="{{ asset('storage/' . $page->cover) }}">

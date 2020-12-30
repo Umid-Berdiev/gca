@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Language;
 use App\Pages;
 use App\PagesCategories;
-use App\PagesCategoriesGroup;
+use App\PageCategoryGroup;
 use App\PagesGroup;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -44,7 +44,7 @@ class PageController extends Controller
 
   public function getLang()
   {
-    $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
 
     return $model->id;
   }

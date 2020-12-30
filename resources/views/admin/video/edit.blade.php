@@ -15,12 +15,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
-
+        <li @if($key==0) class="active" @endif><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -42,7 +37,7 @@
             <div class="form-group floating-label">
               <select class="form-control" name="category_id" id="category_id">
                 @foreach($category as $value)
-                <option value="{{ $value->group }}" selected="{{ $val->event_category_id == $value->group }}">
+                <option value="{{ $value->group }}" @if($val->category_id == $value->group) selected @endif>
                   {{ $value->title }}</option>
                 @endforeach
               </select>
@@ -50,16 +45,16 @@
             </div>
             <div class="form-group floating-label">
               <input type="text" name="names[]" class="form-control" value="{{ $val->name }}" id="names">
-              <label for="names">name</label>
+              <label for="names">Name</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" value="{{ $val->description }}"
                 id="descriptions">
-              <label for="descriptions">description</label>
+              <label for="descriptions">Description</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="links[]" class="form-control" id="links" value="{{ $val->youtube_link }}">
-              <label for="links">youtube link id</label>
+              <label for="links">Youtube link id</label>
             </div>
           </div>
         </div>
@@ -73,16 +68,16 @@
             <input type="hidden" name="language_ids[]" value="{{$language->id}}">
             <div class="form-group floating-label">
               <input type="text" name="names[]" class="form-control" value="{{ $val->name }}" id="names">
-              <label for="names">name</label>
+              <label for="names">Name</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" value="{{ $val->description }}"
                 id="descriptions">
-              <label for="descriptions">description</label>
+              <label for="descriptions">Description</label>
             </div>
             <div class="form-group floating-label">
               <input type="text" name="links[]" class="form-control" value="{{ $val->youtube_link }}" id="links">
-              <label for="links">youtube link id</label>
+              <label for="links">Youtube link id</label>
             </div>
           </div>
         </div>
@@ -98,6 +93,4 @@
     </form>
   </div>
 </div>
-<!--end .table-responsive -->
-
 @endsection

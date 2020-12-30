@@ -15,12 +15,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
-
+        <li @if($key==0) class="active" @endif><a href="#{{ $language->id }}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -30,19 +25,17 @@
       @method('put')
       <input type="hidden" name="group" value="{{ $grp_id }}">
       <div class="card-body tab-content">
-        @foreach($languages as $key =>$language)
+        @foreach($languages as $key => $language)
         @if($key == 0)
-
         @foreach($model as $val)
-
-        @if($val->language_id ==$language->id)
-        <div class="tab-pane active" id="{{$language->id}}">
+        @if($val->language_id == $language->id)
+        <div class="tab-pane active" id="{{ $language->id }}">
           <div class="form" role="form">
-            <input type="hidden" name="language_ids[]" value="{{$language->id}}">
+            <input type="hidden" name="language_ids[]" value="{{ $language->id }}">
             <div class="form-group floating-label">
               <select class="form-control" name="category_id" id="category_id">
                 @foreach($category as $value)
-                <option value="{{ $value->group }}" selected="{{ $val->event_category_id == $value->group }}">
+                <option value="{{ $value->group }}" @if($val->doc_category_id == $value->group) selected @endif>
                   {{ $value->category_name }}</option>
                 @endforeach
               </select>
@@ -72,8 +65,8 @@
               <label for="register_numbers">register number</label>
             </div>
             <div class="form-group floating-label">
-              <input type="date" name="register_dates[]" class="form-control" value="{{ $val->r_date }}"
-                id="register_dates">
+              <input type="date" name="register_dates[]" class="form-control"
+                value="{{ $val->r_date ?? date('Y-m-d') }}" id="register_dates">
               <label for="register_dates">register date</label>
             </div>
           </div>
@@ -83,7 +76,7 @@
         @else
         @foreach($model as $val)
         @if($val->language_id ==$language->id)
-        <div class="tab-pane" id="{{$language->id}}">
+        <div class="tab-pane" id="{{ $language->id }}">
           <div class="form" role="form">
             <input type="hidden" name="language_ids[]" value="{{ $language->id }}">
             <div class="form-group floating-label">
@@ -106,8 +99,8 @@
               <label for="register_numbers">register number</label>
             </div>
             <div class="form-group floating-label">
-              <input type="date" name="register_dates[]" class="form-control" value="{{ $val->r_date }}"
-                id="register_dates">
+              <input type="date" name="register_dates[]" class="form-control"
+                value="{{ $val->r_date ?? date('Y-m-d') }}" id="register_dates">
               <label for="register_dates">register date</label>
             </div>
           </div>
@@ -124,8 +117,4 @@
     </form>
   </div>
 </div>
-<!--end .table-responsive -->
-
-
-
 @endsection

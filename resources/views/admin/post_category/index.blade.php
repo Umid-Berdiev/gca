@@ -36,7 +36,7 @@
         <tr>
           <td>№</td>
           <td>NAME</td>
-          <td>ACTION</td>
+          <td>ACTIONS</td>
         </tr>
       </thead>
       <tbody>

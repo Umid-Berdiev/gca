@@ -8,6 +8,7 @@ use App\PhotoCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class PhotoController extends Controller
 {
@@ -58,32 +59,37 @@ class PhotoController extends Controller
 
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'names.*' => 'required|max:255',
       'descriptions.*' => 'required|max:255',
-      'cover' => 'required',
-      'category_id' => 'required',
+      'cover' => 'required'
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $this->getGroupId();
 
     foreach ($request->language_ids as $key => $value) {
       $model = new Photogallery();
-      $model->name = $request->names[$key] ?? "";
-      $model->description = $request->descriptions[$key] ?? "";
-
-      $model->category_id = $request->category_id ?? "";
-      $model->group = $grp_id ?? "";
+      $model->name = $request->names[$key];
+      $model->description = $request->descriptions[$key];
+      $model->category_id = $request->category_id;
+      $model->group = $grp_id;
       $model->language_id = $value;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
       $model->save();
     }
 
-    return redirect(route('photos.index'))->with('success', 'Created!');
+    return redirect(route('photos.edit', $model->group))->with('success', 'Created!');
   }
 
   public function edit(Request $request, $id)
@@ -102,16 +108,20 @@ class PhotoController extends Controller
 
   public function update(Request $request, $id)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'names.*' => 'required|max:255',
       'descriptions.*' => 'required|max:255',
-      'category_id' => 'required',
-      'group' => 'required',
+      'cover' => 'required'
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     foreach ($request->language_ids as $key => $value) {
-      $model = Photogallery::all()
-        ->where("group", $id)
+      $model = Photogallery::where("group", $id)
         ->where("language_id", $value)
         ->first();
       $model->name = $request->names[$key];
@@ -121,18 +131,25 @@ class PhotoController extends Controller
       $model->language_id = $value;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFile('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      } else {
+        $model->cover = "null";
       }
+
+      if ($request->remove_cover == "on") {
+        $model->cover = "null";
+      }
+
       $model->update();
     }
 
-    return redirect(route('photos.index'))->with('success', 'Updated!');
+    return back()->with('success', 'Updated!');
   }
 
   public function destroy(Request $request, $id)
   {
     Photogallery::where("group", $id)->delete();
-
     return redirect(route('photos.index'))->with('success', 'Deleted!');
   }
 

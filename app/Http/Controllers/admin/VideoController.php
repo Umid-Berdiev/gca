@@ -8,7 +8,7 @@ use App\Videoalbum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Validator;
 
 class VideoController extends Controller
 {
@@ -59,39 +59,38 @@ class VideoController extends Controller
 
   public function store(Request $request)
   {
-    // dd($request->all());
+    $validator = Validator::make($request->all(), [
+      'names.*' => 'required|max:255',
+      'descriptions.*' => 'required|max:255',
+      'category_id' => 'required',
+      'group' => 'required'
+    ]);
 
-    // $request->validate([
-    //   'names' => 'required|array',
-    //   'names.*' => 'required|string|max:255',
-    //   'descriptions.*' => 'required|max:255',
-    //   'links.*' => 'max:255',
-    //   'language_id.*' => 'required',
-    //   'cover' => 'required',
-    //   'category_id' => 'required',
-    // ]);
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $this->getGroupId();
 
     foreach ($request->language_ids as $key => $value) {
       $model = new Video();
-      $model->name = $request->input("names")[$key];
-      $model->description = $request->input("descriptions")[$key];
-      $model->youtube_link = $request->input("links")[$key];
-      $model->category_id = $request->input("category_id");
+      $model->name = $request->names[$key];
+      $model->description = $request->descriptions[$key];
+      $model->youtube_link = $request->links[$key];
+      $model->category_id = $request->category_id;
       $model->group = $grp_id;
       $model->language_id = $value;
 
       if ($request->hasFile("cover")) {
         $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      } else {
-        $model->cover = "null";
-      }
+      } else $model->cover = "null";
 
       $model->save();
     }
 
-    return redirect(route('video.index'));
+    return redirect(route('video.edit', $model->group))->with('success', 'Created!');
   }
 
   public function edit(Request $request, $id)
@@ -110,35 +109,43 @@ class VideoController extends Controller
 
   public function update(Request $request, $id)
   {
-    // $request->validate([
-    //   'name' => 'required|max:255',
-    //   'description' => 'required|max:255',
-    //   'language_id' => 'required',
-    //   'category_id' => 'required',
-    //   'group' => 'required',
-    // ]);
+    $validator = Validator::make($request->all(), [
+      'names.*' => 'required|max:255',
+      'descriptions.*' => 'required|max:255',
+      'category_id' => 'required',
+      'group' => 'required'
+    ]);
 
-    foreach ($request->input("language_ids") as $key => $value) {
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
+    foreach ($request->language_ids as $key => $value) {
       $model = Video::where("group", $id)
         ->where("language_id", $value)
         ->first();
-      $model->name = $request->input("names")[$key];
-      $model->description = $request->input("descriptions")[$key];
-      $model->youtube_link = $request->input("links")[$key];
-      $model->category_id = $request->input("category_id");
+      $model->name = $request->names[$key];
+      $model->description = $request->descriptions[$key];
+      $model->youtube_link = $request->links[$key];
+      $model->category_id = $request->category_id;
       $model->group = $id;
       $model->language_id = $value;
 
       if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      } else {
+        $model->cover = $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      } else $model->cover = "null";
+
+      if ($request->remove_cover == "on") {
         $model->cover = "null";
       }
 
       $model->update();
     }
 
-    return back();
+    return back()->with('success', 'Updated');
   }
 
   public function show()
@@ -148,13 +155,8 @@ class VideoController extends Controller
 
   public function destroy($id)
   {
-    $model = Video::all()->where("group", $id);
-
-    foreach ($model as $value) {
-      Video::find($value->id)->delete();
-    }
-
-    return back();
+    Video::where("group", $id)->delete();
+    return redirect(route('videoalbum.index'))->with('success', 'Deleted!');
   }
 
   public function getLang()

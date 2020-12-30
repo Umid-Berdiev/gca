@@ -14,12 +14,7 @@
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
         @foreach($languages as $key => $language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
-
+        <li @if($key==0) class="active" @endif><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
         @endforeach
       </ul>
     </div>
@@ -65,8 +60,8 @@
 
             <div class="form-group floating-label">
               <input type="date" name="register_dates[]" class="form-control" id="register_dates"
-                value="{{ date('Y-m-d H:i') }}">
-              {{-- <label for="register_dates">register date</label> --}}
+                value="{{ date('Y-m-d') }}">
+              <label for="register_dates">register date</label>
             </div>
           </div>
         </div>
@@ -97,8 +92,9 @@
             </div>
 
             <div class="form-group floating-label">
-              <input type="date" name="register_dates[]" class="form-control" id="register_dates">
-              {{-- <label for="register_dates">register date</label> --}}
+              <input type="date" name="register_dates[]" class="form-control" id="register_dates"
+                value="{{ date('Y-m-d') }}">
+              <label for="register_dates">register date</label>
             </div>
 
           </div>

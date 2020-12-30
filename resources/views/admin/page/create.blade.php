@@ -2,30 +2,38 @@
 
 @section("content")
 
+<div class="container">
+  <div class="row">
+    <div class="col-auto ml-auto">
+      @include('partials.alerts')
+    </div>
+  </div>
+</div>
+
 <div class="card-body" style="background-color: white">
   <div class="col-md-12">
     <div class="card-head">
       <ul class="nav nav-tabs" data-toggle="tabs">
-        @foreach($languages as $key =>$language)
-        @if($key == 0)
-        <li class="active"><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @else
-        <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
-        @endif
-
+        @foreach($languages as $key => $language)
+        <li @if($key==0) class="active" @endif>
+          <a href="#{{ $language->id }}">{{ $language->language_name }}</a>
+        </li>
         @endforeach
       </ul>
     </div>
-    <form class="form" role="form" enctype="multipart/form-data" method="post" action="{{route('pages_store')}}">
+    <form class="form" role="form" enctype="multipart/form-data" method="post" action="{{ route('pages.store') }}">
+      @csrf
+
       <div class="card-body tab-content">
         <div class="form-group floating-label">
-          <input type="file" name="photos" class="form-control" accept="image/*">
+          <label for="photo">Photo</label>
+          <input type="file" id="photo" name="photos" class="form-control" accept="image/*">
         </div>
         <div class="form-group">
-          <select class="form-control" id="select1" name="categories">
-            @foreach($page_categories as $key =>$categories)
-            <option value="{{$categories->category_group_id}}">
-              {{$categories->category_name}}
+          <select class="form-control" id="select1" name="category_id">
+            @foreach($categories as $key => $category)
+            <option value="{{ $category->category_group_id }}">
+              {{ $category->category_name }}
             </option>
             @endforeach
           </select>
@@ -33,42 +41,36 @@
         </div>
         @foreach($languages as $key =>$language)
         @if($key == 0)
-        <div class="tab-pane active" id="{{$language->id}}">
+        <div class="tab-pane active" id="{{ $language->id }}">
           <div class="form" role="form">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <input type="hidden" name="language_ids[]" value="{{$language->id}}">
+            <input type="hidden" name="language_ids[]" value="{{ $language->id }}">
             <div class="form-group floating-label">
               <input type="text" name="titles[]" class="form-control" id="regular2">
               <label for="regular2">Title</label>
             </div>
             <div class="form-group floating-label">
-              <input type="text" name="description[]" class="form-control" id="regular2">
+              <input type="text" name="descriptions[]" class="form-control" id="regular2">
               <label for="regular2">Description</label>
             </div>
-
             <div class="form-group floating-label">
-              <textarea name="content[]" class="form-control" id="regular2">
-                                        </textarea>
+              <textarea name="contents[]" class="form-control" id="regular2"></textarea>
             </div>
-
           </div>
         </div>
         @else
-        <div class="tab-pane" id="{{$language->id}}">
+        <div class="tab-pane" id="{{ $language->id }}">
           <div class="form" role="form">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-            <input type="hidden" name="language_ids[]" value="{{$language->id}}">
+            <input type="hidden" name="language_ids[]" value="{{ $language->id }}">
             <div class="form-group floating-label">
               <input type="text" name="titles[]" class="form-control" id="regular2">
               <label for="regular2">Title</label>
             </div>
             <div class="form-group floating-label">
-              <input type="text" name="description[]" class="form-control" id="regular2">
+              <input type="text" name="descriptions[]" class="form-control" id="regular2">
               <label for="regular2">Description</label>
             </div>
             <div class="form-group">
-              <textarea name="content[]">
-                                        </textarea>
+              <textarea name="contents[]"></textarea>
             </div>
           </div>
         </div>
@@ -76,7 +78,8 @@
         @endforeach
 
         <div class="card-actionbar-row">
-          <button type="submit" class="btn btn-flat btn-primary ink-reaction">Save</button>
+          <a href="{{ route('pages.index') }}" class="btn btn-secondary">Back</a>
+          <button type="submit" class="btn btn-primary ink-reaction">Save</button>
         </div>
       </div>
     </form>

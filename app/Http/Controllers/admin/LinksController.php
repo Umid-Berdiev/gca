@@ -230,10 +230,15 @@ class LinksController extends Controller
       $model->link = $request->input("link");
       $model->group = $grp_id;
       $model->language_id = $value;
+
       if ($request->hasFile('cover')) {
-        $model->photo_url =  Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        $model->photo_url =  $request->file('cover')->getClientOriginalName();
+        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
+      if ($request->remove_cover == "on") {
+        $model->cover = "null";
+      }
 
       $model->update();
     }

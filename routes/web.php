@@ -60,53 +60,24 @@ Route::get('locale/{locale}', function ($locale) {
 
 ###admin routes
 Route::middleware(['isAuther'])->prefix('admin')->group(function () {
-  Route::get('/', 'admin\PostController@index')->name('post');
+  Route::get('/', function () {
+    return redirect(route('posts.index'));
+  })->name('post');
+  // Route::get('/', 'admin\PostController@index')->name('post');
 
-  Route::get('pages/categories', 'admin\PageCategoriesController@index')->name('page_categories');
-  Route::get('pages/categories/create', 'admin\PageCategoriesController@create')->name('page_categories_create');
-  Route::get('pages/categories/edit/{id}', 'admin\PageCategoriesController@edit')->name('page_categories_edit');
-  Route::get('pages/categories/delete/{id}', 'admin\PageCategoriesController@destroy')->name('page_categories_delete');
-  Route::post('pages/categories/store', 'admin\PageCategoriesController@store')->name('page_categories_store');
-  Route::post('pages/categories/update', 'admin\PageCategoriesController@update')->name('page_categories_update');
-
-  Route::get('pages', 'admin\PageController@index')->name('pages');
-  Route::get('pages/create', 'admin\PageController@create')->name('pages_create');
-  Route::get('pages/edit/{id}', 'admin\PageController@edit')->name('pages_edit');
-  Route::get('pages/delete/{id}', 'admin\PageController@destroy')->name('pages_delete');
-  Route::post('pages/store', 'admin\PageController@store')->name('pages_store');
-  Route::post('pages/update', 'admin\PageController@update')->name('pages_update');
-
+  Route::resource('documents', 'admin\DocumentController');
+  Route::resource('photos', 'admin\PhotoController');
+  Route::resource('video', 'admin\VideoController');
+  Route::resource('videoalbum', 'admin\VideoalbumController');
+  Route::resource('event-categories', 'admin\EventcategoryController');
+  Route::resource('photo-categories', 'admin\PhotocategoryController');
+  Route::resource('events', 'admin\EventController');
+  Route::resource('page-categories', 'admin\PageCategoryController');
+  Route::resource('pages', 'admin\PageController');
   Route::resource('languages', 'admin\LanguageController');
-  // Route::get('language', 'admin\LanguageController@index')->name('languages');
-  // Route::post('language/edit', 'admin\LanguageController@Update');
-  // Route::get('language/edit', 'admin\LanguageController@UpdateShow')->name('languages_edit');
-  // Route::get('language/delete', 'admin\LanguageController@Delete')->name('languages_delete');
-  // Route::get('language/create', 'admin\LanguageController@Show')->name('languages_create');
-  // Route::post('language/insert', 'admin\LanguageController@Insert');
-
   Route::resource('post-categories', 'admin\PostcategoryController');
-  // Route::get('postcategory', 'admin\PostcategoryController@index')->name('post_category');
-  // Route::post('postcategory/edit', 'admin\PostcategoryController@Update');
-  // Route::get('postcategory/edit', 'admin\PostcategoryController@UpdateShow')->name('post_category_edit');
-  // Route::get('postcategory/delete', 'admin\PostcategoryController@Delete')->name('post_category_delete');
-  // Route::get('postcategory/create', 'admin\PostcategoryController@InsertShow')->name('post_category_create');
-  // Route::post('postcategory/insert', 'admin\PostcategoryController@Insert');
-
   Route::resource('posts', 'admin\PostController');
-  // Route::get('post', 'admin\PostController@index')->name('post');
-  // Route::post('post/edit', 'admin\PostController@Update');
-  // Route::get('post/edit', 'admin\PostController@UpdateShow')->name('post_edit');
-  // Route::get('post/delete', 'admin\PostController@Delete')->name('post_delete');
-  // Route::get('post/create', 'admin\PostController@InsertShow')->name('post_create');
-  // Route::post('post/insert', 'admin\PostController@Insert');
-
   Route::resource('document-categories', 'admin\DocumentCategoryController');
-  // Route::get('doccategory', 'admin\DocumentCategoryController@index')->name('doccategory');
-  // Route::post('doccategory/edit', 'admin\DocumentCategoryController@Update');
-  // Route::get('doccategory/edit', 'admin\DocumentCategoryController@UpdateShow')->name('doccategory_edit');
-  // Route::get('doccategory/delete', 'admin\DocumentCategoryController@Delete')->name('doccategory_delete');
-  // Route::get('doccategory/create', 'admin\DocumentCategoryController@InsertShow')->name('doccategory_create');
-  // Route::post('doccategory/insert', 'admin\DocumentCategoryController@Insert');
 
   Route::get('tendercategory', 'admin\TendercategoryController@index')->name('tendercategory');
   Route::post('tendercategory/edit', 'admin\TendercategoryController@Update');
@@ -115,62 +86,12 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::get('tendercategory/create', 'admin\TendercategoryController@InsertShow')->name('tendercategory_create');
   Route::post('tendercategory/insert', 'admin\TendercategoryController@Insert');
 
-  Route::resource('event-categories', 'admin\EventcategoryController');
-  // Route::get('eventcategory', 'admin\EventcategoryController@index')->name('eventcategory');
-  // Route::post('eventcategory/edit', 'admin\EventcategoryController@Update');
-  // Route::get('eventcategory/edit', 'admin\EventcategoryController@UpdateShow')->name('eventcategory_edit');
-  // Route::get('eventcategory/delete', 'admin\EventcategoryController@Delete')->name('eventcategory_delete');
-  // Route::get('eventcategory/create', 'admin\EventcategoryController@InsertShow')->name('eventcategory_create');
-  // Route::post('eventcategory/insert', 'admin\EventcategoryController@Insert');
-
-  Route::resource('photo-categories', 'admin\PhotocategoryController');
-  // Route::get('photocategory', 'admin\PhotocategoryController@index')->name('photocategory');
-  // Route::post('photocategory/edit', 'admin\PhotocategoryController@Update');
-  // Route::get('photocategory/edit', 'admin\PhotocategoryController@UpdateShow')->name('photocategory_edit');
-  // Route::get('photocategory/delete', 'admin\PhotocategoryController@Delete')->name('photocategory_delete');
-  // Route::get('photocategory/create', 'admin\PhotocategoryController@InsertShow')->name('photocategory_create');
-  // Route::post('photocategory/insert', 'admin\PhotocategoryController@Insert');
-
-  // Route::get('videoalbum', 'admin\VideoalbumController@index')->name('videoalbum');
-  // Route::post('videoalbum/edit', 'admin\VideoalbumController@Update');
-  // Route::get('videoalbum/edit', 'admin\VideoalbumController@UpdateShow')->name('videocategory_edit');
-  // Route::get('videoalbum/delete', 'admin\VideoalbumController@Delete')->name('videocategory_delete');
-  // Route::get('videoalbum/create', 'admin\VideoalbumController@InsertShow')->name('videocategory_create');
-  // Route::post('videoalbum/insert', 'admin\VideoalbumController@Insert');
-
-  Route::resource('events', 'admin\EventController');
-  // Route::get('event', 'admin\EventController@index')->name('event');
-  // Route::post('event/edit', 'admin\EventController@Update');
-  // Route::get('event/edit', 'admin\EventController@UpdateShow')->name('event_edit');
-  // Route::get('event/delete', 'admin\EventController@Delete')->name('event_delete');
-  // Route::get('event/create', 'admin\EventController@InsertShow')->name('event_create');
-  // Route::post('event/insert', 'admin\EventController@Insert');
-
   Route::get('tender', 'admin\TenderController@index')->name('tender');
   Route::post('tender/edit', 'admin\TenderController@Update');
   Route::get('tender/edit', 'admin\TenderController@UpdateShow')->name('tender_edit');
   Route::get('tender/delete', 'admin\TenderController@Delete')->name('tender_delete');
   Route::get('tender/create', 'admin\TenderController@InsertShow')->name('tender_create');
   Route::post('tender/insert', 'admin\TenderController@Insert');
-
-  Route::resource('documents', 'admin\DocumentController');
-  // Route::get('doc', 'admin\DocumentController@index')->name('doc');
-  // Route::post('doc/edit', 'admin\DocumentController@Update');
-  // Route::get('doc/edit', 'admin\DocumentController@UpdateShow')->name('doc_edit');
-  // Route::get('doc/delete', 'admin\DocumentController@Delete')->name('doc_delete');
-  // Route::get('doc/create', 'admin\DocumentController@InsertShow')->name('doc_create');
-  // Route::post('doc/insert', 'admin\DocumentController@Insert');
-
-  Route::resource('photos', 'admin\PhotoController');
-  // Route::get('photo', 'admin\PhotoController@index')->name('photo');
-  // Route::post('photo/edit', 'admin\PhotoController@Update');
-  // Route::get('photo/edit', 'admin\PhotoController@UpdateShow')->name('photo_edit');
-  // Route::get('photo/delete', 'admin\PhotoController@Delete')->name('photo_delete');
-  // Route::get('photo/create', 'admin\PhotoController@InsertShow')->name('photo_create');
-  // Route::post('photo/insert', 'admin\PhotoController@Insert');
-
-  Route::resource('video', 'admin\VideoController');
-  Route::resource('videoalbum', 'admin\VideoalbumController');
 
   Route::get('sorov', 'admin\SorovnomaController@index')->name('sorov');
   Route::post('sorov/edit', 'admin\SorovnomaController@Update');
@@ -252,7 +173,7 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
     Route::get('/', 'admin\GcaInfoController@index')->name('gca.info.index');
     Route::get('edit/{id}', 'admin\GcaInfoController@edit')->name('gca.info.edit');
     Route::get('get', 'admin\GcaInfoController@get')->name('gca.info.get');
-    Route::post('update', 'admin\GcaInfoController@update');
+    Route::post('update', 'admin\GcaInfoController@update')->name('gca.info.update');
   });
 
   Route::get('translate', function () {
@@ -299,6 +220,9 @@ Route::group(['prefix' => '{lang}', 'middleware' => ['lang']], function () {
   Route::get('/photo', 'PhotoController@ViewPhoto');
   Route::get('/obuna/delete', 'FormController@deleteObune');
   Route::post('/errorpage', 'FormController@orpho');
+
+  Route::get('events', 'admin\EventController@getEvents');
+  Route::get('event', 'admin\EventController@getEvent');
 });
 ### end front ###
 
