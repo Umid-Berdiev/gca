@@ -4,7 +4,7 @@
 <section class="main_top_layout" style="background-image: url({{asset('gca/images/main.jpg')}});">
   <div class="container">
     <h2>
-      <span>@lang('blog.events')</span>
+      <span>@lang('events.events')</span>
     </h2>
   </div>
 </section>
@@ -12,6 +12,36 @@
 
 <section class="event_inner">
   <div class="container">
+    <div class="row mb-3">
+      <div class="col-auto">
+        <form class="form-inline" action="{{ url(app()->getLocale() . '/events') }}" method="get">
+          <div class="form-group">
+            <label for="inputDateFrom">@lang('events.from')</label>
+            <input type="date" id="inputDateFrom" name="inputDateFrom" value="{{ request('inputDateFrom') }}"
+              class="form-control mx-sm-3">
+          </div>
+          <div class="form-group">
+            <label for="inputDateTo">@lang('events.to')</label>
+            <input type="date" id="inputDateTo" name="inputDateTo" value="{{ request('inputDateTo') }}"
+              class="form-control mx-sm-3">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">@lang('events.categories')</label>
+            <select class="form-control mx-sm-3" id="exampleFormControlSelect1" name="category">
+              <option value="">@lang('events.all')</option>
+              @foreach ($categories as $cat)
+              <option value="{{ $cat->group}}" @if (request('category')==$cat->group) selected @endif>
+                {{ $cat->category_name }}</option>
+              @endforeach
+            </select>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">@lang('events.filter')</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-auto"></div>
+    </div>
     <div class="row">
       @foreach($upcoming_events as $event)
       <div class="col-lg-6">
@@ -36,8 +66,11 @@
               {{ $event->organization }}
             </div>
             <a href="{{ url(app()->getLocale() . '/event?id=' . $event->id) }}">{{ $event->title }}</a>
-            {{-- <a href="{{ URL(App::getLocale().'/event/'.$curcat->group.'/'.$event->group) }}">{{ $event->title }}</a>
-            --}}
+            <small>
+              @if ($event->category)
+              {{ $event->category->category_name }}
+              @endif
+            </small>
             <img src="{{ asset('storage/events/' . $event->cover) }}" alt="event_cover">
           </div>
         </div>

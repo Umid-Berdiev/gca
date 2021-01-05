@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class menumaker extends Model
+class MenuMaker extends Model
 {
-    //
+  protected $table = 'menumakers';
 }

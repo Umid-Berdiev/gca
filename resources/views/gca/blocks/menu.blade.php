@@ -1,135 +1,37 @@
-@php $menus = DB::table("menumakers")
-->where("language_id", "=", \App\Http\Controllers\NewsController::getlangid())
-->where("parent_id", "=", 0)
-->orderBy('orders', 'ASC')
-->get();
+@php
+$current_lang = \App\Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+$menu = \App\MenuMaker::where('language_id', $current_lang->id)->get();
 @endphp
 
 <div class="container">
   <div class="hdr_main">
-    <a href="{{ URL(App::getLocale()."/") }}" class="logo">
-      <img src="{{asset('project_gca/images/logo.png')}}" alt="">
+    <a href="{{ url(app()->getLocale() . '/') }}" class="logo">
+      <img src="{{ asset('project_gca/images/logo.png') }}" alt="Logo">
     </a>
     <ul class="ht_ul">
-      @foreach($menus as $value)
+      @foreach ($menu->where('parent_id', 0) as $item)
       @php
-      $modelsx = DB::table("menumakers")
-      ->where("language_id", "=", \App\Http\Controllers\NewsController::getlangid())
-      ->where("parent_id", "=", $value->group)
-      ->orderBy('orders', 'ASC')
-      ->get();
+      $sub_menu = $menu->where('parent_id', $item->group);
       @endphp
-      @if(count($modelsx) >0)
+      @if (count($sub_menu) > 0)
       <li class="sub_menu">
-        <a href="#">
-          {{ $value->menu_name }}
-        </a>
+        <a href="#">{{ $item->menu_name }}</a>
         <ul>
-          @foreach($modelsx as $valuex)
-          <?php $modelsxs = DB::table("menumakers")
-                                  ->where("language_id", "=", \App\Http\Controllers\NewsController::getlangid())
-                                  ->where("parent_id", "=", $valuex->group)
-                                  ->orderBy('orders', 'ASC')
-                                  ->get(); ?>
-          @if(count($modelsxs) >0)
-          <li class="sub_menu">
-            <a href="#">
-              {{ $valuex->menu_name }}
-            </a>
-
-            <ul class="sub_menu">
-              @foreach($modelsxs as $valuexx)
-
-              <li><a href="@if($valuexx->type ==" 1") @if(strpos($valuexx->link, "http") ===true)
-                  {{ $valuexx->link }}
-                  @else {{ URL(App::getLocale().$valuexx->link) }} @endif
-                  @elseif($valuexx->type =="2")
-                  {{ URL(App::getLocale()."/posts/".$valuexx->alias_category_id) }}
-                  @elseif($valuexx->type =="3")
-                  <?php   $pages = DB::table("pages")
-                                                      ->where("language_id", "=", \App\Http\Controllers\NewsController::getlangid())
-                                                      ->where("page_group_id", "=", $valuexx->alias_category_id)
-                                                      ->first(); ?>
-                  {{ URL(App::getLocale()."/page/".$pages->page_category_group_id."/".$pages->page_group_id) }}
-                  @elseif($valuexx->type =="4")
-                  {{ URL(App::getLocale()."/doc/".$valuexx->alias_category_id) }}
-                  @elseif($valuexx->type =="5")
-                  {{ URL(App::getLocale()."/event/".$valuexx->alias_category_id) }}
-                  @elseif($valuexx->type =="6")
-                  {{ URL(App::getLocale()."/tender/".$valuexx->alias_category_id) }}
-                  @elseif($valuexx->type =="7")
-                  @elseif($valuexx->type =="8")
-                  @endif">{{ $valuexx->menu_name }}</a></li>
-              <li role="separator" class="divider"></li>
-              @endforeach
-            </ul>
+          @foreach ($sub_menu as $sub_item)
+          <li>
+            <a href="{{ url(app()->getLocale() . $sub_item->link) }}">{{ $sub_item->menu_name }}</a>
           </li>
-          @else
-          <li><a href="@if($valuex->type ==" 1") <?php
-                                          $mystring = $valuex->link; $findme = 'http'; $pos = strpos($mystring, $findme);
-                                          if ($pos === false) {
-  
-                                              echo URL(App::getLocale().$valuex->link);
-                                          }
-                                          else {
-                                              echo $valuex->link;
-  
-                                          }
-                                          ?> @elseif($valuex->type =="2")
-              {{ URL(App::getLocale()."/posts/".$valuex->alias_category_id) }}
-              @elseif($valuex->type =="3")
-              <?php   $pages= DB::table("pages")
-                                              ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
-                                              ->where("page_group_id","=",$valuex->alias_category_id)
-                                              ->first(); ?>
-              {{ URL(App::getLocale()."/page/".$pages->page_category_group_id."/".$pages->page_group_id) }}
-              @elseif($valuex->type =="4")
-              {{ URL(App::getLocale()."/doc/".$valuex->alias_category_id) }}
-              @elseif($valuex->type =="5")
-              {{ URL(App::getLocale()."/event/".$valuex->alias_category_id) }}
-              @elseif($valuex->type =="6")
-              {{ URL(App::getLocale()."/tender/".$valuex->alias_category_id) }}
-              @elseif($valuex->type =="7")
-              {{ URL(App::getLocale()."/video/".$valuex->alias_category_id) }}
-              @elseif($valuex->type =="8")
-              {{ URL(App::getLocale()."/photo/".$valuex->alias_category_id) }}
-              @endif">{{ $valuex->menu_name }}</a></li>
-          <li role="separator" class="divider"></li>
-
-          @endif
-
           @endforeach
         </ul>
       </li>
       @else
-      <li><a href="@if($value->type ==" 1") @if(strpos($valuex->link, "http") === true)
-          {{ $value->link }}
-          @else {{ URL(App::getLocale().$value->link) }} @endif
-          @elseif($value->type =="2")
-          {{ URL(App::getLocale()."/posts/".$value->alias_category_id) }}
-          @elseif($value->type =="3")
-          <?php   $pages= DB::table("pages")
-                              ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
-                              ->where("page_group_id","=",$value->alias_category_id)
-                              ->first();?>
-          {{ URL(App::getLocale()."/page/".$pages->page_category_group_id."/$pages->page_group_id") }}
-          @elseif($value->type =="4")
-          {{ URL(App::getLocale()."/doc/".$value->alias_category_id) }}
-          @elseif($value->type =="5")
-          {{ URL(App::getLocale()."/event/".$value->alias_category_id) }}
-          @elseif($value->type =="6")
-          {{ URL(App::getLocale()."/tender/".$value->alias_category_id) }}
-          @elseif($value->type =="7")
-          {{ URL(App::getLocale()."/video/".$value->alias_category_id) }}
-          @elseif($value->type =="8")
-          {{ URL(App::getLocale()."/photo/".$value->alias_category_id) }}
-          @endif">
-          {{ $value->menu_name }}</a></li>
-      <li role="separator" class="divider"></li>
+      <li>
+        <a href="{{ url(app()->getLocale() . $item->link) }}">{{ $item->menu_name }}</a>
+      </li>
       @endif
       @endforeach
-
     </ul>
+
     <div class="form_header">
       <span class="togle_form_header">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,8 +45,7 @@
             fill="#7B7A7E" />
         </svg>
       </span>
-      <form action="{{URL(App::getLocale().'/search')}}" class="navbar-form" style="width: max-content;">
-
+      <form action="{{ url(app()->getLocale() . '/search') }}" class="navbar-form" style="width: max-content;">
         <div class="form-group">
           <input type="text" name="search" placeholder="@lang('blog.search')">
           <button type="submit">

@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-use App\Language as lang;
+use App\Language as L;
 
 class Language
 {
@@ -17,10 +17,10 @@ class Language
    */
   public function handle($request, Closure $next)
   {
-    $model = lang::where("language_prefix", $request->segment(1))->first();
+    $model = L::where("language_prefix", $request->segment(1))->first();
 
     if ($model) {
-      \App::setLocale($model->language_prefix);
+      app()->setLocale($model->language_prefix);
       return $next($request);
     } else {
       if (

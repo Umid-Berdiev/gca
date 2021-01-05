@@ -15,7 +15,7 @@ class Event extends Model
 
   public function category()
   {
-    return $this->belongsTo('App\EventCategory', 'event_category_id', 'group');
+    return $this->belongsTo('App\EventCategory', 'event_category_id', 'group')->select('id', 'group', 'category_name');
   }
 
   public function language()

@@ -72,7 +72,6 @@
           tooltip: 'User not available on this day.'
         };
       }
-
     }
   });
 

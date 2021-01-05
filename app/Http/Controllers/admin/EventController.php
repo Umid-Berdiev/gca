@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\EventCategory;
 use App\Event;
-use DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -181,15 +180,33 @@ class EventController extends Controller
 
   public function getEvents(Request $request)
   {
-    if ($request->date) {
-      $upcoming_events = Event::where('language_id', $this->getLang())
-        ->whereDate('datestart', '<=', $request->date)
-        ->whereDate('dateend', '>=', $request->date)->paginate(10);
-    } else $upcoming_events = Event::where('language_id', $this->getLang())->whereDate('dateend', '>=', date('Y-m-d'))->paginate(10);
+    $params = $request->all();
+    // dd($params);
+    $data = Event::where('language_id', $this->getLang())->with('category');
 
-    $category = EventCategory::where("language_id", $this->getLang())->first();
+    if (isset($params['date']) && $params['date'])
+      $data = $data->whereDate('datestart', '<=', $params['date'])
+        ->whereDate('dateend', '>=', $params['date']);
+    if ($params['inputDateFrom'] && $params['inputDateTo'])
+      $data = $data->whereBetween('dateend', [$params['inputDateFrom'], $params['inputDateTo']]);
+    if ($params['inputDateFrom'] && !$params['inputDateTo'])
+      $data = $data->whereDate('datestart', '>=', $params['inputDateFrom']);
+    if ($params['inputDateTo'] && !$params['inputDateFrom'])
+      $data = $data->whereDate('dateend', '<=', $params['inputDateTo']);
+    if ($params['category']) {
+      if (!$params['inputDateFrom'] && !$params['inputDateTo']) {
+        $data = $data->where('event_category_id', $params['category'])
+          ->whereDate('dateend', '>=', date('Y-m-d'));
+      } else {
+        $data = $data->where('event_category_id', $params['category']);
+      }
+    } else $data = $data->whereDate('dateend', '>=', date('Y-m-d'));
 
-    return view('gca.events', compact('upcoming_events', 'category'));
+    $upcoming_events = $data->paginate(10);
+
+    $categories = EventCategory::where("language_id", $this->getLang())->get();
+
+    return view('gca.events', compact('upcoming_events', 'categories'));
   }
 
   public function getEvent(Request $request)

@@ -1,15 +1,9 @@
 @extends("admin.layout.template")
 
 @section("content")
-@if ($errors->any())
-<div class="alert alert-danger">
-  <ul>
-    @foreach ($errors->all() as $error)
-    <li>{{ $error }}</li>
-    @endforeach
-  </ul>
-</div>
-@endif
+
+@include('partials.alerts')
+
 <div class="col-md-12" style="background-color: white;padding: 25px;">
   <div class="col-md-4">
     <ul id="main-menu" class="gui-controls">
@@ -70,16 +64,9 @@
         <!--end /submenu -->
       </li>
     </ul>
-
-
-
   </div>
 
-
-
-
   <div class="col-md-6">
-
     <div class="card-body" style="background-color: white">
       <div class="col-md-12">
         <div class="card-head">
@@ -90,22 +77,21 @@
             @else
             <li><a href="#{{$language->id}}">{{$language->language_name}}</a></li>
             @endif
-
             @endforeach
           </ul>
         </div>
         <form class="form" role="form" enctype="multipart/form-data" method="post"
-          action="{{  URL("/admin/menubuilder/edit")}}">
+          action="{{ url('/admin/menubuilder/') }}">
+          @csrf
+          @method('put')
 
           <div class="card-body tab-content">
             @foreach($languages as $key =>$language)
             @if($key == 0)
-
             @foreach($edit as $valuesx)
             @if($valuesx->language_id == $language->id)
             <div class="tab-pane active" id="{{$language->id}}">
               <div class="form" role="form">
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="grp_id" value="{{$grp_id}}">
                 <input type="hidden" name="language_ids[]" value="{{$language->id}}">
                 <div class="form-group floating-label">
@@ -202,7 +188,6 @@
                   </select>
                   <label for="regular2">type</label>
                 </div>
-
                 <div class="form-group floating-label">
 
                   <label for="regular2">Categories</label>
@@ -288,11 +273,9 @@
                   </select>
                 </div>
                 <div class="form-group floating-label">
-                  <input type="text" name="link" class="form-control" id="regular2">
+                  <input type="text" name="link" class="form-control" id="regular2" value="{{ $valuesx->link }}">
                   <label for="regular2">link</label>
                 </div>
-
-
               </div>
             </div>
             @endif
@@ -302,7 +285,6 @@
             @if($valuesx->language_id == $language->id)
             <div class="tab-pane" id="{{$language->id}}">
               <div class="form" role="form">
-                <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" name="language_ids[]" value="{{$language->id}}">
                 <div class="form-group floating-label">
                   <input type="text" name="menu_name[]" value="{{ $valuesx->menu_name }}" class="form-control"

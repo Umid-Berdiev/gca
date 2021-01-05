@@ -1,23 +1,11 @@
 @extends("admin.layout.template")
 
 @section("content")
-@if ($errors->any())
-<div class="alert alert-danger">
-  <ul>
-    @foreach ($errors->all() as $error)
-    <li>{{ $error }}</li>
-    @endforeach
-  </ul>
-</div>
-@endif
+
+@include('partials.alerts')
+
 <div class="col-md-12" style="background-color: white;padding: 25px;">
-
-
-
-
-
   <div class="col-md-6">
-
     <div class="card-body" style="background-color: white">
       <div class="col-md-12">
         <div class="card-head">
@@ -183,7 +171,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 @endsection

@@ -124,7 +124,7 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::get('menuchange', 'MenuController@orderchange')->name('menu_change');
   Route::get('menudelete', 'MenuController@destroy')->name('menu_destroy');
   Route::post('menubuilder/insert', 'MenuController@Insert');
-  Route::post('menubuilder/edit', 'MenuController@Update');
+  Route::put('menubuilder', 'MenuController@update');
 
   Route::get('users', 'admin\UserController@getUsers')->name('users');
   Route::get('logout', 'admin\UserController@logout');
