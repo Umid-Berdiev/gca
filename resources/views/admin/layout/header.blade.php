@@ -23,7 +23,8 @@
         @foreach(\App\Language::all() as $key => $language)
         <li>
           <div>
-            <a class="text-uppercase" href="{{ url('/locale/' . $language->language_prefix) }}">
+            <a class="text-uppercase {{ app()->getLocale() == $language->language_prefix ? 'text-danger' : '' }}"
+              href="{{ url('/locale/' . $language->language_prefix) }}">
               {{ $language->language_prefix }}
             </a>
 

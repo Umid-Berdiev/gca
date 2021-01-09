@@ -154,6 +154,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
 
             </ul>
           </li>
+
           <li class="gui-folder" id="pager">
             <a class="{{ starts_with(Route::current()->uri, 'admin/event') ? 'active' : '' }}">
               <div class="gui-icon"><i class="md md-computer"></i></div>
@@ -298,6 +299,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
 
             </ul>
           </li>
+
           <li class="gui-folder" id="pager">
             <ul>
               @if(
@@ -317,24 +319,13 @@ $user = \Illuminate\Support\Facades\Auth::user();
               @endif
 
             </ul>
-
-            @if(
-            'statistica' == Route::current()->getName() ||
-            'statistica_create' == Route::current()->getName()
-            )
-          <li class="active">
-            <a href="{{URL('/admin/statistica')}}">
-              <span class="title">Статистика</span>
-            </a>
-          </li>
-          @else
-          <li>
-            <a href="{{URL('/admin/statistica')}}">
-              <span class="title">Статистика</span>
-            </a>
           </li>
 
-          @endif
+          <li class="{{ starts_with(Route::current()->uri, 'admin/statistics') ? 'active' : '' }}">
+            <a href="{{ route('statistics.index') }}">
+              <span class="title">{{ __('Статистика') }}</span>
+            </a>
+          </li>
 
           @if('gca.info.index' == Route::current()->getName())
           <li class="active">

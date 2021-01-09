@@ -37,16 +37,20 @@
           <td>NAME</td>
           <td>DESCRIPTION</td>
           <td>CATEGORY</td>
+          <td>COVER</td>
           <td>ACTIONS</td>
         </tr>
       </thead>
       <tbody>
-        @foreach($table as $key => $page)
+        @foreach($videos as $key => $page)
         <tr>
-          <td>{{$key+1}}</td>
-          <td>{{$page->name}}</td>
-          <td>{{$page->description}}</td>
-          <td>{{$page->title}}</td>
+          <td>{{ $key + 1 }}</td>
+          <td>{{ $page->name }}</td>
+          <td>{{ $page->description }}</td>
+          <td>{{ $page->category->title }}</td>
+          <td>
+            <img src="{{ asset('images/videos/' . $page->cover) }}" alt="Cover image" width="100">
+          </td>
           <td>
             <form style="display: inline;" action="{{ route('video.edit', $page->group) }}" method="get">
               <button>
@@ -65,7 +69,7 @@
         @endforeach
       </tbody>
     </table>
-    {{ $table->links() }}
+    {{ $videos->links() }}
   </div>
 </div>
 

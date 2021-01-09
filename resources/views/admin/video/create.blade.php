@@ -29,6 +29,10 @@
           </select>
           <label for="category_id">Video category</label>
         </div>
+        <div class="form-group floating-label">
+          <input type="text" name="youtube_link" class="form-control" id="links">
+          <label for="links">Youtube link id</label>
+        </div>
         @foreach($languages as $key => $language)
         @if($key == 0)
         <div class="tab-pane active" id="{{$language->id}}">
@@ -41,10 +45,6 @@
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" id="descriptions">
               <label for="descriptions">Description</label>
-            </div>
-            <div class="form-group floating-label">
-              <input type="text" name="links[]" class="form-control" id="links">
-              <label for="links">Youtube link id</label>
             </div>
             {{-- <div class="form-group floating-label">
               <input type="file" name="cover" class="form-control" id="cover">
@@ -63,10 +63,6 @@
             <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" id="descriptions">
               <label for="descriptions">Description</label>
-            </div>
-            <div class="form-group floating-label">
-              <input type="text" name="links[]" class="form-control" id="links">
-              <label for="links">Youtube link id</label>
             </div>
           </div>
         </div>

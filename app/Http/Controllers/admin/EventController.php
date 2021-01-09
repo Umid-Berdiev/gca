@@ -180,25 +180,23 @@ class EventController extends Controller
 
   public function getEvents(Request $request)
   {
-    $params = $request->all();
-    // dd($params);
     $data = Event::where('language_id', $this->getLang())->with('category');
 
-    if (isset($params['date']) && $params['date'])
-      $data = $data->whereDate('datestart', '<=', $params['date'])
-        ->whereDate('dateend', '>=', $params['date']);
-    if ($params['inputDateFrom'] && $params['inputDateTo'])
-      $data = $data->whereBetween('dateend', [$params['inputDateFrom'], $params['inputDateTo']]);
-    if ($params['inputDateFrom'] && !$params['inputDateTo'])
-      $data = $data->whereDate('datestart', '>=', $params['inputDateFrom']);
-    if ($params['inputDateTo'] && !$params['inputDateFrom'])
-      $data = $data->whereDate('dateend', '<=', $params['inputDateTo']);
-    if ($params['category']) {
-      if (!$params['inputDateFrom'] && !$params['inputDateTo']) {
-        $data = $data->where('event_category_id', $params['category'])
+    if ($request['date'])
+      $data = $data->whereDate('datestart', '<=', $request['date'])
+        ->whereDate('dateend', '>=', $request['date']);
+    if ($request['inputDateFrom'] && $request['inputDateTo'])
+      $data = $data->whereBetween('dateend', [$request['inputDateFrom'], $request['inputDateTo']]);
+    if ($request['inputDateFrom'] && !$request['inputDateTo'])
+      $data = $data->whereDate('datestart', '>=', $request['inputDateFrom']);
+    if ($request['inputDateTo'] && !$request['inputDateFrom'])
+      $data = $data->whereDate('dateend', '<=', $request['inputDateTo']);
+    if ($request['category']) {
+      if (!$request['inputDateFrom'] && !$request['inputDateTo']) {
+        $data = $data->where('event_category_id', $request['category'])
           ->whereDate('dateend', '>=', date('Y-m-d'));
       } else {
-        $data = $data->where('event_category_id', $params['category']);
+        $data = $data->where('event_category_id', $request['category']);
       }
     } else $data = $data->whereDate('dateend', '>=', date('Y-m-d'));
 

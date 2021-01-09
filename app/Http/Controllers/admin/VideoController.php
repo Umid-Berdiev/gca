@@ -26,24 +26,21 @@ class VideoController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $model = \DB::table("videogalleries")
-        ->select(['videogalleries.*', 'languages.language_name', 'videogallerycategories.title'])
-        ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
-        ->leftJoin("videogallerycategories", "videogallerycategories.group", "=", "videogalleries.category_id")
-        ->where("videogalleries.language_id", "=", $this->getLang())
-        ->where("videogallerycategories.language_id", "=", $this->getLang())
-        ->orderBy('id', 'desc')
-        ->paginate(10);
+      // $model = \DB::table("videogalleries")
+      //   ->select(['videogalleries.*', 'languages.language_name', 'videogallerycategories.title'])
+      //   ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
+      //   ->leftJoin("videogallerycategories", "videogallerycategories.group", "=", "videogalleries.category_id")
+      //   ->where("videogalleries.language_id", "=", $this->getLang())
+      //   ->where("videogallerycategories.language_id", "=", $this->getLang())
+      //   ->orderBy('id', 'desc')
+      //   ->paginate(10);
+      $videos = Video::where('language_id', $this->getLang())->with('category')->latest()->paginate(10);
     }
 
-    $lang = Language::all()->where('status', '1');
-    $doccat = Videoalbum::where("language_id", $this->getLang())->get();
+    $languages = Language::where('status', '1')->get();
+    $categories = Videoalbum::where("language_id", $this->getLang())->get();
 
-    return view("admin.video.index", [
-      "table" => $model,
-      "language" => $lang,
-      "category" => $doccat,
-    ]);
+    return view("admin.video.index", compact('videos', 'languages'));
   }
 
   public function create()
@@ -62,8 +59,7 @@ class VideoController extends Controller
     $validator = Validator::make($request->all(), [
       'names.*' => 'required|max:255',
       'descriptions.*' => 'required|max:255',
-      'category_id' => 'required',
-      'group' => 'required'
+      'category_id' => 'required'
     ]);
 
     if ($validator->fails()) {
@@ -72,20 +68,24 @@ class VideoController extends Controller
         ->withInput();
     }
 
+    $youtube_link = $request->youtube_link;
     $grp_id = $this->getGroupId();
 
     foreach ($request->language_ids as $key => $value) {
       $model = new Video();
       $model->name = $request->names[$key];
       $model->description = $request->descriptions[$key];
-      $model->youtube_link = $request->links[$key];
+      $model->youtube_link = $youtube_link;
       $model->category_id = $request->category_id;
       $model->group = $grp_id;
       $model->language_id = $value;
 
-      if ($request->hasFile("cover")) {
-        $model->cover = Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      } else $model->cover = "null";
+      if ($youtube_link) {
+        $youtube_link_cover = 'https://img.youtube.com/vi/' . $youtube_link . '/sddefault.jpg';
+        $filename = $youtube_link . '-' . basename($youtube_link_cover);
+        \Image::make($youtube_link_cover)->save(public_path('images\\videos\\' . $filename));
+        $model->cover = $filename;
+      } else $model->cover = "";
 
       $model->save();
     }
@@ -112,8 +112,7 @@ class VideoController extends Controller
     $validator = Validator::make($request->all(), [
       'names.*' => 'required|max:255',
       'descriptions.*' => 'required|max:255',
-      'category_id' => 'required',
-      'group' => 'required'
+      'category_id' => 'required'
     ]);
 
     if ($validator->fails()) {
@@ -122,21 +121,25 @@ class VideoController extends Controller
         ->withInput();
     }
 
+    $youtube_link = $request->youtube_link;
+
     foreach ($request->language_ids as $key => $value) {
       $model = Video::where("group", $id)
         ->where("language_id", $value)
         ->first();
       $model->name = $request->names[$key];
       $model->description = $request->descriptions[$key];
-      $model->youtube_link = $request->links[$key];
+      $model->youtube_link = $youtube_link;
       $model->category_id = $request->category_id;
       $model->group = $id;
       $model->language_id = $value;
 
-      if ($request->hasFile("cover")) {
-        $model->cover = $request->file('cover')->getClientOriginalName();
-        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      } else $model->cover = "null";
+      if ($youtube_link) {
+        $youtube_link_cover = 'https://img.youtube.com/vi/' . $youtube_link . '/sddefault.jpg';
+        $filename = $youtube_link . '-' . basename($youtube_link_cover);
+        \Image::make($youtube_link_cover)->save(public_path('images\\videos\\' . $filename));
+        $model->cover = $filename;
+      } else $model->cover = "";
 
       if ($request->remove_cover == "on") {
         $model->cover = "null";
@@ -156,7 +159,7 @@ class VideoController extends Controller
   public function destroy($id)
   {
     Video::where("group", $id)->delete();
-    return redirect(route('videoalbum.index'))->with('success', 'Deleted!');
+    return redirect(route('videos.index'))->with('success', 'Deleted!');
   }
 
   public function getLang()

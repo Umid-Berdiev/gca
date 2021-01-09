@@ -41,12 +41,12 @@
         </tr>
       </thead>
       <tbody>
-        @foreach($table as $key => $page)
+        @foreach($docs as $key => $page)
         <tr>
           <td>{{$key+1}}</td>
           <td>{{$page->title}}</td>
           <td>{{$page->r_number}}</td>
-          <td>{{$page->category_name}}</td>
+          <td>{{$page->category->category_name}}</td>
           <td>
             <form style="display: inline;" action="{{ route('documents.edit', $page->group) }}" method="get">
               <button>
@@ -65,7 +65,7 @@
         @endforeach
       </tbody>
     </table>
-    {{ $table->links() }}
+    {{ $docs->links() }}
   </div>
 </div>
 

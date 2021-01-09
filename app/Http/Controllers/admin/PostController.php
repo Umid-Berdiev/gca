@@ -76,7 +76,7 @@ class PostController extends Controller
     $grp_id = $this->postGroup($request->input("post_category_id"));
 
     foreach ($request->language_ids as $key => $value) {
-      $model = new post();
+      $model = new Post();
       $model->datetime = $request->datetime;
       $model->title = $request->titles[$key];
       $model->decription = $request->decriptions[$key];

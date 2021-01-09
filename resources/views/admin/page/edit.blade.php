@@ -38,7 +38,7 @@
           <input type="hidden" name="page_group_id" value="{{ $page_group->id }}">
         </div>
         <div class="form-group">
-          <select class="form-control" id="select1" name="categories">
+          <select class="form-control" id="select1" name="category_id">
             @foreach($categories as $key =>$categories)
             <option @if($categories->category_group_id == $page_group->page_category_group_id) selected @endif
               value="{{ $categories->category_group_id }}">

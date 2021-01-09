@@ -15,36 +15,35 @@ class DocumentController extends Controller
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $model = \DB::table("docs")
-        ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
-        ->leftJoin("languages", "languages.id", "=", "docs.language_id")
-        ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
-        ->where("docs.language_id", "=", $this->getLang())
-        ->where("doccategories.language_id", "=", $this->getLang())
-        ->where("docs.title", "LIKE", '%' . $request->input("search") . '%')
-        ->orWhere("docs.description", "LIKE", '%' . $request->input("search") . '%')
-        ->orWhere("docs.r_number", "LIKE", '%' . $request->input("search") . '%')
-        ->orderBy('id', 'desc')
-        ->paginate(10);
+      $docs = Document::where('title', 'like', '%' . $request->input("search") . '%')->where('language_id')->with('category')->latest()->paginate(10);
+
+      // $model = \DB::table("docs")
+      //   ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
+      //   ->leftJoin("languages", "languages.id", "=", "docs.language_id")
+      //   ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
+      //   ->where("docs.language_id", "=", $this->getLang())
+      //   ->where("doccategories.language_id", "=", $this->getLang())
+      //   ->where("docs.title", "LIKE", '%' . $request->input("search") . '%')
+      //   ->orWhere("docs.description", "LIKE", '%' . $request->input("search") . '%')
+      //   ->orWhere("docs.r_number", "LIKE", '%' . $request->input("search") . '%')
+      //   ->orderBy('id', 'desc')
+      //   ->paginate(10);
     } else {
-      $model = \DB::table("docs")
-        ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
-        ->leftJoin("languages", "languages.id", "=", "docs.language_id")
-        ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
-        ->where("docs.language_id", "=", $this->getLang())
-        ->where("doccategories.language_id", "=", $this->getLang())
-        ->orderBy('id', 'desc')
-        ->paginate(10);
+      $docs = Document::where('language_id')->with('category')->latest()->paginate(10);
+
+      // $model = \DB::table("docs")
+      //   ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
+      //   ->leftJoin("languages", "languages.id", "=", "docs.language_id")
+      //   ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
+      //   ->where("docs.language_id", "=", $this->getLang())
+      //   ->where("doccategories.language_id", "=", $this->getLang())
+      //   ->orderBy('id', 'desc')
+      //   ->paginate(10);
     }
 
-    $lang = Language::where('status', '1')->get();
-    $doccat = DocumentCategory::where("language_id", $this->getLang())->get();
+    $languages = Language::where('status', '1')->get();
 
-    return view("admin.document.index", [
-      "table" => $model,
-      "language" => $lang,
-      "category" => $doccat,
-    ]);
+    return view("admin.document.index", compact('docs', 'languages'));
   }
 
   public function create()

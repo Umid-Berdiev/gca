@@ -69,15 +69,16 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::resource('photos', 'admin\PhotoController');
   Route::resource('video', 'admin\VideoController');
   Route::resource('videoalbum', 'admin\VideoalbumController');
-  Route::resource('event-categories', 'admin\EventcategoryController');
-  Route::resource('photo-categories', 'admin\PhotocategoryController');
+  Route::resource('event-categories', 'admin\EventCategoryController');
+  Route::resource('photo-categories', 'admin\PhotoCategoryController');
   Route::resource('events', 'admin\EventController');
   Route::resource('page-categories', 'admin\PageCategoryController');
   Route::resource('pages', 'admin\PageController');
   Route::resource('languages', 'admin\LanguageController');
-  Route::resource('post-categories', 'admin\PostcategoryController');
+  Route::resource('post-categories', 'admin\PostCategoryController');
   Route::resource('posts', 'admin\PostController');
   Route::resource('document-categories', 'admin\DocumentCategoryController');
+  Route::resource('statistics', 'admin\StatisticsController');
 
   Route::get('tendercategory', 'admin\TendercategoryController@index')->name('tendercategory');
   Route::post('tendercategory/edit', 'admin\TendercategoryController@Update');
@@ -136,10 +137,10 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::get('users/delete', 'admin\UserController@Delete');
   Route::get('users/profile', 'admin\UserController@Profile');
 
-  Route::get('statistica', 'admin\StatisticaController@index')->name('statistica');
-  Route::get('statistica/create', 'admin\StatisticaController@create')->name('statistica_create');
-  Route::get('statistica/destroy', 'admin\StatisticaController@destroy');
-  Route::post('statistica/store', 'admin\StatisticaController@store');
+  // Route::get('statistics', 'admin\StatisticsController@index')->name('statistics');
+  // Route::get('statistics/create', 'admin\StatisticsController@create')->name('statistica_create');
+  // Route::get('statistics/destroy', 'admin\StatisticsController@destroy');
+  // Route::post('statistics/store', 'admin\StatisticsController@store');
 
   Route::post('raxbariyat/store', 'admin\RaxbariyatController@store');
   Route::get('raxbariyat', 'admin\RaxbariyatController@index')->name('raxbariyat');
@@ -210,7 +211,7 @@ Route::group(['prefix' => '{lang}', 'middleware' => ['lang']], function () {
   Route::get('/{page}/{id}', 'SearchController@allin')->name('pagesall');
   Route::get('/{page}/{id}/{ids}', 'SearchController@allinin')->name('pagesallin');
   Route::get('/downloads', 'SearchController@download');
-  Route::get('/statistica', 'FrontController@getStatistika');
+  Route::get('/statistics', 'FrontController@getStatistika');
   Route::get('/raxbariyat', 'FrontController@getRaxbariyat');
   Route::get('/cv_form', 'CvController@index');
   Route::get('/send', 'FormController@index');
@@ -254,6 +255,18 @@ Route::get('artisan/route-clear', function () {
 Route::get('artisan/view-clear', function () {
   $exitCode = \Illuminate\Support\Facades\Artisan::call('view:clear');
   return '<h1>View cache cleared</h1>';
+});
+
+//Clear View cache:
+Route::get('artisan/view-cache', function () {
+  $exitCode = \Illuminate\Support\Facades\Artisan::call('view:cache');
+  return '<h1>View cached</h1>';
+});
+
+//Clear View cache:
+Route::get('artisan/event-cache', function () {
+  $exitCode = \Illuminate\Support\Facades\Artisan::call('event:cache');
+  return '<h1>Event cached</h1>';
 });
 
 //Clear Config cache:

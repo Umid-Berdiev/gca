@@ -16,13 +16,16 @@ class PageCategoryController extends Controller
   {
     $languages = Language::where('status', 1)->get();
     $languages_min = Language::min('id');
-    $categories = DB::table('pages_categories')
-      ->Leftjoin('pages_categories_groups', 'pages_categories.category_group_id', '=', 'pages_categories_groups.id')
-      ->select('pages_categories.*')
-      ->where('pages_categories_groups.status', 1)
-      ->where('pages_categories.language_id', $languages_min)
-      ->orderBy('id', 'desc')
-      ->paginate(10);
+    // dd($languages_min);
+    // $categories = DB::table('pages_categories')
+    //   ->Leftjoin('pages_categories_groups', 'pages_categories.category_group_id', '=', 'pages_categories_groups.id')
+    //   ->select('pages_categories.*')
+    //   ->where('pages_categories_groups.status', 1)
+    //   ->where('pages_categories.language_id', $languages_min)
+    //   ->orderBy('id', 'desc')
+    //   ->paginate(10);
+
+    $categories = PageCategory::where('language_id', $this->getLang())->latest()->paginate(10);
 
     return view("admin.page_category.index", compact('languages', 'categories'));
   }
@@ -99,5 +102,13 @@ class PageCategoryController extends Controller
   {
     PageCategory::where('category_group_id', $id)->delete();
     return redirect(route('page-categories.index'))->with('success', 'Deleted!');
+  }
+
+  private function getLang()
+  {
+    $current_locale = app()->getLocale() ?? 'en';
+    $model = Language::where('status', '1')->where("language_prefix", $current_locale)->first();
+
+    return $model->id;
   }
 }

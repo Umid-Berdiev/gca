@@ -21,17 +21,20 @@ class PageController extends Controller
     $tenders = Tender::take(3)->where('language_id', $this->getLang())->get();
     $languages = Language::where('status', 1)->get();
     $languages_min = Language::min('id');
-    $pages = DB::table('pages_groups')
-      ->leftJoin('pages', 'pages.page_group_id', '=', 'pages_groups.id')
-      ->leftJoin('pages_categories', 'pages_categories.category_group_id', '=', 'pages.page_category_group_id')
-      ->select('pages.*', 'pages_categories.*')
-      ->where('pages.language_id', $languages_min)
-      ->where('pages_groups.status', 1)
-      ->where('pages_categories.language_id', $languages_min)
-      ->orderBy('pages_groups.id', 'desc')
-      ->paginate(10);
+    // $pages = DB::table('pages_groups')
+    //   ->leftJoin('pages', 'pages.page_group_id', '=', 'pages_groups.id')
+    //   ->leftJoin('pages_categories', 'pages_categories.category_group_id', '=', 'pages.page_category_group_id')
+    //   ->select('pages.*', 'pages_categories.*')
+    //   ->where('pages.language_id', $languages_min)
+    //   ->where('pages_groups.status', 1)
+    //   ->where('pages_categories.language_id', $languages_min)
+    //   ->orderBy('pages_groups.id', 'desc')
+    //   ->paginate(10);
 
-    return view('admin.page.index', compact('languages', 'tenders', 'pages'));
+    // Page::query()->delete();
+    $pages = Page::where('language_id', $this->getLang())->latest()->paginate(10);
+
+    return view('admin.page.index', compact('languages', 'pages'));
   }
 
   public function create()
@@ -78,8 +81,9 @@ class PageController extends Controller
     if ($request->hasFile('photos')) {
       $page_group->photo_url = $request->file('photos')->getClientOriginalName();
       Storage::putFileAs('public/pages', $request->file('photos'), $request->file('photos')->getClientOriginalName());
-      $page_group->save();
     }
+
+    $page_group->save();
 
     foreach ($request->language_ids as $key => $val) {
       $page = new Page();
@@ -118,6 +122,7 @@ class PageController extends Controller
 
   public function update(Request $request, $id)
   {
+    // dd($request->all());
     $validator = Validator::make($request->all(), [
       'titles.*' => 'required',
       'descriptions.*' => 'required',
@@ -172,9 +177,11 @@ class PageController extends Controller
     return redirect(route('pages.index'))->with('success', 'Deleted!');
   }
 
-  public function getLang()
+  private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $current_locale = app()->getLocale() ?? 'en';
+    $model = Language::where('status', '1')->where("language_prefix", $current_locale)->first();
+
     return $model->id;
   }
 }

@@ -49,10 +49,10 @@
               <input type="text" name="links[]" class="form-control" id="links">
               <label for="links">link</label>
             </div>
-            <div class="form-group floating-label">
+            {{-- <div class="form-group floating-label">
               <input type="text" name="other_link" class="form-control" id="other_link">
               <label for="other_link">other_link</label>
-            </div>
+            </div> --}}
             <div class="form-group floating-label">
               <input type="text" name="register_numbers[]" class="form-control" id="register_numbers">
               <label for="register_numbers">register number</label>
@@ -74,11 +74,12 @@
               <input type="text" name="titles[]" class="form-control" id="titles">
               <label for="titles">title</label>
             </div>
+
             <div class="form-group floating-label">
               <textarea name="descriptions[]" class="form-control"></textarea>
             </div>
 
-            <div class="form-group floating-label">
+            {{-- <div class="form-group floating-label">
               <input type="file" placeholder="PDF" name="files[]" class="form-control" id="pdf">
             </div>
 
@@ -94,20 +95,20 @@
             <div class="form-group floating-label">
               <input type="date" name="register_dates[]" class="form-control" id="register_dates"
                 value="{{ date('Y-m-d') }}">
-              <label for="register_dates">register date</label>
-            </div>
+            <label for="register_dates">register date</label>
+          </div> --}}
 
-          </div>
-        </div>
-        @endif
-        @endforeach
-        <div class="card-actionbar-row">
-          <a href="{{ route('documents.index') }}" class="btn btn-secondary">Back</a>
-          <button type="submit" class="btn btn-primary ink-reaction">Save</button>
         </div>
       </div>
-    </form>
+      @endif
+      @endforeach
+      <div class="card-actionbar-row">
+        <a href="{{ route('documents.index') }}" class="btn btn-secondary">Back</a>
+        <button type="submit" class="btn btn-primary ink-reaction">Save</button>
+      </div>
   </div>
+  </form>
+</div>
 </div>
 <!--end .table-responsive -->
 

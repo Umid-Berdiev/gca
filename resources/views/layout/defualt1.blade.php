@@ -34,8 +34,8 @@ $last =  max(array(
 
 
 
-$numberOfGuests = \Kim\Activity\Activity::guests()->count();
-$numberOfUsers = \Kim\Activity\Activity::users()->count();
+// $numberOfGuests = \Kim\Activity\Activity::guests()->count();
+// $numberOfUsers = \Kim\Activity\Activity::users()->count();
 
 $tender = App\tender::take(3)->where('title','<>','')->where('language_id','=',\App\Http\Controllers\SearchController::languages())->get();
 $events =\DB::table("events")
@@ -549,7 +549,7 @@ $events =\DB::table("events")
 
             @section('statistika')
             <?php
-                $statisticas = \App\Statistica::take(4)->where('photo_url','<>','')->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())->orderBy('id','desc')->get();
+                $statisticas = \App\Statistics::take(4)->where('photo_url','<>','')->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())->orderBy('id','desc')->get();
                 ?>
             <div class="statistika col-xs-12">
               <div class="row" style="background-color: #fff">

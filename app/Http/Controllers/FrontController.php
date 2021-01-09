@@ -7,7 +7,7 @@ use App\Event;
 use App\Language;
 use App\Mail\DemoMail;
 use App\Raxbariyat;
-use App\Statistica;
+use App\Statistics;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Mail;
 use App\Post;
@@ -57,7 +57,7 @@ class FrontController extends Controller
     }
 
     $this->checkcurrency();
-    $statisticas = \App\Statistica::where('photo_url', '<>', '')->where("language_id", "=", \App\Http\Controllers\NewsController::getlangid())->orderBy('id', 'desc')->take(10)->get();
+    $statisticas = \App\Statistics::where('photo_url', '<>', '')->where("language_id", "=", \App\Http\Controllers\NewsController::getlangid())->orderBy('id', 'desc')->take(10)->get();
 
     // $events = \DB::table("events")
     //   ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
@@ -160,7 +160,7 @@ class FrontController extends Controller
     $posts = Post::take(6)->where('category_group_id', '=', '1545735855')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->get();
     $languages = Language::get();
     $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->get();
-    $statistica = Statistica::where('photo_url', '<>', '')->where('language_id', '=', $this->getLang())->paginate(10);
+    $statistica = Statistics::where('photo_url', '<>', '')->where('language_id', '=', $this->getLang())->paginate(10);
     return view('statistica')
       ->with('languages', $languages)
       ->with('posts', $posts)
