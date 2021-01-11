@@ -64,7 +64,7 @@ class EventController extends Controller
       'titles.*' => 'required|max:200|min:3|unique:events,title',
       'dateend' => 'required',
       'datestart' => 'required',
-      'cover' => 'required',
+      'cover' => 'required|mimes:jpg,jpeg,gif,png',
       'descriptions.*' => 'required',
     ]);
     // dd($request->language_ids);
@@ -76,7 +76,10 @@ class EventController extends Controller
     }
 
     $grp_id = $this->getGroupId();
-
+    if ($request->hasFile('cover')) {
+      $cover = $request->file('cover')->getClientOriginalName();
+      Storage::putFileAs('public/events', $request->file('cover'), $cover);
+    }
     foreach ($request->language_ids as $key => $value) {
       $model = Event::create([
         'title' => $request->titles[$key],
@@ -88,12 +91,8 @@ class EventController extends Controller
         'event_category_id' => $request->category_id,
         'group' => $grp_id,
         'language_id' => $value,
+        'cover' => $cover
       ]);
-
-      if ($request->hasFile('cover')) {
-        $model->cover = $request->file('cover')->getClientOriginalName();
-        Storage::putFileAs('public/events', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      }
     }
 
     return redirect(route('events.edit', $model->group))->with('success', 'Created!');

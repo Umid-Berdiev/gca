@@ -4,8 +4,8 @@
 <section class="main_top_layout" style="background-image: url({{asset('gca/images/main.jpg')}});">
   <div class="container">
     <h2>
-      <span>{!! $page->title !!}</span>
-      {!! $page->description !!}
+      <span>{!! isset($page->title) ? $page->title : '' !!}</span>
+      {!! isset($page->discription) ? $page->discription : '' !!}
     </h2>
   </div>
 </section>
@@ -14,7 +14,7 @@
 <section class="about_inner">
   <div class="container">
     <div class="text_layout">
-      {!! $page->content !!}
+      {!! isset($page->content) ? $page->content : '' !!}
     </div>
   </div>
 </section>

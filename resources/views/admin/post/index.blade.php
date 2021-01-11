@@ -46,11 +46,11 @@
           <td>{{ $key + 1 }}</td>
           <td>
             @if ($page->cover != "null")
-            <img alt="cover" class="img-responsive" width="100" src="{{ asset('storage/' . $page->cover) }}">
+            <img alt="cover" class="img-responsive" width="100" src="{{ asset('storage/posts/' . $page->cover) }}">
             @endif
           </td>
-          <td width="40%">{{ $page->title }}</td>
-          <td width="40%">{{ $page->decription }}</td>
+          <td>{{ $page->title }}</td>
+          <td>{{ $page->decription }}</td>
           <td>
             <form style="display: inline;" action="{{ route('posts.edit', $page->group) }}" method="get">
               <button>

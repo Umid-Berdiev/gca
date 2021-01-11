@@ -41,7 +41,9 @@
         </tr>
       </thead>
       <tbody>
+        {{-- @dd($docs) --}}
         @foreach($docs as $key => $page)
+        {{-- @dd($page->category->category_name) --}}
         <tr>
           <td>{{$key+1}}</td>
           <td>{{$page->title}}</td>

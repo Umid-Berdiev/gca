@@ -29,7 +29,6 @@
           </select>
           <label for="post_category_id">Category</label>
         </div>
-
         @foreach($languages as $key => $language)
         @if($key == 0)
         <div class="tab-pane active" id="{{$language->id}}">
@@ -37,31 +36,31 @@
             <input type="hidden" name="language_ids[]" value="{{$language->id}}">
             <div class="form-group floating-label">
               <input type="text" name="titles[]" class="form-control" id="titles">
-              <label for="titles">title</label>
+              <label for="titles">Title</label>
             </div>
             <div class="form-group floating-label">
               <textarea name="descriptions[]" class="form-control"></textarea>
             </div>
             <div class="form-group floating-label">
-              <input type="file" placeholder="PDF" name="files[]" class="form-control">
+              <input type="file" placeholder="PDF" name="files" class="form-control">
             </div>
             <div class="form-group floating-label">
-              <input type="text" name="links[]" class="form-control" id="links">
-              <label for="links">link</label>
+              <input type="text" name="links" class="form-control" id="links">
+              <label for="links">External link</label>
             </div>
             {{-- <div class="form-group floating-label">
               <input type="text" name="other_link" class="form-control" id="other_link">
-              <label for="other_link">other_link</label>
+              <label for="other_link">Other_link</label>
             </div> --}}
             <div class="form-group floating-label">
-              <input type="text" name="register_numbers[]" class="form-control" id="register_numbers">
-              <label for="register_numbers">register number</label>
+              <input type="text" name="register_numbers" class="form-control" id="register_numbers">
+              <label for="register_numbers">Reference number</label>
             </div>
 
             <div class="form-group floating-label">
-              <input type="date" name="register_dates[]" class="form-control" id="register_dates"
+              <input type="date" name="register_dates" class="form-control" id="register_dates"
                 value="{{ date('Y-m-d') }}">
-              <label for="register_dates">register date</label>
+              <label for="register_dates">Register date</label>
             </div>
           </div>
         </div>
@@ -69,10 +68,9 @@
         <div class="tab-pane" id="{{$language->id}}">
           <div class="form" role="form">
             <input type="hidden" name="language_ids[]" value="{{ $language->id }}">
-
             <div class="form-group floating-label">
               <input type="text" name="titles[]" class="form-control" id="titles">
-              <label for="titles">title</label>
+              <label for="titles">Title</label>
             </div>
 
             <div class="form-group floating-label">

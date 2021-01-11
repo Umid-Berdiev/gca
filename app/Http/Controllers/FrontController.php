@@ -223,7 +223,7 @@ class FrontController extends Controller
       ->where('pages_categories.language_id', $this->getLang())
       ->where('pages.language_id', $this->getLang())
       ->first();
-
+    // dd($page);
     return view('gca.pages')
       ->with('page_categories', $page_categories)
       ->with('languages', $languages)
