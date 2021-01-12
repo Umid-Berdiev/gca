@@ -273,8 +273,7 @@
                   </select>
                 </div>
                 <div class="form-group floating-label">
-                  <input type="text" disabled name="link" class="form-control" id="regular2"
-                    value="{{ $valuesx->link }}">
+                  <input type="text" name="link" class="form-control" id="regular2" value="{{ $valuesx->link }}">
                   <label for="regular2">Link to custom content</label>
                 </div>
               </div>

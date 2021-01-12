@@ -126,12 +126,17 @@ class MenuController extends Controller
 
     $grp_id = $this->getGroupId();
 
+    if (isset($request->type) && $request->type == 3 && isset($request->alias_category_id)) {
+      $page = Page::where('page_group_id', $request->alias_category_id)->first();
+      $link = "/page/" . $page->page_category_group_id . "/" . $page->page_group_id;
+    }
+
     foreach ($request->language_ids as $key => $value) {
       $model = new MenuMaker();
       $model->alias_category_id = $request->input("alias_category_id") ?? null;
       $model->menu_name = $request->input("menu_name")[$key] ?? null;
       $model->type = $request->input("type");
-      $model->link = $request->input("link") ?? null;
+      $model->link = $link ?? $request->input("link") ?? "";
 
       if ($request->input('parent_id') != "null") {
         $model->parent_id = $request->input("parent_id");
@@ -168,6 +173,7 @@ class MenuController extends Controller
       //   2 => "\App\Post",
       // ];
 
+
       if (isset($request->type) && $request->type == 3 && isset($request->alias_category_id)) {
         $page = Page::where('page_group_id', $request->alias_category_id)->first();
         $link = "/page/" . $page->page_category_group_id . "/" . $page->page_group_id;
@@ -183,7 +189,7 @@ class MenuController extends Controller
         'alias_category_id' => $request->alias_category_id ?? null,
         'menu_name' => $request->menu_name[$key] ?? null,
         'type' => $request->type,
-        'link' => $link ?? null,
+        'link' => $link ?? $request->link ?? "",
         'parent_id' => $request->parent_id ?? 0,
       ]);
     }

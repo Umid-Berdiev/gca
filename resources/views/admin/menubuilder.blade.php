@@ -143,7 +143,7 @@
                   </select>
                 </div>
                 <div class="form-group floating-label">
-                  <input type="text" disabled name="link" class="form-control" id="regular2">
+                  <input type="text" name="link" class="form-control" id="regular2">
                   <label for="regular2">Link to custom content</label>
                 </div>
 
