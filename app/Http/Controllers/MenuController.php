@@ -163,21 +163,21 @@ class MenuController extends Controller
       $model = MenuMaker::where("group", $grp_id)
         ->where("language_id", $lang_id)->first();
 
-      $arr = [
-        1 => ['class' => "\App\Link", 'link_name' => 'link'],
-        2 => "\App\Post",
-      ];
+      // $arr = [
+      //   1 => ['class' => "\App\Link", 'link_name' => 'link'],
+      //   2 => "\App\Post",
+      // ];
 
-      // if (isset($request->type) && $request->type == 3 && isset($request->alias_category_id)) {
-      //   $page = Page::where('page_group_id', $request->alias_category_id)->first();
-      //   $link = "/page/" . $page->page_category_group_id . "/" . $page->page_group_id;
-      // }
-
-      if (isset($request->type) && isset($request->alias_category_id)) {
-        $page = $arr[$request->type]::where('page_group_id', $request->alias_category_id)->first();
-        // dd($page);
+      if (isset($request->type) && $request->type == 3 && isset($request->alias_category_id)) {
+        $page = Page::where('page_group_id', $request->alias_category_id)->first();
         $link = "/page/" . $page->page_category_group_id . "/" . $page->page_group_id;
       }
+
+      // if (isset($request->type) && isset($request->alias_category_id)) {
+      //   $page = $arr[$request->type]::where('page_group_id', $request->alias_category_id)->first();
+      //   // dd($page);
+      //   $link = "/page/" . $page->page_category_group_id . "/" . $page->page_group_id;
+      // }
 
       $model->update([
         'alias_category_id' => $request->alias_category_id ?? null,
