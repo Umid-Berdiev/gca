@@ -142,7 +142,7 @@ class VideoController extends Controller
       } else $model->cover = "";
 
       if ($request->remove_cover == "on") {
-        $model->cover = "null";
+        $model->cover = "";
       }
 
       $model->update();

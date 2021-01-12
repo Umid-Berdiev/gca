@@ -36,6 +36,7 @@
           <td>NAME</td>
           <td>DESCRIPTION</td>
           <td>CATEGORY</td>
+          <td>IMAGE</td>
           <td>ACTIONS</td>
         </tr>
       </thead>
@@ -46,6 +47,9 @@
           <td>{{$page->name}}</td>
           <td>{{$page->description}}</td>
           <td>{{$page->title}}</td>
+          <td>
+            <img src="{{ asset('storage/photos/' . $page->cover) }}" alt="category's cover image" width="100">
+          </td>
           <td>
             <form style="display: inline;" action="{{ route('photos.edit', $page->group) }}" method="get">
               <button>
