@@ -25,10 +25,10 @@
       @csrf
 
       <div class="card-body tab-content">
-        <div class="form-group floating-label">
+        {{-- <div class="form-group floating-label">
           <label for="photo">Photo</label>
           <input type="file" id="photo" name="photos" class="form-control" accept="image/*">
-        </div>
+        </div> --}}
         <div class="form-group">
           <select class="form-control" id="select1" name="category_id">
             @foreach($categories as $key => $category)
@@ -48,10 +48,10 @@
               <input type="text" name="titles[]" class="form-control" id="regular2">
               <label for="regular2">Title</label>
             </div>
-            <div class="form-group floating-label">
+            {{-- <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" id="regular2">
               <label for="regular2">Description</label>
-            </div>
+            </div> --}}
             <div class="form-group floating-label">
               <textarea name="contents[]" class="form-control" id="regular2"></textarea>
             </div>
@@ -65,10 +65,10 @@
               <input type="text" name="titles[]" class="form-control" id="regular2">
               <label for="regular2">Title</label>
             </div>
-            <div class="form-group floating-label">
+            {{-- <div class="form-group floating-label">
               <input type="text" name="descriptions[]" class="form-control" id="regular2">
               <label for="regular2">Description</label>
-            </div>
+            </div> --}}
             <div class="form-group">
               <textarea name="contents[]"></textarea>
             </div>

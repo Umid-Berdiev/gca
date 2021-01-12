@@ -31,18 +31,18 @@
                 <input type="hidden" name="language_ids[]" value="{{$language->id}}">
                 <div class="form-group floating-label">
                   <input type="text" name="menu_name[]" class="form-control" id="regular2">
-                  <label for="regular2">menu_name</label>
+                  <label for="regular2">Menu item name</label>
                 </div>
                 <div class="form-group floating-label">
 
                   <select class="form-control" name="parent_id">
 
-                    <option value="null">---</option>
+                    <option value="null">Select option</option>
                     @foreach($menues as $keyone=>$value)
                     <?php $modelsx = DB::table("menumakers")
-                                                            ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
-                                                            ->where("parent_id","=",$value->group)
-                                                            ->get(); ?>
+                      ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
+                      ->where("parent_id","=",$value->group)
+                      ->get(); ?>
                     @if(count($modelsx) >0)
 
                     <option value="{{ $value->group }}">{{ $keyone+1 }}){{ $value->menu_name }}</option>
@@ -50,9 +50,9 @@
                     <ul>
                       @foreach($modelsx as $keytwo=>$valuex)
                       <?php $modelsxs = DB::table("menumakers")
-                                                                            ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
-                                                                            ->where("parent_id","=",$valuex->group)
-                                                                            ->get(); ?>
+                        ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
+                        ->where("parent_id","=",$valuex->group)
+                        ->get(); ?>
                       @if(count($modelsxs) >0)
 
                       <option value="{{ $valuex->group }}">{{ ($keyone+1).".".($keytwo+1) }}) {{ $valuex->menu_name }}
@@ -79,7 +79,7 @@
 
 
                   </select>
-                  <label for="regular2">type</label>
+                  <label for="regular2">Menu item level</label>
                 </div>
                 <div class="form-group floating-label">
 
@@ -93,12 +93,12 @@
                     <option value="7">video</option>
                     <option value="8">Photo</option>
                   </select>
-                  <label for="regular2">type</label>
+                  <label for="regular2">Content type</label>
                 </div>
 
                 <div class="form-group floating-label">
 
-                  <label for="regular2">Categories</label>
+                  <label for="regular2">Content source</label>
 
                   <select name="alias_category_id" class="form-control">
                     <optgroup label="Docs">
@@ -143,8 +143,8 @@
                   </select>
                 </div>
                 <div class="form-group floating-label">
-                  <input type="text" name="link" class="form-control" id="regular2">
-                  <label for="regular2">link</label>
+                  <input type="text" disabled name="link" class="form-control" id="regular2">
+                  <label for="regular2">Link to custom content</label>
                 </div>
 
 
@@ -157,7 +157,7 @@
                 <input type="hidden" name="language_ids[]" value="{{$language->id}}">
                 <div class="form-group floating-label">
                   <input type="text" name="menu_name[]" class="form-control" id="regular2">
-                  <label for="regular2">menu_name</label>
+                  <label for="regular2">Menu item name</label>
                 </div>
               </div>
             </div>

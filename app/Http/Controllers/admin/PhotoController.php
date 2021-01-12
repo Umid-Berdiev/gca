@@ -83,7 +83,7 @@ class PhotoController extends Controller
 
       if ($request->hasFile("cover")) {
         $model->cover = $request->file('cover')->getClientOriginalName();
-        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        Storage::putFileAs('public/photos', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       }
 
       $model->save();
@@ -132,7 +132,7 @@ class PhotoController extends Controller
 
       if ($request->hasFile("cover")) {
         $model->cover = $request->file('cover')->getClientOriginalName();
-        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+        Storage::putFileAs('public/photos', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       } else {
         $model->cover = "null";
       }

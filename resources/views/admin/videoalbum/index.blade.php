@@ -38,6 +38,7 @@
           <td>TITLE</td>
           <td>DESCRIPTION</td>
           <td>CATEGORY</td>
+          <td>COVER</td>
           <td>ACTIONS</td>
         </tr>
       </thead>
@@ -48,6 +49,9 @@
           <td>{{$page->title}}</td>
           <td>{{$page->Description}}</td>
           <td>{{$page->title}}</td>
+          <td>
+            <img src="{{ asset('storage/video-categories/' . $page->cover) }}" alt="category's cover image" width="100">
+          </td>
           <td>
             <form style="display: inline;" action="{{ route('videoalbum.edit', $page->group) }}" method="get">
               <button>

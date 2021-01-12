@@ -190,6 +190,7 @@ class FrontController extends Controller
 
   public function page($lang, $category_id, $id)
   {
+    // dd('ok');
     $events = \DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")

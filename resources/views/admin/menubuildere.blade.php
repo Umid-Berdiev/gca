@@ -97,19 +97,19 @@
                 <div class="form-group floating-label">
                   <input type="text" name="menu_name[]" value="{{ $valuesx->menu_name }}" class="form-control"
                     id="regular2">
-                  <label for="regular2">menu_name</label>
+                  <label for="regular2">Menu item name</label>
                 </div>
                 <div class="form-group floating-label">
 
                   <select class="form-control" name="parent_id">
-                    <option value="0">---</option>
+                    <option value="0">Select option</option>
 
 
                     @foreach($menues as $keyone=>$value)
                     <?php $modelsx = DB::table("menumakers")
-                                                            ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
-                                                            ->where("parent_id","=",$value->group)
-                                                            ->get(); ?>
+                      ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
+                      ->where("parent_id","=",$value->group)
+                      ->get(); ?>
                     @if(count($modelsx) >0)
 
                     @if($valuesx->parent_id == $value->group)
@@ -122,9 +122,9 @@
                     <ul>
                       @foreach($modelsx as $keytwo=>$valuex)
                       <?php $modelsxs = DB::table("menumakers")
-                                                                            ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
-                                                                            ->where("parent_id","=",$valuex->group)
-                                                                            ->get(); ?>
+                        ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
+                        ->where("parent_id","=",$valuex->group)
+                        ->get(); ?>
                       @if(count($modelsxs) >0)
 
                       @if($valuesx->parent_id == $valuex->group)
@@ -172,7 +172,7 @@
 
 
                   </select>
-                  <label for="regular2">type</label>
+                  <label for="regular2">Menu item level</label>
                 </div>
                 <div class="form-group floating-label">
 
@@ -186,11 +186,11 @@
                     <option value="7" @if($valuesx->type =="7") selected @endif>video</option>
                     <option value="8" @if($valuesx->type =="8") selected @endif>Photo</option>
                   </select>
-                  <label for="regular2">type</label>
+                  <label for="regular2">Content type</label>
                 </div>
                 <div class="form-group floating-label">
 
-                  <label for="regular2">Categories</label>
+                  <label for="regular2">Content source</label>
 
                   <select name="alias_category_id" class="form-control">
                     <optgroup label="Docs">
@@ -273,8 +273,9 @@
                   </select>
                 </div>
                 <div class="form-group floating-label">
-                  <input type="text" name="link" class="form-control" id="regular2" value="{{ $valuesx->link }}">
-                  <label for="regular2">link</label>
+                  <input type="text" disabled name="link" class="form-control" id="regular2"
+                    value="{{ $valuesx->link }}">
+                  <label for="regular2">Link to custom content</label>
                 </div>
               </div>
             </div>
@@ -289,7 +290,7 @@
                 <div class="form-group floating-label">
                   <input type="text" name="menu_name[]" value="{{ $valuesx->menu_name }}" class="form-control"
                     id="regular2">
-                  <label for="regular2">menu_name</label>
+                  <label for="regular2">Menu item name</label>
                 </div>
               </div>
             </div>

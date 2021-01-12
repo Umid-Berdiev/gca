@@ -45,7 +45,7 @@
         <tr>
           <td>{{ $key + 1 }}</td>
           <td>{{ $page->title }}</td>
-          <td>{{ $page->category_name }}</td>
+          <td>{{ $page->category->category_name }}</td>
           {{-- <td>
             <img src="{{ 'storage/pages/' . $page->photo_url }}" alt="">
           </td> --}}

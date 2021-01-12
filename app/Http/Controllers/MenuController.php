@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Language;
 use App\MenuMaker;
+use App\Page;
+use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 
@@ -130,8 +132,8 @@ class MenuController extends Controller
       $model->menu_name = $request->input("menu_name")[$key] ?? null;
       $model->type = $request->input("type");
       $model->link = $request->input("link") ?? null;
-      if ($request->input('parent_id') != "null") {
 
+      if ($request->input('parent_id') != "null") {
         $model->parent_id = $request->input("parent_id");
       } else {
         $model->parent_id = 0;
@@ -140,7 +142,6 @@ class MenuController extends Controller
       $model->language_id = $value;
       $model->orders = 0;
       $model->group = $grp_id;
-
       $model->save();
     }
 
@@ -159,15 +160,32 @@ class MenuController extends Controller
     $grp_id = $request->input("grp_id");
 
     foreach ($request->language_ids as $key => $lang_id) {
-      MenuMaker::where("group", $grp_id)
-        ->where("language_id", $lang_id)
-        ->update([
-          'alias_category_id' => $request->alias_category_id ?? null,
-          'menu_name' => $request->menu_name[$key] ?? null,
-          'type' => $request->type,
-          'link' => $request->link ?? null,
-          'parent_id' => $request->parent_id ?? 0,
-        ]);
+      $model = MenuMaker::where("group", $grp_id)
+        ->where("language_id", $lang_id)->first();
+
+      $arr = [
+        1 => ['class' => "\App\Link", 'link_name' => 'link'],
+        2 => "\App\Post",
+      ];
+
+      // if (isset($request->type) && $request->type == 3 && isset($request->alias_category_id)) {
+      //   $page = Page::where('page_group_id', $request->alias_category_id)->first();
+      //   $link = "/page/" . $page->page_category_group_id . "/" . $page->page_group_id;
+      // }
+
+      if (isset($request->type) && isset($request->alias_category_id)) {
+        $page = $arr[$request->type]::where('page_group_id', $request->alias_category_id)->first();
+        // dd($page);
+        $link = "/page/" . $page->page_category_group_id . "/" . $page->page_group_id;
+      }
+
+      $model->update([
+        'alias_category_id' => $request->alias_category_id ?? null,
+        'menu_name' => $request->menu_name[$key] ?? null,
+        'type' => $request->type,
+        'link' => $link ?? null,
+        'parent_id' => $request->parent_id ?? 0,
+      ]);
     }
 
     return redirect("/admin/menu/edits?id=" . $grp_id);

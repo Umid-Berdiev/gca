@@ -32,7 +32,7 @@ class PageController extends Controller
     //   ->paginate(10);
 
     // Page::query()->delete();
-    $pages = Page::where('language_id', $this->getLang())->latest()->paginate(10);
+    $pages = Page::where('language_id', $this->getLang())->with('category')->latest()->paginate(10);
 
     return view('admin.page.index', compact('languages', 'pages'));
   }
@@ -88,7 +88,7 @@ class PageController extends Controller
     foreach ($request->language_ids as $key => $val) {
       $page = new Page();
       $page->title = $request->titles[$key];
-      $page->description = $request->descriptions[$key];
+      $page->description = "";
       $page->content = $request->contents[$key];
       $page->page_group_id = $page_group->id;
       $page->language_id = $val;
@@ -161,7 +161,7 @@ class PageController extends Controller
     foreach ($language_ids as $key => $val) {
       $page = Page::find($page_ids[$key]);
       $page->title = $titles[$key];
-      $page->description = $descriptions[$key];
+      // $page->description = $descriptions[$key];
       $page->content = $contents[$key];
       $page->page_category_group_id = $category_group_id;
       $page->language_id = $val;

@@ -53,7 +53,7 @@ class PhotoCategoryController extends Controller
     $validator = Validator::make($request->all(), [
       'titles.*' => 'required|max:40',
       'descriptions.*' => 'required',
-      'cover' => 'required'
+      // 'cover' => 'required'
     ]);
 
     if ($validator->fails()) {
@@ -73,8 +73,8 @@ class PhotoCategoryController extends Controller
 
       if ($request->hasFile("cover")) {
         $model->cover = $request->file('cover')->getClientOriginalName();
-        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      }
+        Storage::putFileAs('public/photo-categories', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      } else $model->cover = "photo-category_default.png";
 
       $model->save();
     }
@@ -99,7 +99,7 @@ class PhotoCategoryController extends Controller
     $validator = Validator::make($request->all(), [
       'titles.*' => 'required|max:40',
       'descriptions.*' => 'required',
-      'cover' => 'required'
+      // 'cover' => 'required'
     ]);
 
     if ($validator->fails()) {
@@ -117,11 +117,11 @@ class PhotoCategoryController extends Controller
 
       if ($request->hasFile("cover")) {
         $model->cover = $request->file('cover')->getClientOriginalName();
-        Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
-      }
+        Storage::putFileAs('public/photo-categories', $request->file('cover'), $request->file('cover')->getClientOriginalName());
+      } else $model->cover = "photo-category_default.png";
 
       if ($request->remove_cover == "on") {
-        $model->cover = "null";
+        $model->cover = "photo-category_default.png";
       }
 
       $model->update();

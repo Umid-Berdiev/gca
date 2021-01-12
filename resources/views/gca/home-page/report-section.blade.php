@@ -7,10 +7,10 @@
     <div class="swiper-wrapper">
       @foreach($statisticas as $item)
       <div class="swiper-slide" data-fancybox=":gallery"
-        data-src="{{ url(app()->getLocale().'/downloads?type=statistica&id='.$item->id) }}">
+        data-src="{{ asset('storage/statistics/' . $item->photo_url) }}">
         <a href="#" class="report_main_item">
           <div class="report_main_item_img">
-            <img src="{{ url(app()->getLocale().'/downloads?type=statistica&id='.$item->id) }}" alt="">
+            <img src="{{ asset('storage/statistics/' . $item->photo_url) }}" alt="stat image">
           </div>
           <p>{{ $item->name }}</p>
         </a>
