@@ -82,9 +82,11 @@ class VideoController extends Controller
 
       if ($youtube_link) {
         $youtube_link_cover = 'https://img.youtube.com/vi/' . $youtube_link . '/sddefault.jpg';
-        $filename = $youtube_link . '-' . basename($youtube_link_cover);
-        \Image::make($youtube_link_cover)->save(public_path('images\\videos\\' . $filename));
-        $model->cover = $filename;
+        $img_name = $youtube_link . '-' . basename($youtube_link_cover);
+        // \Image::make($youtube_link_cover)->save(public_path('images\\videos\\' . $img_name));
+        $img = \Image::make($youtube_link_cover)->encode();
+        Storage::put('public/videos/' . $img_name, $img);
+        $model->cover = $img_name;
       } else $model->cover = "";
 
       $model->save();
@@ -136,9 +138,11 @@ class VideoController extends Controller
 
       if ($youtube_link) {
         $youtube_link_cover = 'https://img.youtube.com/vi/' . $youtube_link . '/sddefault.jpg';
-        $filename = $youtube_link . '-' . basename($youtube_link_cover);
-        \Image::make($youtube_link_cover)->save(public_path('images\\videos\\' . $filename));
-        $model->cover = $filename;
+        $img_name = $youtube_link . '-' . basename($youtube_link_cover);
+        // \Image::make($youtube_link_cover)->save(public_path('images\\videos\\' . $img_name));
+        $img = \Image::make($youtube_link_cover)->encode();
+        Storage::put('public/videos/' . $img_name, $img);
+        $model->cover = $img_name;
       } else $model->cover = "";
 
       if ($request->remove_cover == "on") {

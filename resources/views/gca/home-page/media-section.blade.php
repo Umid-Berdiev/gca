@@ -7,8 +7,9 @@
         <a data-fancybox="" class="videos_fancy over"
           href="https://www.youtube.com/watch?v={{ $item->youtube_link}}&amp;feature=emb_logo"
           data-caption="{{ $item->description}}">
-          <img src="https://img.youtube.com/vi/{{ $item->youtube_link}}/sddefault.jpg" alt="youtube_link_cover"
-            height="250">
+          <img src="{{ asset('storage/videos/' . $item->cover) }}" alt="youtube_link_cover" height="250">
+          {{-- <img src="https://img.youtube.com/vi/{{ $item->youtube_link}}/sddefault.jpg" alt="youtube_link_cover"
+          height="250"> --}}
           <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M29 15C29 7.27083 22.7292 1 15 1C7.27083 1 1 7.27083 1 15C1 22.7292 7.27083 29 15 29C22.7292 29 29 22.7292 29 15Z"
