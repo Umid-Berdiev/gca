@@ -48,7 +48,7 @@
           <td>{{$key+1}}</td>
           <td>{{$page->title}}</td>
           <td>{{$page->r_number}}</td>
-          <td>{{$page->category->category_name}}</td>
+          <td>{{$page->category && $page->category->category_name}}</td>
           <td>
             <form style="display: inline;" action="{{ route('documents.edit', $page->group) }}" method="get">
               <button>

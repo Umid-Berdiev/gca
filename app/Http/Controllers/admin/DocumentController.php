@@ -15,7 +15,7 @@ class DocumentController extends Controller
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $docs = Document::where('title', 'like', '%' . $request->input("search") . '%')->where('language_id')->with('category')->latest()->paginate(10);
+      $docs = Document::where('title', 'like', '%' . $request->input("search") . '%')->where('language_id', $this->getLang())->with('category')->latest()->paginate(10);
 
       // $model = \DB::table("docs")
       //   ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
@@ -29,7 +29,7 @@ class DocumentController extends Controller
       //   ->orderBy('id', 'desc')
       //   ->paginate(10);
     } else {
-      $docs = Document::/* where('language_id')-> */with('category')->latest()->paginate(10);
+      $docs = Document::where('language_id', $this->getLang())->with('category')->latest()->paginate(10);
       // dd($docs);
       // $model = \DB::table("docs")
       //   ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
