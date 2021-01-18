@@ -173,7 +173,7 @@ class PageController extends Controller
 
   public function destroy(Request $request, $id)
   {
-    Page::where('page_category_group_id', $id)->delete();
+    Page::where('page_group_id', $id)->delete();
     return redirect(route('pages.index'))->with('success', 'Deleted!');
   }
 

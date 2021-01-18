@@ -1,6 +1,5 @@
 @extends('gca.layout')
 @section('main_top_layout')
-
 @section('content')
 @include('gca.home-page.main-slider')
 @include('gca.home-page.partners-section')

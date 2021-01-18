@@ -110,14 +110,10 @@ class NewsController extends Controller
       ->where("postgroups.post_category_group_id", "=", $curcat->group)
       ->where("postgroups.id", "=", $title)
       ->first();
-
     $lastcount = $news->viewcount;
     $grpupd = \App\postgroup::all()->where("id", "=", $news->id)->first();
     $grpupd->viewcount = $lastcount + 1;
     $grpupd->update();
-
-
-
     return view('gca.post', [
       'newscat' => $category,
       'languages' => $languages,

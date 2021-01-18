@@ -9,7 +9,6 @@
 {{--        </div>--}}
 {{--    </section--}}
 {{--@endsection--}}
-
 <section class="inner_all">
     <div class="container">
         <div class="bar_inner">
@@ -17,34 +16,36 @@
                 <div class="text_layout">
                     <span class="date_ban">{{ \Carbon\Carbon::parse($news->datetime)->format('d.m.Y') }}</span>
                     <h1>{{$news->title}}</h1>
-                    <img src="{{ URL(App::getLocale().'/downloads?type=post&id='.$news->group) }}" alt="{{$news->title}}">
+                    <img src="{{ asset("storage/posts/$news->cover") }}" alt="{{$news->title}}">
                     {!! $news->content !!}
-                    </div>
+                </div>
             </div>
             <div class="bar_inner_right">
                 <div class="bar_inner_events event_bord">
                     <h3>@lang('blog.news')</h3>
                     @foreach($news_in as $value)
 
-                        <a  href="{{ URL(App::getLocale().'/posts/'.$value->category_group_id .'/'.$value->group)  }}" class="news_item {{ $value->group == $news->group ? 'active' : ''}}">
-                            {{--                                    <img src="{{URL(App::getLocale().'/downloads?type=event&id='.$value->group)}}" alt="">--}}
-                            <div>
-                                {{--                                        <span>{{ \Carbon\Carbon::parse($value->created_at)->format('d.m.Y')  }}</span>--}}
-                                <p>{{$value->title}}</p>
-                            </div>
-                        </a>
-                    @endforeach
-                    <hr>
-                    <h3>@lang('blog.events')</h3>
-                    @foreach($events as $value)
-                    <a href="{{URL(App::getLocale().'/event/'.$value->event_category_id).'/'.$value->group}}" class="news_item">
-                        <img src="{{URL(App::getLocale().'/downloads?type=event&id='.$value->group)}}" alt="">
+                    <a href="{{ URL(App::getLocale().'posts/'.$value->category_group_id .'/'.$value->group)  }}"
+                        class="news_item {{ $value->group == $news->group ? 'active' : ''}}">
+                        <img src="{{ asset("storage/posts/$value->cover") }}" alt="">
                         <div>
                             <span>{{ \Carbon\Carbon::parse($value->created_at)->format('d.m.Y')  }}</span>
                             <p>{{$value->title}}</p>
                         </div>
                     </a>
-                        @endforeach
+                    @endforeach
+                    <hr>
+                    <h3>@lang('blog.events')</h3>
+                    @foreach($events as $value)
+                    <a href="{{URL(App::getLocale().'/event/'.$value->event_category_id).'/'.$value->group}}"
+                        class="news_item">
+                        <img src="{{ asset("storage/events/$value->cover") }}" alt="">
+                        <div>
+                            <span>{{ \Carbon\Carbon::parse($value->created_at)->format('d.m.Y')  }}</span>
+                            <p>{{$value->title}}</p>
+                        </div>
+                    </a>
+                    @endforeach
 
                 </div>
 

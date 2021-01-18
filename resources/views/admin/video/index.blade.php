@@ -36,7 +36,7 @@
           <td>№</td>
           <td>NAME</td>
           <td>DESCRIPTION</td>
-          <td>CATEGORY</td>
+          {{-- <td>CATEGORY</td> --}}
           <td>COVER</td>
           <td>ACTIONS</td>
         </tr>
@@ -47,7 +47,7 @@
           <td>{{ $key + 1 }}</td>
           <td>{{ $page->name }}</td>
           <td>{{ $page->description }}</td>
-          <td>{{ $page->category->title }}</td>
+          {{-- <td>{{ $page->category->title }}</td> --}}
           <td>
             <img src="{{ asset('storage/videos/' . $page->cover) }}" alt="Cover image" width="100">
           </td>

@@ -34,12 +34,12 @@ class VideoController extends Controller
       //   ->where("videogallerycategories.language_id", "=", $this->getLang())
       //   ->orderBy('id', 'desc')
       //   ->paginate(10);
-      $videos = Video::where('language_id', $this->getLang())->with('category')->latest()->paginate(10);
+      $videos = Video::with('category')->where('language_id', $this->getLang())->latest()->paginate(10);
     }
 
     $languages = Language::where('status', '1')->get();
     $categories = Videoalbum::where("language_id", $this->getLang())->get();
-
+    // dd($videos);
     return view("admin.video.index", compact('videos', 'languages'));
   }
 
@@ -163,7 +163,7 @@ class VideoController extends Controller
   public function destroy($id)
   {
     Video::where("group", $id)->delete();
-    return redirect(route('videos.index'))->with('success', 'Deleted!');
+    return redirect(route('video.index'))->with('success', 'Deleted!');
   }
 
   public function getLang()

@@ -27,6 +27,7 @@
               fill="#fff"></path>
           </svg>
         </a>
+        <h3>{{ $value->title }}</h3>
       </div>
       @endforeach
 

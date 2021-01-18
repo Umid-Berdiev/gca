@@ -35,7 +35,6 @@ class PhotoController extends Controller
       ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
       ->where("photogallerycategories.language_id", "=", $this->getLang())
       ->orderBy('id', 'desc')
-
       ->paginate(10);
 
 
@@ -43,8 +42,6 @@ class PhotoController extends Controller
       ->select(['photogallerycategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
       ->where("photogallerycategories.language_id", "=", $this->getLang())->get();
-
-
 
     return view('gca.media', [
       'newscat' => $category,
