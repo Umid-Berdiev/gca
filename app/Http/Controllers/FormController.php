@@ -298,8 +298,20 @@ class FormController extends Controller
    */
   public function destroy($id)
   {
-    //
+    Contact::find($id)->delete();
+    return back()->with('success', 'Deleted!');
   }
+
+  public function delete(Request $request)
+  {
+    if ($request->checkedIds) {
+      $ids = explode(',', $request->checkedIds);
+      Contact::whereIn('id', $ids)->delete();
+      return back()->with('success', 'Deleted!');
+    }
+    return back()->with('error', 'Bad request');
+  }
+
   public function getLang()
   {
     $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();

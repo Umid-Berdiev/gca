@@ -109,6 +109,8 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::post('sorovatter/insert', 'admin\SorovnomaatterController@Insert');
 
   Route::get('menu', 'MenuController@index')->name('menu');
+  Route::get('contact/delete/{id}', 'FormController@destroy')->name('contact.destroy');
+  Route::get('contact/delete', 'FormController@delete')->name('contact.delete');
   Route::get('contact', 'FormController@indexContact')->name('contact');
   Route::post('contact/search', 'FormController@ContactSearch');
   Route::get('cv', 'FormController@indexCV')->name('cv');

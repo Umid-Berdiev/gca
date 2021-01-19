@@ -35,7 +35,7 @@ The target group of the Initiative consists of the foreign ministries (and, thro
 		'bosh' => 'Home Page',
 		'voice' => 'Voice Assistant',
 		'callback' => 'Contact Us',
-		'map_point' => 'Contact With Us',
+		'map_point' => 'Contact Us',
 		'obuna' => 'Subscription',
 		'email_send' => 'Submit your Email and stay up to date on the new materials on our website:',
 		'obuna_bulish' => 'Subscribe',
@@ -165,7 +165,7 @@ The target group of the Initiative consists of the foreign ministries (and, thro
 		'coming_events' => 'Coming Events',
 		'docs' => 'Documents',
 		'new_docs' => 'Our Latest Publications',
-		'test_mode' => 'The website is working on test mode'
+		'test_mode' => 'The website is in a test mode'
 
 
 	];

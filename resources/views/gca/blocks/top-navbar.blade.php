@@ -1,5 +1,5 @@
 <div class="hdr_top">
-  <marquee class="table-danger">@lang('blog.test_mode')</marquee>
+  <marquee>@lang('blog.test_mode')</marquee>
   <div class="container">
     <div class="hdr_top_main">
       <div class="phone_top right_border">
