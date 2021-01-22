@@ -24,12 +24,14 @@ class GcaInfoController extends Controller
       'gca' => $gca
     ]);
   }
+
   public function get(Request $request)
   {
     // dd($request->all());
     $gca = GcaInfo::with('news')->where('prefix', $request->prefix)->first();
     return response()->json($gca);
   }
+
   public function update(Request $request)
   {
     $request->validate([

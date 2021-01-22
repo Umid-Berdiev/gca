@@ -1,6 +1,6 @@
 <section class="recent_programms">
   <div class="container">
-    <h2 class="title">@lang('blog.news')</h2>
+    <h2 class="title">{{ __('blog.news') }}</h2>
     <div class="row">
       @foreach($posts_for as $item)
       <div class="col-lg-3 col-sm-6">

@@ -1,22 +1,20 @@
 @extends("admin.layout.template")
-
 @section("content")
-
 <div class="col-md-12" style="background-color: white;padding: 25px;">
   <div class="col-md-12">
     <div class="form-group">
       <form action="{{URL('admin/menu/edits')}}" method="get">
         <div class="input-group">
           <div class="form-group floating-label">
-
             <select class="form-control" name="id">
-
-              <option value="null">---</option>
+              <option value="null"></option>
               @foreach($menues as $keyone=>$value)
-              <?php $modelsx = DB::table("menumakers")
-                                        ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
-                                        ->where("parent_id","=",$value->group)
-                                        ->orderBy("orders")->get(); ?>
+              <?php
+                $modelsx = DB::table("menumakers")
+                  ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
+                  ->where("parent_id","=",$value->group)
+                  ->orderBy("orders")->get(); 
+              ?>
               @if(count($modelsx) >0)
 
               <option value="{{ $value->group }}">{{ $keyone+1 }}){{ $value->menu_name }}</option>
@@ -43,22 +41,16 @@
                 @endif
 
                 @endforeach
-
-
-
                 @else
                 <option value="{{ $value->group }}">{{ $keyone+1 }}){{ $value->menu_name }}</option>
                 @endif
                 @endforeach
-
-
             </select>
-            <label for="regular2">type</label>
+            <label for="regular2">Type</label>
           </div>
           <div class="input-group-btn">
             <button class="btn btn-default" type="submit">EDIT</button>
           </div>
-
         </div>
       </form>
     </div>
@@ -69,10 +61,9 @@
           <tr>
             <td>№</td>
             <td>Названия</td>
-            <td>Позитьсия</td>
+            <td>Действия</td>
           </tr>
         </thead>
-
         @foreach($menues as $keyone=>$value)
         <?php $modelsx = DB::table("menumakers")
                             ->where("language_id","=",\App\Http\Controllers\NewsController::getlangid())
@@ -90,7 +81,7 @@
                   class="fa fa-arrow-circle-o-down btn btn-warning"></i></a></span>
             <span><a onclick="return confirm('Are you sure you want to delete this thing into the database?')"
                 href="{{ URL( "/admin/menudelete?id=".$value->group) }}"> <i
-                  class="fa fa-recycle btn btn-danger"></i></a></span>
+                  class="fa fa-trash btn btn-danger"></i></a></span>
           </td>
         </tr>
 
@@ -102,7 +93,7 @@
         @if(count($modelsxs) >0)
 
         <tr>
-          <td>{{ $keytwo+1 }}</td>
+          <td>"{{ ($keyone+1).'.'.($keytwo+1) }}"</td>
           <td style="padding-left: 25px;"><span style="background-color: #e1fcff">-{{ $valuex->menu_name }} |
               {{ $valuex->orders }}</span></td>
           <td>
@@ -112,7 +103,7 @@
                   class="fa fa-arrow-circle-o-down btn btn-warning"></i></a></span>
             <span><a onclick="return confirm('Are you sure you want to delete this thing into the database?')"
                 href="{{ URL( "/admin/menudelete?id=".$valuex->group) }}"> <i
-                  class="fa fa-recycle btn btn-danger"></i></a></span>
+                  class="fa fa-trash btn btn-danger"></i></a></span>
 
           </td>
         </tr>
@@ -129,7 +120,7 @@
                   class="fa fa-arrow-circle-o-down btn btn-warning"></i></a></span>
             <span><a onclick="return confirm('Are you sure you want to delete this thing into the database?')"
                 href="{{ URL( "/admin/menudelete?id=".$valuexx->group) }}"> <i
-                  class="fa fa-recycle btn btn-danger"></i></a></span>
+                  class="fa fa-trash btn btn-danger"></i></a></span>
 
           </td>
         </tr>
@@ -147,7 +138,7 @@
                   class="fa fa-arrow-circle-o-down btn btn-warning"></i></a></span>
             <span><a onclick="return confirm('Are you sure you want to delete this thing into the database?')"
                 href="{{ URL( "/admin/menudelete?id=".$valuex->group) }}"> <i
-                  class="fa fa-recycle btn btn-danger"></i></a></span>
+                  class="fa fa-trash btn btn-danger"></i></a></span>
 
           </td>
         </tr>
@@ -167,7 +158,7 @@
                   class="fa fa-arrow-circle-o-down btn btn-warning"></i></a></span>
             <span><a onclick="return confirm('Are you sure you want to delete this thing into the database?')"
                 href="{{ URL( "/admin/menudelete?id=".$value->group) }}"> <i
-                  class="fa fa-recycle btn btn-danger"></i></a></span>
+                  class="fa fa-trash btn btn-danger"></i></a></span>
 
           </td>
         </tr>

@@ -165,7 +165,6 @@ return [
     Illuminate\View\ViewServiceProvider::class,
     Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
-    Kim\Activity\ActivityServiceProvider::class,
 
     /*
     * Package Service Providers...
@@ -229,7 +228,6 @@ return [
     'URL' => Illuminate\Support\Facades\URL::class,
     'Validator' => Illuminate\Support\Facades\Validator::class,
     'View' => Illuminate\Support\Facades\View::class,
-    'Activity' => Kim\Activity\ActivityFacade::class,
     'Image' => Intervention\Image\Facades\Image::class
 
   ],

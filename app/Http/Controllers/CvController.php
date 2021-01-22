@@ -64,17 +64,17 @@ class CvController extends Controller
 
     // dd(Input::all());
     $cv = new CvForm();
-    $cv->fio = Input::get('fio');
-    $cv->email = Input::get('email');
-    $cv->phone_number = Input::get('phone');
-    $cv->comment = Input::get('comment');
+    $cv->fio = $request->fio;
+    $cv->email = $request->email;
+    $cv->phone_number = $request->phone;
+    $cv->comment = $request->comment;
     $cv->uploaded_file  = Storage::disk('public_uploads')->put('upload', $request->file('file')); //Storage::putFile('public/upload', $request->file('file'));
     $cv->unique_number  = "BCM" . Carbon::now()->timestamp;
     $cv->status  = 0;
     $cv->save();
 
-    MailController::send($cv->unique_number, Input::get('comment'), Input::get('fio'), 'info@water.gov.uz', 'murojaat@minwater.uz', 'cv', null, asset('uploads/' . $cv->uploaded_file));
-    MailController::send($cv->unique_number, '', Input::get('fio'), 'sales@kibera.uz', Input::get('email'), 'murojat_client');
+    MailController::send($cv->unique_number, $request->comment, $request->fio, 'info@water.gov.uz', 'murojaat@minwater.uz', 'cv', null, asset('uploads/' . $cv->uploaded_file));
+    MailController::send($cv->unique_number, '', $request->fio, 'sales@kibera.uz', $request->email, 'murojat_client');
 
     return redirect()->back()->with('message', $cv->unique_number);
   }

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\admin;
 
 use App\Language;
-use App\Pages;
+use App\Page;
 use App\PagesCategories;
 use App\PageCategoryGroup;
-use App\PagesGroup;
+use App\PageGroup;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -79,16 +79,16 @@ class PageController extends Controller
   {
 
     if (
-      Input::has('language_id') &&
-      Input::has('title') &&
-      Input::has('description') &&
-      Input::has('content') &&
-      Input::has('categories')
+      $request->has('language_id') &&
+      $request->has('title') &&
+      $request->has('description') &&
+      $request->has('content') &&
+      $request->has('categories')
     ) {
-      $page_group = new PagesGroup();
+      $page_group = new PageGroup();
       $page_group->viewers = 0;
       $page_group->status = 1;
-      $page_group->page_category_group_id = Input::get('categories');
+      $page_group->page_category_group_id = $request->categories;
       $page_group->user_id = Auth::id();
 
 
@@ -106,13 +106,13 @@ class PageController extends Controller
 
 
 
-      $language_id = Input::get('language_id');
-      $title = Input::get('title');
-      $description = Input::get('description');
-      $content = Input::get('content');
+      $language_id = $request->language_id;
+      $title = $request->title;
+      $description = $request->description;
+      $content = $request->content;
 
       foreach ($language_id as $key => $val) {
-        $pages = new Pages();
+        $pages = new Page();
         if (isset($title[$key])) {
           $pages->title = $title[$key];
         } else {
@@ -131,7 +131,7 @@ class PageController extends Controller
 
         $pages->page_group_id = $page_group->id;
         $pages->language_id = $language_id[$key];
-        $pages->page_category_group_id =  Input::get('categories');
+        $pages->page_category_group_id =  $request->categories;
         $pages->save();
       }
       return redirect(route('pages'));
@@ -154,8 +154,8 @@ class PageController extends Controller
       ->where('pages_categories_groups.status', '=', 1)
       ->where('pages_categories.language_id', '=', $languages_min)
       ->get();
-    $pages = Pages::where('page_group_id', '=', $id)->get();
-    $page_group = PagesGroup::where('id', '=', $id)->first();
+    $pages = Page::where('page_group_id', '=', $id)->get();
+    $page_group = PageGroup::where('id', '=', $id)->first();
 
     return view('admin.pages_edit')
       ->with('languages', $languages)
@@ -182,35 +182,35 @@ class PageController extends Controller
    */
   public function update(Request $request)
   {
-    if (Input::has('page_group_id')) {
-      $page_group_id = Input::get('page_group_id');
-      $page_category_group_id = Input::get('categories');
+    if ($request->has('page_group_id')) {
+      $page_group_id = $request->page_group_id;
+      $page_category_group_id = $request->categories;
 
 
-      $language_id = Input::get('language_id');
-      $title = Input::get('title');
-      $description = Input::get('description');
-      $content = Input::get('content');
-      $pages_id = Input::get('page_id');
-      if (Input::hasFile('photos')) {
+      $language_id = $request->language_id;
+      $title = $request->title;
+      $description = $request->description;
+      $content = $request->content;
+      $pages_id = $request->page_id;
+      if ($request->file('photos')) {
         $image = $request->file('photos');
         $name = time() . '.' . $image->getClientOriginalExtension();
         $destinationPath = storage_path('app/public/photos/1');
         $image->move($destinationPath, $name);
 
-        $pages_group = PagesGroup::where('id', $page_group_id)
+        $pages_group = PageGroup::where('id', $page_group_id)
           ->update([
             'page_category_group_id' => $page_category_group_id,
             'photo_url' => $name
           ]);
       } else {
-        $pages_group = PagesGroup::where('id', $page_group_id)
+        $pages_group = PageGroup::where('id', $page_group_id)
           ->update([
             'page_category_group_id' => $page_category_group_id,
           ]);
       }
       foreach ($language_id as $key => $val) {
-        $pages = Pages::find($pages_id[$key]);
+        $pages = Page::find($pages_id[$key]);
 
         if (isset($title[$key])) {
           $pages->title = $title[$key];
@@ -244,7 +244,7 @@ class PageController extends Controller
   public function destroy($id)
   {
     if (isset($id)) {
-      PagesGroup::where('id', '=', $id)
+      PageGroup::where('id', '=', $id)
         ->update(['status' => 0]);
       return redirect()->back();
     }

@@ -10,11 +10,11 @@
         </div>
       </div>
       <div class="about_us_main_right">
-        <span class="template_span">@lang('blog.about_us')</span>
-        <h2 class="title">@lang('blog.activity_head')</h2>
-        <p class="title">@lang('blog.activity')</p>
+        <span class="template_span">{{ __('blog.about_us') }}</span>
+        <h2 class="title">{{ __('blog.activity_head') }}</h2>
+        <p class="title">{{ __('blog.activity') }}</p>
 
-        <a href="{{ url(app()->getLocale().'/page/15/80') }}" class="link_template">@lang('blog.discover_more')</a>
+        <a href="{{ url(app()->getLocale().'/page/15/80') }}" class="link_template">{{ __('blog.discover_more') }}</a>
       </div>
     </div>
   </div>

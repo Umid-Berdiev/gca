@@ -7,7 +7,6 @@ use App\MenuMaker;
 use App\Page;
 use App\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
 class MenuController extends Controller
 {
@@ -44,7 +43,7 @@ class MenuController extends Controller
   public function editshow()
   {
     $menu = \DB::table("menumakers")->where("language_id", "=", $this->getLang())->where("parent_id", "=", 0)->orderBy("orders")->get();
-
+    // dd($menu);
     return view("admin.menuedit", [
       'menues' => $menu,
     ]);
@@ -268,8 +267,8 @@ class MenuController extends Controller
 
   public function destroy(Request $request)
   {
-    $menu  = MenuMaker::where('group', Input::get('id'))->delete();
-    $parentmenu = MenuMaker::where('parent_id', Input::get('id'))->delete();
+    $menu  = MenuMaker::where('group', $request->id)->delete();
+    $parentmenu = MenuMaker::where('parent_id', $request->id)->delete();
 
     return redirect()->back();
   }

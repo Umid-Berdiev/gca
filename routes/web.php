@@ -175,7 +175,7 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::prefix('gcainfo')->group(function () {
     Route::get('/', 'admin\GcaInfoController@index')->name('gca.info.index');
     Route::get('edit/{id}', 'admin\GcaInfoController@edit')->name('gca.info.edit');
-    Route::get('get', 'admin\GcaInfoController@get')->name('gca.info.get');
+    // Route::get('get', 'admin\GcaInfoController@get')->name('gca.info.get');
     Route::post('update', 'admin\GcaInfoController@update')->name('gca.info.update');
   });
 
@@ -189,9 +189,12 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
 
 ### end admin routes
 
+
+
 Route::post('/vote', 'admin\SorovnomaController@vote')->name('vote');
 
 Route::group(['prefix' => '{lang}', 'middleware' => ['lang']], function () {
+  Route::get('get', 'admin\GcaInfoController@get')->name('gca.info.get');
   Route::get('/', 'FrontController@index')->name('front_index');
   Route::get('/rss/{str}', 'SitemapController@index');
   Route::get('/map', function () {

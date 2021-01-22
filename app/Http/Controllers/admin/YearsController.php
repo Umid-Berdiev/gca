@@ -95,7 +95,7 @@ class YearsController extends Controller
   {
 
     $lang = Language::all();
-    $years = Years::where('group', '=', Input::get('id'))->get();
+    $years = Years::where('group', '=', $request->id)->get();
     return view('admin.years_edit')->with('years', $years)->with('languages', $lang);
   }
 
@@ -115,7 +115,7 @@ class YearsController extends Controller
 
 
     ]);
-    $id = Input::get('group');
+    $id = $request->group;
 
     foreach ($request->language_ids as $key => $value) {
       $years = Years::all()

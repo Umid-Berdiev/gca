@@ -41,10 +41,10 @@ class UserController extends Controller
 
 
     $user = new User();
-    $user->name = Input::get('name');
-    $user->email = Input::get('login');
-    $user->password = bcrypt(Input::get('password'));
-    $user->status = Input::get('categories');
+    $user->name = $request->name;
+    $user->email = $request->login;
+    $user->password = bcrypt($request->password);
+    $user->status = $request->categories;
 
     $user->save();
 
@@ -53,7 +53,7 @@ class UserController extends Controller
 
   public function Show(Request $request)
   {
-    $user = User::where('id', '=', Input::get('id'))->first();
+    $user = User::where('id', '=', $request->id)->first();
     return view('admin.users_edit')->with('user', $user);
   }
 
@@ -68,11 +68,11 @@ class UserController extends Controller
 
     ]);
 
-    $user = User::find(Input::get('id'));
-    if (Input::get('password') == Input::get('confirm_password')) {
-      $user->name = Input::get('name');
-      $user->status = Input::get('categories');
-      $user->password = bcrypt(Input::get('confirm_password'));
+    $user = User::find($request->id);
+    if ($request->password == $request->confirm_password) {
+      $user->name = $request->name;
+      $user->status = $request->categories;
+      $user->password = bcrypt($request->confirm_password);
       $user->update();
 
       return redirect('/admin/users/');
@@ -81,7 +81,7 @@ class UserController extends Controller
 
   public function  destroy(Request $request, $id)
   {
-    $user = User::find(Input::get('id'));
+    $user = User::find($request->id);
     $user->delete();
 
     return redirect('/admin/users/');
@@ -102,15 +102,13 @@ class UserController extends Controller
 
     ]);
 
-    $user = Auth::user();
-
-    //dd(Input::all());
-
-    if (Hash::check(Input::get('old_password'), $user->password)) {
-      if (Input::get('new_password') == Input::get('confirm_password')) {
-        $user->name = Input::get('name');
-        $user->password = Hash::make(Input::get('confirm_password'));
-        $user->update();
+    $user = auth()->user();
+    $user = User::find($user->id);
+    if (Hash::check($request->old_password, $user->password)) {
+      if ($request->new_password == $request->confirm_password) {
+        $user->name = $request->name;
+        $user->password = Hash::make($request->confirm_password);
+        $user->save();
         return redirect('/admin/users/profile/');
       }
     }

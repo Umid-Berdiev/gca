@@ -140,7 +140,7 @@
 
       getGcaInfo (prefix) {
         axios
-          .get("{{ route('gca.info.get') }}", {
+          .get("{{ route('gca.info.get', ['lang' => app()->getLocale()]) }}", {
             params: {
               prefix: prefix
             }

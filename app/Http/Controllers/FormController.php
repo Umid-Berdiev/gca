@@ -82,7 +82,7 @@ class FormController extends Controller
       'search' => 'required',
     ]);
 
-    $contacts = Contact::where('fio', 'LIKE', '%' . Input::get('search') . '%')->paginate(15);
+    $contacts = Contact::where('fio', 'LIKE', '%' . $request->search . '%')->paginate(15);
 
     if ($request->has('search')) {
       return view('admin.contact')->with('contacts', $contacts);
@@ -104,9 +104,9 @@ class FormController extends Controller
 
   public function cvSave(Request $request)
   {
-    $cv = CvForm::find(Input::get('id'));
+    $cv = CvForm::find($request->id);
 
-    $cv->status = Input::get('status');
+    $cv->status = $request->status;
     $cv->update();
 
     MailController::send($cv->unique_number, '', $cv->status, 'murojaat@minwater.uz', $cv->email, 'murojat_re');
@@ -120,7 +120,7 @@ class FormController extends Controller
       'search' => 'required',
     ]);
 
-    $cvs = CvForm::where('fio', 'LIKE', '%' . Input::get('search') . '%')->paginate(15);
+    $cvs = CvForm::where('fio', 'LIKE', '%' . $request->search . '%')->paginate(15);
 
     if ($request->has('search')) {
       return view('admin.cv')->with('cvs', $cvs);
@@ -140,8 +140,8 @@ class FormController extends Controller
   }
   public function murojat_update(Request $request)
   {
-    $object = ObjectSend::find(Input::get('id'));
-    $object->status = Input::get('status');
+    $object = ObjectSend::find($request->id);
+    $object->status = $request->status;
     $object->update();
 
     MailController::send($object->unique_number, '', $object->status, 'murojaat@minwater.uz', $object->email, 'murojat_re');
@@ -156,7 +156,7 @@ class FormController extends Controller
 
       'search' => 'required',
     ]);
-    $objects = ObjectSend::where('fio', 'LIKE', '%' . Input::get('search') . '%')->paginate(15);
+    $objects = ObjectSend::where('fio', 'LIKE', '%' . $request->search . '%')->paginate(15);
 
     if ($request->has('search')) {
       return view('admin.murojat')->with('objects', $objects);
@@ -172,7 +172,7 @@ class FormController extends Controller
 
     ]);
 
-    $object_app = ObjectSend::where('unique_number', '=', Input::get('aplication_id'))->first();
+    $object_app = ObjectSend::where('unique_number', '=', $request->aplication_id)->first();
 
     return redirect()->back()->with('check', $object_app);
   }
@@ -202,14 +202,14 @@ class FormController extends Controller
       'email' => 'required',
     ]);
     $contact = new Contact();
-    $contact->fio = Input::get('fio');
-    $contact->email = Input::get('email');
-    $contact->phone = Input::get('phone');
-    $contact->comment = Input::get('comment');
+    $contact->fio = $request->fio;
+    $contact->email = $request->email;
+    $contact->phone = $request->phone;
+    $contact->comment = $request->comment;
     $contact->save();
 
-    //        MailController::send(Input::get('fio'),Input::get('comment'),'','info@water.gov.uz','murojaat@minwater.uz','contact');
-    //        MailController::send(Input::get('fio'),Input::get('comment'),'','info@water.gov.uz',Input::get('email'),'contact_client');
+    //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz','murojaat@minwater.uz','contact');
+    //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz',$request->email,'contact_client');
 
     return redirect()->back()->with('message', 'Мурожаатингиз қабул қилинди');
   }
@@ -237,21 +237,21 @@ class FormController extends Controller
     ]);
 
     $object_send = new ObjectSend();
-    $object_send->fio = Input::get('fio');
-    $object_send->birth = Input::get('birth');
-    $object_send->passport = Input::get('passport');
-    $object_send->adress = Input::get('adress');
-    $object_send->index = Input::get('index');
-    $object_send->email = Input::get('email');
-    $object_send->phone_number = Input::get('phone_number');
-    $object_send->object_type = Input::get('object_type');
-    $object_send->comment = Input::get('comment');
+    $object_send->fio = $request->fio;
+    $object_send->birth = $request->birth;
+    $object_send->passport = $request->passport;
+    $object_send->adress = $request->adress;
+    $object_send->index = $request->index;
+    $object_send->email = $request->email;
+    $object_send->phone_number = $request->phone_number;
+    $object_send->object_type = $request->object_type;
+    $object_send->comment = $request->comment;
     $object_send->status = 0;
     $object_send->unique_number = "BCM" . Carbon::now()->timestamp;;
     $object_send->save();
 
-    MailController::send($object_send->unique_number, Input::get('comment'), Input::get('fio'), 'info@water.gov.uz', 'murojaat@minwater.uz', 'murojat');
-    MailController::send($object_send->unique_number, '', Input::get('fio'), 'info@water.gov.uz', Input::get('email'), 'murojat_client');
+    MailController::send($object_send->unique_number, $request->comment, $request->fio, 'info@water.gov.uz', 'murojaat@minwater.uz', 'murojat');
+    MailController::send($object_send->unique_number, '', $request->fio, 'info@water.gov.uz', $request->email, 'murojat_client');
 
     return redirect()->back()->with('message', $object_send->unique_number);
   }
@@ -327,7 +327,7 @@ class FormController extends Controller
     ]);
 
     $obuna = new Obuna();
-    $obuna->email = Input::get('email');
+    $obuna->email = $request->email;
     $obuna->save();
 
     return redirect()->back()->with('message', '');

@@ -10,7 +10,7 @@
                     <div class="page-content">
                         <div>
                             <ol class="breadcrumb h6">
-                                <li><a href="{{URL(App::getLocale().'/')}}" title="@lang('blog.bosh')">@lang('blog.bosh')</a></li>
+                                <li><a href="{{URL(App::getLocale().'/')}}" title="{{ __('blog.bosh') }}">{{ __('blog.bosh') }}</a></li>
                                 <li><a href="{{ URL(App::getLocale().'/doc/'.$curcat->group) }}">{{$curcat->category_name}}</a></li>
                             </ol>
                         </div>
@@ -21,7 +21,7 @@
                             <h4><b>{{ $curcat->category_name }}</b></h4>
                         </div>
                         <div class="col-md-3 hidden-xs hidden-sm" style="padding-top: 11px;">
-                            <a class="page-print-link" style="cursor:pointer;" target="_self" ><span class="glyphicon glyphicon-print"></span> @lang('blog.print_button')</a>
+                            <a class="page-print-link" style="cursor:pointer;" target="_self" ><span class="glyphicon glyphicon-print"></span> {{ __('blog.print_button') }}</a>
                             <a class="rss-link pull-right" href="{{URL(\Illuminate\Support\Facades\App::getLocale().'/rss/doc')}}"><img src="{{URL('/images/Feed-icon.svg.png')}}" alt="" width="20" height="20"> RSS</a>
                         </div>
                     </div>
@@ -30,11 +30,11 @@
                     @foreach($table as $value)
                             <div class="file-box">
                                 <span><a href="{{URL(App::getLocale().'/doc/'.$value->doc_category_id.'/'.$value->group)}}" class="">{{$value->title}}</a></span>
-                                <span><a href="{{URL(App::getLocale().'/doc/'.$value->doc_category_id.'/'.$value->group)}}" class="">| @lang('blog.more')</a></span>
+                                <span><a href="{{URL(App::getLocale().'/doc/'.$value->doc_category_id.'/'.$value->group)}}" class=""> {{ __('blog.more') }}</a></span>
 
                                 <div class="row">
                                     @if($value->r_number != null)
-                                    <div class="col-md-5"><h6>@lang('blog.register_date'): {{$value->r_date}} | @lang('blog.number'): {{$value->r_number}} </h6></div>
+                                    <div class="col-md-5"><h6>@lang('blog.register_date'): {{$value->r_date}} |{{  __('blog.number') }}: {{$value->r_number}} </h6></div>
                                     @endif
                                         <div class="col-md-7">
                                         @if($value->link  != null)

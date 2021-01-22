@@ -74,28 +74,28 @@ class RaxbariyatController extends Controller
     foreach ($request->language_ids as $key => $value) {
       $raxbariyat = new Raxbariyat();
       if (isset($request->input('fio')[$key]))
-        $raxbariyat->fio = Input::get('fio')[$key];
+        $raxbariyat->fio = $request->fio[$key];
       else
         $raxbariyat->fio = "";
       if (isset($request->input('major')[$key]))
-        $raxbariyat->major = Input::get('major')[$key];
+        $raxbariyat->major = $request->major[$key];
       else
         $raxbariyat->major = "";
       if (isset($request->input('qabul')[$key]))
-        $raxbariyat->qabul = Input::get('qabul')[$key];
+        $raxbariyat->qabul = $request->qabul[$key];
       else
         $raxbariyat->qabul = "";
       if (isset($request->input('short')[$key]))
-        $raxbariyat->short = Input::get('short')[$key];
+        $raxbariyat->short = $request->short[$key];
       else
         $raxbariyat->short = "";
       if (isset($request->input('vazifa')[$key]))
-        $raxbariyat->vazifa = Input::get('vazifa')[$key];
+        $raxbariyat->vazifa = $request->vazifa[$key];
       else
         $raxbariyat->vazifa = "";
-      $raxbariyat->tel = Input::get('tel');
-      $raxbariyat->faks = Input::get('faks');
-      $raxbariyat->email = Input::get('email');
+      $raxbariyat->tel = $request->tel;
+      $raxbariyat->faks = $request->faks;
+      $raxbariyat->email = $request->email;
       $raxbariyat->photo_url =  Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
       $raxbariyat->group = $grp_id;
       $raxbariyat->language_id = $value;
@@ -125,7 +125,7 @@ class RaxbariyatController extends Controller
   public function edit(Request $request)
   {
     $lang = Language::all();
-    $raxbariyat = Raxbariyat::where('group', '=', Input::get('id'))->get();
+    $raxbariyat = Raxbariyat::where('group', '=', $request->id)->get();
     return view('admin.raxbariyat_edit')->with('raxbariyat', $raxbariyat)->with('languages', $lang);
   }
 
@@ -153,7 +153,7 @@ class RaxbariyatController extends Controller
 
     ]);
 
-    $id = Input::get('group');
+    $id = $request->group;
     foreach ($request->language_ids as $key => $value) {
       $raxbariyat = Raxbariyat::all()
         ->where("group", "=", $id)
@@ -161,28 +161,28 @@ class RaxbariyatController extends Controller
         ->first();
       // dd($raxbariyat);
       if (isset($request->input('fio')[$key]))
-        $raxbariyat->fio = Input::get('fio')[$key];
+        $raxbariyat->fio = $request->fio[$key];
       else
         $raxbariyat->fio = "";
       if (isset($request->input('major')[$key]))
-        $raxbariyat->major = Input::get('major')[$key];
+        $raxbariyat->major = $request->major[$key];
       else
         $raxbariyat->major = "";
       if (isset($request->input('qabul')[$key]))
-        $raxbariyat->qabul = Input::get('qabul')[$key];
+        $raxbariyat->qabul = $request->qabul[$key];
       else
         $raxbariyat->qabul = "";
       if (isset($request->input('short')[$key]))
-        $raxbariyat->short = Input::get('short')[$key];
+        $raxbariyat->short = $request->short[$key];
       else
         $raxbariyat->short = "";
       if (isset($request->input('vazifa')[$key]))
-        $raxbariyat->vazifa = Input::get('vazifa')[$key];
+        $raxbariyat->vazifa = $request->vazifa[$key];
       else
         $raxbariyat->vazifa = "";
-      $raxbariyat->tel = Input::get('tel');
-      $raxbariyat->faks = Input::get('faks');
-      $raxbariyat->email = Input::get('email');
+      $raxbariyat->tel = $request->tel;
+      $raxbariyat->faks = $request->faks;
+      $raxbariyat->email = $request->email;
       if ($request->hasFile('cover'))
         $raxbariyat->photo_url =  Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
 

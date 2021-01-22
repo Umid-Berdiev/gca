@@ -301,8 +301,8 @@ class MenuController extends Controller
 
   public function  destroy(Request $request)
   {
-    $menu  = menumaker::where('group', '=', Input::get('id'))->delete();
-    $parentmenu = menumaker::where('parent_id', '=', Input::get('id'))->delete();
+    $menu  = menumaker::where('group', '=', $request->id)->delete();
+    $parentmenu = menumaker::where('parent_id', '=', $request->id)->delete();
 
     return redirect()->back();
   }

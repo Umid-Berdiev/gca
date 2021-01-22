@@ -96,7 +96,7 @@ The target group of the Initiative consists of the foreign ministries (and, thro
 		'message_text' => 'Your Message',
 		'message_text_placeholder' => 'Type in Your message here',
 		'address' => '1A Labzak, 4th floor, Tashkent',
-		'address_placeholder' => 'Regional Initiative on Climate and Security in Central Asia and Afghanistan.',
+		'address_placeholder' => 'Transboundary dialogue on climate, environment and security in Central Asia and Afghanistan',
 		'form_btn_send' => 'Submit',
 		'required_fields_note' => 'These fields are required to be filled.',
 		'phone_number' => 'Your Phone Number',

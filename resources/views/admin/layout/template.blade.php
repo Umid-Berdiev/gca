@@ -453,50 +453,79 @@ $user = \Illuminate\Support\Facades\Auth::user();
   <script src="{{ URL::asset("assets/js/core/source/AppVendor.js") }}"></script>
 
   <script src="{{ URL::asset("assets/js/tinymce/tinymce.min.js") }}"></script>
+  {{--   <script src="https://cdn.tiny.cloud/1/maf5d5cmdz73at7pcujnkatb57j1j428e4flg31x7o5vgmws/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({selector:'textarea'});
+  </script> --}}
+
   <script src="{{ URL::asset("assets/js/core/demo/Demo.js") }}"></script>
-  <!--<script src="{{ URL::asset("assets/js/core/demo/DemoDashboard.js") }}"></script>-->
 
   <script>
     let editor_config = {
       path_absolute: "/",
       selector: "textarea",
-      theme: "modern",
+      theme: "silver",
       height: 300,
       plugins: [
-        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+        "advlist autolink lists link image charmap print preview hr anchor pagebreak image code",
         "searchreplace wordcount visualblocks visualchars code fullscreen",
-        "insertdatetime media nonbreaking save table contextmenu directionality",
+        "insertdatetime nonbreaking save table contextmenu directionality",
         "emoticons template paste textcolor colorpicker textpattern"
       ],
       toolbar1: "responsivefilemanager undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect | sizeselect | fontselect | fontsizeselect",
-      toolbar2: "link image media |link unlink anchor | image media | forecolor backcolor  | print preview code  fullscreen insertdatetime ",
+      toolbar2: "link image media |link unlink anchor | forecolor backcolor  | print preview code  fullscreen insertdatetime ",
 
       fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
       relative_urls: false,
+      image_title: true,
+      automatic_uploads: true,
+      file_picker_types: 'image',
+      file_picker_callback: function (cb, value, meta) {
+        var input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.onchange = function () {
+          var file = this.files[0];
+          var reader = new FileReader();
+          reader.onload = function () {
+            var id = 'blobid' + (new Date()).getTime();
+            var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+            var base64 = reader.result.split(',')[1];
+            var blobInfo = blobCache.create(id, file, base64);
+            blobCache.add(blobInfo);
+            cb(blobInfo.blobUri(), { title: file.name });
+          };
+          reader.readAsDataURL(file);
+        };
 
+        input.click();
+      },
+      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+      /* file_picker_callback : function(callback, value, meta) {
+        var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+        var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
 
-      file_browser_callback: function (field_name, url, type, win) {
-        let x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
-        let y = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
-
-        let cmsURL = editor_config.path_absolute + 'public/laravel-filemanager?field_name=' + field_name;
-        if (type == 'image') {
+        var cmsURL = editor_config.path_absolute + 'laravel-filemanager?editor=' + meta.fieldname;
+        if (meta.filetype == 'image') {
           cmsURL = cmsURL + "&type=Images";
         } else {
           cmsURL = cmsURL + "&type=Files";
         }
 
-        tinyMCE.activeEditor.windowManager.open({
-          file: cmsURL,
-          title: 'Filemanager',
-          width: x * 0.8,
-          height: y * 0.8,
-          resizable: "yes",
-          close_previous: "no"
+        tinyMCE.activeEditor.windowManager.openUrl({
+          url : cmsURL,
+          title : 'Filemanager',
+          width : x * 0.8,
+          height : y * 0.8,
+          resizable : "yes",
+          close_previous : "no",
+          onMessage: (api, message) => {
+            callback(message.content);
+          }
         });
-      }
+      } */
     };
-
     tinymce.init(editor_config);
   </script>
 </body>

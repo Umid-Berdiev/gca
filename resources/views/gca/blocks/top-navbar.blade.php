@@ -9,8 +9,8 @@
             fill="#2DA37D"></path>
         </svg>
         <span>@lang('blog.phone'): </span>
-        <a href="tel:+998 71 241 40 48">
-          +998 71 241 40 48
+        <a href="tel:+998 93 501 07 40">
+          +998 93 501 07 40
         </a>
       </div>
       <div class="mail_top right_border">
@@ -20,8 +20,8 @@
             fill="#2DA37D"></path>
         </svg>
         <span>@lang('blog.email'): </span>
-        <a href="mailto:info@giz.de">
-          info@giz.de
+        <a href="mailto:info@greencentralasia.org">
+          info@greencentralasia.org
         </a>
       </div>
       <div class="address_top right_border">

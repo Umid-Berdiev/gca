@@ -104,7 +104,7 @@ class LinksController extends Controller
       $model->category_group = $request->input("links_category_id");
       $model->group = $grp_id;
       $model->language_id = $value;
-      $model->link = Input::get('link');
+      $model->link = $request->link;
 
       if ($request->hasFile('cover')) {
         $model->photo_url =  Storage::putFileAs('public', $request->file('cover'), $request->file('cover')->getClientOriginalName());
@@ -186,10 +186,9 @@ class LinksController extends Controller
     $model  = LinksCategories::all()->where("group", "=", $request->input("id"));
     $lang = Language::all();
     return view("admin.links_categories_edit", [
-
       "languages" => $lang,
       "model" => $model,
-      "grp_id" => $id,
+      "grp_id" => null,
     ]);
   }
 

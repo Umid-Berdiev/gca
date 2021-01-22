@@ -7,7 +7,7 @@
         <h3 class="text-white">{{ $item->title}}</h3>
         <br>
         <a href="{{ url(app()->getLocale() . '/posts/' . $item->category_group_id . '/' . $item->group) }}"
-          class="link_template">@lang('blog.discover_more')</a>
+          class="link_template">{{ __('blog.discover_more') }}</a>
       </div>
     </div>
     @endforeach

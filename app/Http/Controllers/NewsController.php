@@ -144,10 +144,10 @@ class NewsController extends Controller
       ->join("posts", "posts.group", "=", "postgroups.id")
       ->leftJoin("languages", "languages.id", "=", "posts.language_id")
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
-      ->whereBetween('posts.datetime', array(Input::get('start'), Input::get('finish')))
+      ->whereBetween('posts.datetime', array($request->start, $request->finish))
       ->where("posts.language_id", "=", $this->getLang())
       ->where('posts.title', '<>', '')
-      ->where("postgroups.post_category_group_id", "=", Input::get('cutcat'))
+      ->where("postgroups.post_category_group_id", "=", $request->cutcat)
       ->orderBy('posts.id', 'desc')
       ->paginate(10);
 
@@ -160,7 +160,7 @@ class NewsController extends Controller
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->orderBy('id', 'desc')->get();
     $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->get();
     $languages = Language::get();
-    $curcat = \DB::table("postcategories")->where('group', '=', Input::get('cutcat'))->where('language_id', '=', $this->getLang())->first();
+    $curcat = \DB::table("postcategories")->where('group', '=', $request->cutcat)->where('language_id', '=', $this->getLang())->first();
     $category = \DB::table("postcategories")
       ->select(['postcategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "postcategories.language_id")
