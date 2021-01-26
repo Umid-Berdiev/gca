@@ -17,7 +17,14 @@
   <script src="{{asset('project_gca/js/axios.min.js')}}"></script>
 
   <title>GSA</title>
-
+  <style>
+    header {
+      background-repeat: no-repeat;
+      background-position-x: right;
+      background-size: 240px;
+      background-image: url({{asset('assets/img/Ornament.png')}});
+    }
+  </style>
 </head>
 
 <body>
