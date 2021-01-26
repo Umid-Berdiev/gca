@@ -427,6 +427,7 @@ class SearchController extends Controller
 
   public function download(Request $request)
   {
+    // dd($request->all());
     $type = $request->input("type");
     $id = $request->input("id");
     //PDF file is stored under project/public/download/info.
@@ -435,55 +436,49 @@ class SearchController extends Controller
       case "video":
         $bk = \DB::table("videogallerycategories")
           ->where("group", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->cover));
+        return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
 
       case "event":
         $bk = \DB::table("events")
           ->where("group", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->cover));
+        return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "tenders":
         $bk = \DB::table("tenders")
           ->where("group", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->cover));
+        return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "videoin":
         $bk = \DB::table("videogalleries")
           ->where("videogalleries.id", "=", $id)->first();
-
-
-
-        $fileContents = File::get(storage_path("app/" . $bk->cover));
-
+        $fileContents = File::get(storage_path("app/public/upload/" . $bk->cover));
         $response = Response::make($fileContents, 200);
         $response->header('Content-Type', "video/mp4");
-
         $i = 0;
-
         return $response;
         break;
 
       case "photo":
         $bk = \DB::table("photogallerycategories")
           ->where("group", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->cover));
+        return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "docs":
         $bk = \DB::table("docs")
           ->where("group", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->photo_url));
+        return response()->download(storage_path("app/public/upload/" . $bk->files));
         break;
       case "photoin":
         $bk = \DB::table("photogalleries")
           ->where("photogalleries.id", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->cover));
+        return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
 
       case "post":
         $bk = \DB::table("posts")
           ->where("posts.group", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->cover));
+        return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "page":
         $bk = \DB::table("pages_groups")
@@ -493,34 +488,34 @@ class SearchController extends Controller
       case "doc":
         $bk = \DB::table("docs")
           ->where("docs.id", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->files));
+        return response()->download(storage_path("app/public/upload/" . $bk->files));
         break;
       case "statistica":
         $bk = \DB::table("statisticas")
           ->where("id", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->photo_url));
+        return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
       case "raxbariyat":
         $bk = \DB::table("raxbariyats")
           ->where("id", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->photo_url));
+        return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
       case "link":
         $bk = \DB::table("links")
           ->where("id", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->photo_url));
+        return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
       case "years":
         $bk = \DB::table("years")
           ->where("id", "=", $id)->first();
-        return response()->download(storage_path("app/" . $bk->photo_url));
+        return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
     }
   }
 
   public static function Images($url)
   {
-    return response()->download(storage_path("app/" . $url));
+    return response()->download(storage_path("app/public/upload/" . $url));
   }
 
   public function TenderFilter(Request $request)

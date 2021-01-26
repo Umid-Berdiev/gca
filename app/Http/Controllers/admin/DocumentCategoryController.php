@@ -6,6 +6,7 @@ use App\DocumentCategory;
 use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Validator;
 
 class DocumentCategoryController extends Controller
 {
@@ -40,10 +41,14 @@ class DocumentCategoryController extends Controller
 
   public function store(Request $request)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_names.*' => 'required|max:255',
     ]);
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $grp_id = $this->getGroupId();
 
     foreach ($request->language_ids as $key => $value) {
