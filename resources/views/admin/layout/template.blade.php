@@ -5,7 +5,7 @@ $user = \Illuminate\Support\Facades\Auth::user();
 <html>
 
 <head>
-  <title></title>
+  <title>GCA admin portal</title>
 
   <!-- BEGIN META -->
   <meta charset="utf-8">

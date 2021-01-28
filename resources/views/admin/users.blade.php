@@ -1,14 +1,9 @@
 @extends("admin.layout.template")
-
-
 @section("content")
-
     <div class="col-md-12" style="background-color: white;padding: 25px;">
         <div class="col-md-12">
             <p><button type="button" class="btn ink-reaction btn-floating-action btn-lg btn-primary" onclick="window.location.href='{{ URL("/admin/users/create") }}'"><i class="fa fa-plus"></i></button></p>
             <div class="col-md-2">
-
-
             </div>
             <div class="col-md-12">
                 <table class="table">
@@ -23,7 +18,6 @@
                     </thead>
                     <tbody>
                     @foreach($users as $key=>$user)
-
                         <tr>
                             <td width="80px">{{ $key+1 }}</td>
                             <td width="180px">{{ $user->name }}</td>
@@ -43,15 +37,10 @@
                             </td>
                         </tr>
                         @endforeach
-
-
                     </tbody>
                 </table>
                 {{ $users->links() }}
-
-
             </div>
         </div>
-
 @endsection
 

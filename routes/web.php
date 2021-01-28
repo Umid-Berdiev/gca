@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Auth::routes();
 
 Route::match(['get', 'post'], 'register', function () {
@@ -60,6 +59,7 @@ Route::get('locale/{locale}', function ($locale) {
 
 ###admin routes
 Route::middleware(['isAuther'])->prefix('admin')->group(function () {
+
   Route::get('/', function () {
     return redirect(route('posts.index'));
   })->name('post');
@@ -136,7 +136,7 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
   Route::post('users/store', 'admin\UserController@Store');
   Route::post('users/update', 'admin\UserController@Update');
   Route::post('users/profile_update', 'admin\UserController@profile_update');
-  Route::get('users/delete', 'admin\UserController@Delete');
+  Route::get('users/delete', 'admin\UserController@destroy');
   Route::get('users/profile', 'admin\UserController@Profile');
 
   // Route::get('statistics', 'admin\StatisticsController@index')->name('statistics');
@@ -189,11 +189,13 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
 
 ### end admin routes
 
-
-
 Route::post('/vote', 'admin\SorovnomaController@vote')->name('vote');
 
 Route::group(['prefix' => '{lang}', 'middleware' => ['lang']], function () {
+  // pssword forgot routes
+  Route::any('forgot-password', 'admin\UserController@forgotPassword')->name('forgot-password');
+  Route::any('send-password', 'admin\UserController@sendPassword')->name('send-password');
+
   Route::get('get', 'admin\GcaInfoController@get')->name('gca.info.get');
   Route::get('/', 'FrontController@index')->name('front_index');
   Route::get('/rss/{str}', 'SitemapController@index');
@@ -231,6 +233,8 @@ Route::group(['prefix' => '{lang}', 'middleware' => ['lang']], function () {
   Route::get('event', 'admin\EventController@getEvent');
 });
 ### end front ###
+
+
 
 //Clear Cache facade value:
 Route::get('artisan/clear-cache', function () {
