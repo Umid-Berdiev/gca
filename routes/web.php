@@ -10,6 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
+
 Auth::routes();
 
 Route::match(['get', 'post'], 'register', function () {
@@ -192,6 +197,7 @@ Route::middleware(['isAuther'])->prefix('admin')->group(function () {
 Route::post('/vote', 'admin\SorovnomaController@vote')->name('vote');
 
 Route::group(['prefix' => '{lang}', 'middleware' => ['lang']], function () {
+  Route::post('/new-obuna', 'MailController@newObuna')->name('new-obuna');
   // pssword forgot routes
   Route::any('forgot-password', 'admin\UserController@forgotPassword')->name('forgot-password');
   Route::any('send-password', 'admin\UserController@sendPassword')->name('send-password');

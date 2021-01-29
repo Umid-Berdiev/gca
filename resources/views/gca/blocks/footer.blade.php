@@ -86,9 +86,10 @@ $menu = \App\MenuMaker::where('language_id', $current_lang->id)->get();
         <div class="ft4">
           <h5>@lang('blog.additional_message')</h5>
           <p>@lang('blog.additional_message_placeholder')</p>
-          <form action="#" class="form_template">
+          <form action="{{ route('new-obuna', ['lang' => app()->getLocale()]) }}" class="form_template" method="post">
+            @csrf
             <div class="form-group">
-              <input type="email" placeholder="Email Address">
+              <input type="email" placeholder="Email Address" name="email">
               <button type="submit">GO</button>
             </div>
           </form>
