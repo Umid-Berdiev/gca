@@ -26,7 +26,7 @@
         <div class="carousel slide" id="myCarousel">
             <div class="carousel-inner">
                 <?php $counters = 0?>
-                @foreach(\Illuminate\Support\FacadesDB::table("photogalleries")
+                @foreach(\Illuminate\Support\Facades\DB::table("photogalleries")
                 ->select(['photogalleries.*','languages.language_name'])
                 ->leftJoin("languages","languages.id","=","photogalleries.language_id")
 
