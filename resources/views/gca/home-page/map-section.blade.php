@@ -88,10 +88,10 @@
         // Create map instance
         var chart = am4core.create("chartdiv", am4maps.MapChart);
         chart.logo.disabled = true;
-
         // Set map definition
         chart.geodata = am4geodata_worldLow;
-
+        chart.maxZoomLevel = 1;
+        chart.seriesContainer.draggable = false;
         // Set projection
         chart.projection = new am4maps.projections.Miller();
 

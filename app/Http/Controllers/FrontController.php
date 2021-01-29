@@ -5,15 +5,11 @@ namespace App\Http\Controllers;
 use App\Document;
 use App\Event;
 use App\Language;
-use App\Mail\DemoMail;
 use App\Raxbariyat;
 use App\Statistics;
 use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\Mail;
 use App\Post;
 use App\Tender;
-use DateTime;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FrontController extends Controller
@@ -116,7 +112,7 @@ class FrontController extends Controller
 
     // $posts = Post::where('category_group_id', '=', '1603259067')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->take(2)->get();
     // $posts_publications = Post::where('category_group_id', '=', '1603259189')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->take(3)->get();
-    $posts = Post::where('language_id', $this->getLang())->latest()->take(3)->get();
+    $posts = Post::where('language_id', $this->getLang())->latest()->take(4)->get();
     $posts_publications = Post::where('language_id', $this->getLang())->latest()->skip(3)->take(4)->get();
 
     if (count(Post::where('category_group_id', '=', '1603259067')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->get()) > 4)

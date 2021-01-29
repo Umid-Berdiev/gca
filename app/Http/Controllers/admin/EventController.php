@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\EventCategory;
 use App\Event;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -15,7 +16,6 @@ class EventController extends Controller
 {
   public function index(Request $request)
   {
-
     if ($request->has("search")) {
       $table = DB::table("events")
         ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])

@@ -28,7 +28,7 @@ class MailController extends Controller
     public function newObuna(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'requierd|email|unique:obunas'
+            'email' => 'required|email|unique:obunas'
         ]);
         if ($validator->fails()) {
             return back()
@@ -39,5 +39,20 @@ class MailController extends Controller
             'email' => $request->email
         ]);
         return back()->with('success', 'Email is added');
+    }
+
+    public static function sendPost($post)
+    {
+        // dd($post);
+        $users = Obuna::select('email')->get();
+        foreach ($users as $user) {
+            $text = "New post!\nTitile: $post->title\nContent: $post->content";
+            Mail::raw($text, function ($message) use ($user) {
+                $message->from(env('MAIL_FROM_ADDRESS', 'noreply@greencentralasia.org'), env('MAIL_FROM_NAME', 'greencentralasia.org'));
+                $message->to($user->email);
+                // $message->cc('umid-berdiev82@mail.ru', 'Bobur');
+                $message->subject('Запрос на авторизацию!');
+            });
+        }
     }
 }

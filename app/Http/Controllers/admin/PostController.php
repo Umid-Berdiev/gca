@@ -6,6 +6,7 @@ use App\GcaInfo;
 use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\MailController;
 use App\Post;
 use App\PostCategory;
 use App\PostGroup;
@@ -94,8 +95,8 @@ class PostController extends Controller
       $model->group = $grp_id;
       $model->category_group_id = $request->post_category_id;
       $model->gcainfo_id = $request->country_id;
-
       $model->save();
+      MailController::sendPost($model);
     }
 
     return redirect(route('posts.edit', $model->group))->with('success', 'Created!');
