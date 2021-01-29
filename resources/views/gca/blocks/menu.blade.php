@@ -1,5 +1,5 @@
 @php
-$current_lang = \App\Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+$current_lang = \App\Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
 $menu = \App\MenuMaker::where('language_id', $current_lang->id)->orderBy('orders')->get();
 @endphp
 

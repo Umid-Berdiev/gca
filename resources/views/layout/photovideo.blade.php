@@ -1,10 +1,10 @@
 <div class="row" style="background-color: white;">
-  <div class="col-sm-4 col-xs-12">
-    <div class="" style="border-bottom: 1px solid #00f">
-      <h4>@lang('blog.video')</h4>
-    </div><br />
-    <div class="embed-responsive embed-responsive-16by9">
-      <?php     $model = \DB::table("videogalleries")
+    <div class="col-sm-4 col-xs-12">
+        <div class="" style="border-bottom: 1px solid #00f">
+            <h4>@lang('blog.video')</h4>
+        </div><br />
+        <div class="embed-responsive embed-responsive-16by9">
+            <?php     $model = DB::table("videogalleries")
                 ->select(['videogalleries.*','languages.language_name'])
                 ->leftJoin("languages","languages.id","=","videogalleries.language_id")
 
@@ -12,63 +12,64 @@
 
 
                 ->first(); ?>
-      <video height="300" width="auto" controls>
-        <source src="{{URL(App::getLocale().'/downloads?type=videoin&id='.$model->id)}}" type="video/mp4">
+            <video height="300" width="auto" controls>
+                <source src="{{URL(App::getLocale().'/downloads?type=videoin&id='.$model->id)}}" type="video/mp4">
 
-        Your browser does not support the video tag.
-      </video>
+                Your browser does not support the video tag.
+            </video>
+        </div>
     </div>
-  </div>
-  <div id="home-photogallery" class="col-sm-8 col-xs-12">
-    <div class="container-fluid" style="border-bottom: 1px solid #00f">
-      <h4>@lang('blog.photo')</h4>
-    </div><br />
-    <div class="carousel slide" id="myCarousel">
-      <div class="carousel-inner">
-        <?php $counters = 0?>
-        @foreach(\Illuminate\Support\Facades\DB::table("photogalleries")
-        ->select(['photogalleries.*','languages.language_name'])
-        ->leftJoin("languages","languages.id","=","photogalleries.language_id")
+    <div id="home-photogallery" class="col-sm-8 col-xs-12">
+        <div class="container-fluid" style="border-bottom: 1px solid #00f">
+            <h4>@lang('blog.photo')</h4>
+        </div><br />
+        <div class="carousel slide" id="myCarousel">
+            <div class="carousel-inner">
+                <?php $counters = 0?>
+                @foreach(\Illuminate\Support\FacadesDB::table("photogalleries")
+                ->select(['photogalleries.*','languages.language_name'])
+                ->leftJoin("languages","languages.id","=","photogalleries.language_id")
 
-        ->where("photogalleries.language_id","=",\App\Http\Controllers\SearchController::languages())
-        ->take(30)->orderBy('id','desc')->get() as $key =>$value)
-        @if($counters == 0)
-        <div class="item @if($key==0) active @endif">
-          <ul class="thumbnails">
-            @endif
-            <li class="col-sm-3">
-              <div class="fff">
+                ->where("photogalleries.language_id","=",\App\Http\Controllers\SearchController::languages())
+                ->take(30)->orderBy('id','desc')->get() as $key =>$value)
+                @if($counters == 0)
+                <div class="item @if($key==0) active @endif">
+                    <ul class="thumbnails">
+                        @endif
+                        <li class="col-sm-3">
+                            <div class="fff">
 
-                <div class="thumbnail">
-
-
-                  <a class="example-image-link"
-                    href="{{URL(App::getLocale().'/downloads?type=photoin&id='.$value->id)}}"
-                    data-lightbox="example-set" data-title="{{$value->description}}"><img height="250" width="100%"
-                      class="example-image" src="{{URL(App::getLocale().'/downloads?type=photoin&id='.$value->id)}}"
-                      alt="" /></a>
+                                <div class="thumbnail">
 
 
-                </div>
-
-              </div>
-            </li>
-
-
-            @if($counters == 7)
-          </ul>
-        </div><!-- /Slide1 -->
-        <?php $counters=0;?>
-        @else
-        <?php $counters++;?>
-        @endif
+                                    <a class="example-image-link"
+                                        href="{{URL(App::getLocale().'/downloads?type=photoin&id='.$value->id)}}"
+                                        data-lightbox="example-set" data-title="{{$value->description}}"><img
+                                            height="250" width="100%" class="example-image"
+                                            src="{{URL(App::getLocale().'/downloads?type=photoin&id='.$value->id)}}"
+                                            alt="" /></a>
 
 
-        @endforeach
+                                </div>
 
-      </div>
-      <script>
-        /*!
+                            </div>
+                        </li>
+
+
+                        @if($counters == 7)
+                    </ul>
+                </div><!-- /Slide1 -->
+                <?php $counters=0;?>
+                @else
+                <?php $counters++;?>
+                @endif
+
+
+                @endforeach
+
+            </div>
+            <script>
+                /*!
  * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
  *
@@ -9788,21 +9789,23 @@
                     return new Lightbox();
                 }));
 
-      </script>
+            </script>
 
-      <nav>
-        <ul class="control-box pager">
-          <li><a data-slide="prev" href="#myCarousel" class=""><i class="glyphicon glyphicon-chevron-left"></i></a></li>
-          <li><a data-slide="next" href="#myCarousel" class=""><i class="glyphicon glyphicon-chevron-right"></i></li>
-        </ul>
-      </nav>
-      <!-- /.control-box -->
+            <nav>
+                <ul class="control-box pager">
+                    <li><a data-slide="prev" href="#myCarousel" class=""><i
+                                class="glyphicon glyphicon-chevron-left"></i></a></li>
+                    <li><a data-slide="next" href="#myCarousel" class=""><i
+                                class="glyphicon glyphicon-chevron-right"></i></li>
+                </ul>
+            </nav>
+            <!-- /.control-box -->
 
-    </div><!-- /#myCarousel -->
-  </div>
+        </div><!-- /#myCarousel -->
+    </div>
 </div>
 <script>
-  $(document).ready(function() {
+    $(document).ready(function() {
         $('.carousel').carousel({
             interval: 6000
         })

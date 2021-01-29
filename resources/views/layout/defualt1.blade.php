@@ -38,7 +38,7 @@ $last =  max(array(
 // $numberOfUsers = \Kim\Activity\Activity::users()->count();
 
 $tender = App\tender::take(3)->where('title','<>','')->where('language_id','=',\App\Http\Controllers\SearchController::languages())->get();
-$events =\DB::table("events")
+$events =DB::table("events")
     ->select(['events.*','languages.language_name','eventcategories.category_name'])
     ->leftJoin("languages","languages.id","=","events.language_id")
     ->leftJoin("eventcategories","eventcategories.group","=","events.event_category_id")
@@ -58,9 +58,9 @@ $events =\DB::table("events")
   <link rel="stylesheet" href="{{ URL('css/style.css') }}" />
   <script src="{{URL('js/jquery.min.js')}}"></script>
   <script src="{{ URL::asset('bootstrap/js/bootstrap.min.js') }}"></script>
-  @if(\Illuminate\Support\Facades\App::getLocale() == 'uz')
+  @if(\Illuminate\Support\Facadesapp()->getLocale() == 'uz')
   <script src="{{ URL::asset('main_uz.js') }}"></script>
-  @elseif(\Illuminate\Support\Facades\App::getLocale() == 'ru')
+  @elseif(\Illuminate\Support\Facadesapp()->getLocale() == 'ru')
   <script src="{{ URL::asset('main_ru.js') }}"></script>
   @else
   <script src="{{ URL::asset('main_en.js') }}"></script>

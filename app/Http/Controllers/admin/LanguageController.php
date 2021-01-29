@@ -22,10 +22,16 @@ class LanguageController extends Controller
 
   public function store(Request $request)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'language_name' => 'required|min:3|max:20',
       'language_prefix' => 'required|min:2|max:3',
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     Language::create([
       'language_name' => $request->language_name,
@@ -44,15 +50,16 @@ class LanguageController extends Controller
 
   public function update(Request $request, $id)
   {
-    // Validator::make($request->all(), [
-    //   'language_name' => 'required|min:3|max:20',
-    //   'language_prefix' => 'required|min:2|max:3',
-    // ]);
-
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'language_name' => 'required|min:3|max:20',
       'language_prefix' => 'required|min:2|max:3',
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     Language::whereId($id)->update([
       'language_name' => $request->language_name,

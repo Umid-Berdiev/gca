@@ -37,7 +37,7 @@ $last =  max(array(
 
 
 $tender = App\tender::take(3)->where('title','<>','')->where('language_id','=',\App\Http\Controllers\SearchController::languages())->get();
-$events =\DB::table("events")
+$events =DB::table("events")
     ->select(['events.*','languages.language_name','eventcategories.category_name'])
     ->leftJoin("languages","languages.id","=","events.language_id")
     ->leftJoin("eventcategories","eventcategories.group","=","events.event_category_id")
@@ -416,7 +416,7 @@ if($translate_svg)
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
         </div>
-        <form class="form" method="post" action="{{ URL(\Illuminate\Support\Facades\App::getLocale()."/errorpage") }}">
+        <form class="form" method="post" action="{{ URL(\Illuminate\Support\Facadesapp()->getLocale()."/errorpage") }}">
           <div class="modal-body">
 
             <input type="hidden" name="_token" value="{{ csrf_token() }}">

@@ -15,7 +15,7 @@ class PhotoCategoryController extends Controller
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $model = \DB::table("photogallerycategories")
+      $model = DB::table("photogallerycategories")
         ->select(['photogallerycategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
         ->where("photogallerycategories.language_id", "=", $this->getLang())
@@ -23,7 +23,7 @@ class PhotoCategoryController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $model = \DB::table("photogallerycategories")
+      $model = DB::table("photogallerycategories")
         ->select(['photogallerycategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
         ->where("language_id", "=", $this->getLang())
@@ -138,7 +138,7 @@ class PhotoCategoryController extends Controller
 
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     return $model->id;
   }
 

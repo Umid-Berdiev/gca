@@ -6,13 +6,14 @@ use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\tendercategory;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class TendercategoryController extends Controller
 {
   public function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model) {
 
       return $model->id;
@@ -25,7 +26,7 @@ class TendercategoryController extends Controller
   {
 
     if ($request->has("search")) {
-      $model = \DB::table("tendercategories")
+      $model = DB::table("tendercategories")
         ->select(['tendercategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
         ->where("tendercategories.language_id", "=", $this->getLang())
@@ -33,7 +34,7 @@ class TendercategoryController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $model = \DB::table("tendercategories")
+      $model = DB::table("tendercategories")
         ->select(['tendercategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
         ->where("language_id", "=", $this->getLang())
@@ -50,11 +51,17 @@ class TendercategoryController extends Controller
   }
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_name' => 'required|max:255',
       'language_id' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     $grp_id = $this->getGroupId();
     foreach ($request->language_ids as $key => $value) {
       $model = new tendercategory();
@@ -78,12 +85,18 @@ class TendercategoryController extends Controller
   }
   public function update(Request $request, $id)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_name' => 'required|max:255',
       'language_id' => 'required',
       'group' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     $grp_id = $request->input("group");
 
 
@@ -112,11 +125,16 @@ class TendercategoryController extends Controller
   }
   public function destroy(Request $request, $id)
   {
-    $validatedData = $request->validate([
-
+    $validator = Validator::make($request->all(), [
       'id' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     $model = tendercategory::where('group', $id)->get();
 
     foreach ($model as $value) {

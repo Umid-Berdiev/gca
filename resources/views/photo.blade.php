@@ -26,7 +26,7 @@
                     <a class="page-print-link" target="_self"><span class="glyphicon glyphicon-print"></span> Чоп этиш
                     </a>
                     <a class="rss-link pull-right"
-                        href="{{URL(\Illuminate\Support\Facades\App::getLocale().'/rss/photo')}}"><img
+                        href="{{URL(\Illuminate\Support\Facadesapp()->getLocale().'/rss/photo')}}"><img
                             src="{{URL('/images/Feed-icon.svg.png')}}" alt="" width="20" height="20"> RSS</a>
                 </div>
             </div>

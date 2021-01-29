@@ -44,11 +44,11 @@
                         </div>
                         <div class="form-group floating-label">
                             <input type="password" name="password" class="form-control">
-                            <label for="regular2">new password</label>
+                            <label for="regular2">New password</label>
                         </div>
                         <div class="form-group floating-label">
                             <input type="password" name="confirm_password" class="form-control">
-                            <label for="regular2">confirm password</label>
+                            <label for="regular2">Confirm password</label>
                         </div>
 
 

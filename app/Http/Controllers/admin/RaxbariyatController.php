@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class RaxbariyatController extends Controller
 {
@@ -30,7 +31,7 @@ class RaxbariyatController extends Controller
    */
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {
@@ -56,8 +57,7 @@ class RaxbariyatController extends Controller
   public function store(Request $request)
   {
     // dd(Input::all());
-
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'fio' => 'required|max:255',
       'major' => 'required|max:255',
       'language_id' => 'required',
@@ -68,8 +68,14 @@ class RaxbariyatController extends Controller
       'faks' => 'required',
       'email' => 'required',
       'cover' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     $grp_id = $this->getGroupId();
     foreach ($request->language_ids as $key => $value) {
       $raxbariyat = new Raxbariyat();
@@ -138,7 +144,7 @@ class RaxbariyatController extends Controller
    */
   public function update(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'fio' => 'required|max:255',
       'major' => 'required|max:255',
       'language_id' => 'required',
@@ -149,9 +155,13 @@ class RaxbariyatController extends Controller
       'faks' => 'required',
       'email' => 'required',
       'group' => 'required',
-
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $id = $request->group;
     foreach ($request->language_ids as $key => $value) {
@@ -201,16 +211,16 @@ class RaxbariyatController extends Controller
    */
   public function destroy(Request $request)
   {
-
-    $validatedData = $request->validate([
-
+    $validator = Validator::make($request->all(), [
       'id' => 'required',
-
     ]);
-    $model = Raxbariyat::where("group", "=", $request->input("id"))->delete();;
 
-
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+    Raxbariyat::where("group", "=", $request->input("id"))->delete();
     return redirect("admin/raxbariyat");
   }
 

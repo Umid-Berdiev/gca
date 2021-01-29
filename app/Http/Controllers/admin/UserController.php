@@ -81,9 +81,11 @@ class UserController extends Controller
       $user->name = $request->name;
       $user->status = $request->categories;
       $user->password = bcrypt($request->confirm_password);
+      $user->email_field = $request->email;
       $user->update();
-
       return redirect('/admin/users/');
+    } else {
+      return back()->with('error', 'Wrong passwords!');
     }
   }
 
@@ -106,12 +108,6 @@ class UserController extends Controller
   }
   public function profile_update(Request $request)
   {
-    $validatedData = $request->validate([
-      'name' => 'required|max:255',
-      'old_password' => 'required|max:255',
-      'new_password' => 'required',
-      'confirm_password' => 'required',
-    ]);
     $validator = Validator::make($request->all(), [
       'name' => 'required|max:255',
       'old_password' => 'required|max:255',

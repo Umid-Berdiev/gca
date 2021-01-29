@@ -17,7 +17,7 @@ class EventController extends Controller
   {
 
     if ($request->has("search")) {
-      $table = \DB::table("events")
+      $table = DB::table("events")
         ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "events.language_id")
         ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -29,7 +29,7 @@ class EventController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $table = \DB::table("events")
+      $table = DB::table("events")
         ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "events.language_id")
         ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")

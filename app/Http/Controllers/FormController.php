@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Contact;
 use App\CvForm;
-use App\Mail\DemoEmail;
 use App\ObjectSend;
 use App\Obuna;
 use Illuminate\Http\Request;
 use App\Language;
 use App\tender;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class FormController extends Controller
 {
@@ -24,7 +23,7 @@ class FormController extends Controller
    */
   public function index()
   {
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -77,11 +76,15 @@ class FormController extends Controller
 
   public function ContactSearch(Request $request)
   {
-    $validatedData = $request->validate([
 
-      'search' => 'required',
+    $validator = Validator::make($request->all(), [
+      'search' => 'required'
     ]);
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $contacts = Contact::where('fio', 'LIKE', '%' . $request->search . '%')->paginate(15);
 
     if ($request->has('search')) {
@@ -115,11 +118,14 @@ class FormController extends Controller
   }
   public function CvSearch(Request $request)
   {
-    $validatedData = $request->validate([
-
+    $validator = Validator::make($request->all(), [
       'search' => 'required',
     ]);
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $cvs = CvForm::where('fio', 'LIKE', '%' . $request->search . '%')->paginate(15);
 
     if ($request->has('search')) {
@@ -152,10 +158,14 @@ class FormController extends Controller
   }
   public function murojatSearch(Request $request)
   {
-    $validatedData = $request->validate([
-
+    $validator = Validator::make($request->all(), [
       'search' => 'required',
     ]);
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $objects = ObjectSend::where('fio', 'LIKE', '%' . $request->search . '%')->paginate(15);
 
     if ($request->has('search')) {
@@ -166,12 +176,14 @@ class FormController extends Controller
 
   public function check(Request $request)
   {
-
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'aplication_id' => 'required|max:255',
-
     ]);
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $object_app = ObjectSend::where('unique_number', '=', $request->aplication_id)->first();
 
     return redirect()->back()->with('check', $object_app);
@@ -179,7 +191,7 @@ class FormController extends Controller
 
   public function  contact()
   {
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -196,11 +208,16 @@ class FormController extends Controller
 
   public function  contact_post(Request $request)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'fio' => 'required',
       'phone' => 'required',
       'email' => 'required',
     ]);
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $contact = new Contact();
     $contact->fio = $request->fio;
     $contact->email = $request->email;
@@ -224,7 +241,7 @@ class FormController extends Controller
    */
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'fio' => 'required|max:255',
       'birth' => 'required',
       'passport' => 'required',
@@ -235,6 +252,11 @@ class FormController extends Controller
       'object_type' => 'required',
       'comment' => 'required',
     ]);
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $object_send = new ObjectSend();
     $object_send->fio = $request->fio;
@@ -314,18 +336,21 @@ class FormController extends Controller
 
   public function getLang()
   {
-    $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::all()->where("language_prefix", "=", app()->getLocale())->first();
 
     return $model->id;
   }
 
   public function obuna(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'email' => 'required|max:255|email',
-
     ]);
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $obuna = new Obuna();
     $obuna->email = $request->email;
     $obuna->save();
@@ -335,12 +360,15 @@ class FormController extends Controller
 
   public function orpho(Request $request)
   {
-
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'errortxt' => 'required',
       'comment' => 'required',
     ]);
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     MailController::send($request->input('errortxt'), '', $request->input('comment'), 'info@water.gov.uz', 'murojaat@minwater.uz', 'orph');
     return redirect()->back();
   }

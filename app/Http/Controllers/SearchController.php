@@ -6,14 +6,16 @@ use App\Language;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\tender;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 
 class SearchController extends Controller
 {
   public static function languages()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {
@@ -30,13 +32,9 @@ class SearchController extends Controller
 
   public function index(Request $request)
   {
-    // dd($request->all());
-    /*  $request->validate([
-      'search' => 'integer',
-    ]); */
     $lang = $this->getLang();
     $events = null;
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -44,11 +42,11 @@ class SearchController extends Controller
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
     $tenders = tender::take(3)->where('language_id', '=', $lang)->get();
     $search = $request->input("search");
-    $posts = \DB::select("select * from `posts` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
-    $page = \DB::select("select * from `pages` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
-    $doc = \DB::select("select * from `docs` where `language_id` = $lang and `title` LIKE '%$search%' ");
-    $event = \DB::select("select * from `events` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
-    $tenderss = \DB::select("select * from `tenders` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
+    $posts = DB::select("select * from `posts` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
+    $page = DB::select("select * from `pages` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
+    $doc = DB::select("select * from `docs` where `language_id` = $lang and `title` LIKE '%$search%' ");
+    $event = DB::select("select * from `events` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
+    $tenderss = DB::select("select * from `tenders` where `language_id` = '$lang' and `title` LIKE '%$search%' ");
     return view('gca.search')
       ->with('posts', $posts)
       ->with('pages', $page)
@@ -64,7 +62,7 @@ class SearchController extends Controller
     $model = "";
     $languages = Language::get();
     $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->get();
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -73,7 +71,7 @@ class SearchController extends Controller
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->orderBy('id', 'desc')->get();
     switch ($name_tip) {
       case "doc":
-        $model = \DB::table("docs")
+        $model = DB::table("docs")
           ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "docs.language_id")
           ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
@@ -84,12 +82,12 @@ class SearchController extends Controller
           ->orderBy('id', 'desc')
           ->paginate(10);
 
-        $category = \DB::table("doccategories")
+        $category = DB::table("doccategories")
           ->select(['doccategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "doccategories.language_id")
           ->where("doccategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("doccategories")
+        $curcat = DB::table("doccategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -107,7 +105,7 @@ class SearchController extends Controller
 
         if ($request->has('date')) {
 
-          $model = \DB::table("events")
+          $model = DB::table("events")
             ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
             ->leftJoin("languages", "languages.id", "=", "events.language_id")
             ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -119,7 +117,7 @@ class SearchController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(10);
         } else {
-          $model = \DB::table("events")
+          $model = DB::table("events")
             ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
             ->leftJoin("languages", "languages.id", "=", "events.language_id")
             ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -131,12 +129,12 @@ class SearchController extends Controller
             ->paginate(10);
         }
 
-        $category = \DB::table("eventcategories")
+        $category = DB::table("eventcategories")
           ->select(['eventcategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
           ->where("eventcategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("eventcategories")
+        $curcat = DB::table("eventcategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -151,7 +149,7 @@ class SearchController extends Controller
         ]);;
         break;
       case "tender":
-        $model = \DB::table("tenders")
+        $model = DB::table("tenders")
           ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
           ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
@@ -163,12 +161,12 @@ class SearchController extends Controller
           ->orderBy('id', 'desc')
           ->paginate(10);
 
-        $category = \DB::table("tendercategories")
+        $category = DB::table("tendercategories")
           ->select(['tendercategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
           ->where("tendercategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("tendercategories")
+        $curcat = DB::table("tendercategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -184,17 +182,17 @@ class SearchController extends Controller
         break;
       case "video":
 
-        $category = \DB::table("videogallerycategories")
+        $category = DB::table("videogallerycategories")
           ->select(['videogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
           ->where("videogallerycategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("videogallerycategories")
+        $curcat = DB::table("videogallerycategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
 
-        $model = \DB::table("videogallerycategories")
+        $model = DB::table("videogallerycategories")
           ->select(['videogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
           ->where("videogallerycategories.group", "=", $category_id)
@@ -212,7 +210,7 @@ class SearchController extends Controller
 
         break;
       case "photo":
-        $model = \DB::table("photogallerycategories")
+        $model = DB::table("photogallerycategories")
           ->select(['photogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
           ->where('photogallerycategories.group', '=', $category_id)
@@ -220,12 +218,12 @@ class SearchController extends Controller
           ->orderBy('id', 'desc')
           ->paginate(10);
 
-        $category = \DB::table("photogallerycategories")
+        $category = DB::table("photogallerycategories")
           ->select(['photogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
           ->where("photogallerycategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("photogallerycategories")
+        $curcat = DB::table("photogallerycategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -245,7 +243,7 @@ class SearchController extends Controller
     $model = "";
     $languages = Language::get();
     $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -253,7 +251,7 @@ class SearchController extends Controller
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
     switch ($name_tip) {
       case "doc":
-        $model = \DB::table("docs")
+        $model = DB::table("docs")
           ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "docs.language_id")
           ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
@@ -263,12 +261,12 @@ class SearchController extends Controller
           ->where("doccategories.language_id", "=", $this->getLang())
           ->first();
 
-        $category = \DB::table("doccategories")
+        $category = DB::table("doccategories")
           ->select(['doccategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "doccategories.language_id")
           ->where("doccategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("doccategories")
+        $curcat = DB::table("doccategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -282,13 +280,13 @@ class SearchController extends Controller
         ]);
         break;
       case "event":
-        $events = \DB::table("events")
+        $events = DB::table("events")
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
           ->where("events.language_id", "=", $this->getLang())
           ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
-        $model = \DB::table("events")
+        $model = DB::table("events")
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -298,12 +296,12 @@ class SearchController extends Controller
           ->where("eventcategories.language_id", "=", $this->getLang())
           ->first();
 
-        $category = \DB::table("eventcategories")
+        $category = DB::table("eventcategories")
           ->select(['eventcategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
           ->where("eventcategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("eventcategories")
+        $curcat = DB::table("eventcategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -317,13 +315,13 @@ class SearchController extends Controller
         ]);;
         break;
       case "tender":
-        $events = \DB::table("events")
+        $events = DB::table("events")
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
           ->where("events.language_id", "=", $this->getLang())
           ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
-        $model = \DB::table("tenders")
+        $model = DB::table("tenders")
           ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
           ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
@@ -334,12 +332,12 @@ class SearchController extends Controller
           ->first();
 
 
-        $category = \DB::table("tendercategories")
+        $category = DB::table("tendercategories")
           ->select(['tendercategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
           ->where("tendercategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("tendercategories")
+        $curcat = DB::table("tendercategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -354,14 +352,14 @@ class SearchController extends Controller
         ]);
         break;
       case "video":
-        $events = \DB::table("events")
+        $events = DB::table("events")
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
           ->where("events.language_id", "=", $this->getLang())
           ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
 
-        $model = \DB::table("videogalleries")
+        $model = DB::table("videogalleries")
           ->select(['videogalleries.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
           ->where("videogalleries.language_id", "=", $this->getLang())
@@ -369,12 +367,12 @@ class SearchController extends Controller
           ->orderBy('created_at', 'desc')
           ->paginate(10);
 
-        $category = \DB::table("videogallerycategories")
+        $category = DB::table("videogallerycategories")
           ->select(['videogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
           ->where("videogallerycategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("videogallerycategories")
+        $curcat = DB::table("videogallerycategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -389,13 +387,13 @@ class SearchController extends Controller
         ]);
         break;
       case "photo":
-        $events = \DB::table("events")
+        $events = DB::table("events")
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")
           ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
           ->where("events.language_id", "=", $this->getLang())
           ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
-        $model = \DB::table("photogalleries")
+        $model = DB::table("photogalleries")
           ->select(['photogalleries.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogalleries.language_id")
           ->where("photogalleries.language_id", "=", $this->getLang())
@@ -403,12 +401,12 @@ class SearchController extends Controller
           ->paginate(10);
 
 
-        $category = \DB::table("photogallerycategories")
+        $category = DB::table("photogallerycategories")
           ->select(['photogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
           ->where("photogallerycategories.language_id", "=", $this->getLang())->get();
 
-        $curcat = \DB::table("photogallerycategories")
+        $curcat = DB::table("photogallerycategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
@@ -434,23 +432,23 @@ class SearchController extends Controller
 
     switch ($type) {
       case "video":
-        $bk = \DB::table("videogallerycategories")
+        $bk = DB::table("videogallerycategories")
           ->where("group", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
 
       case "event":
-        $bk = \DB::table("events")
+        $bk = DB::table("events")
           ->where("group", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "tenders":
-        $bk = \DB::table("tenders")
+        $bk = DB::table("tenders")
           ->where("group", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "videoin":
-        $bk = \DB::table("videogalleries")
+        $bk = DB::table("videogalleries")
           ->where("videogalleries.id", "=", $id)->first();
         $fileContents = File::get(storage_path("app/public/upload/" . $bk->cover));
         $response = Response::make($fileContents, 200);
@@ -460,53 +458,53 @@ class SearchController extends Controller
         break;
 
       case "photo":
-        $bk = \DB::table("photogallerycategories")
+        $bk = DB::table("photogallerycategories")
           ->where("group", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "docs":
-        $bk = \DB::table("docs")
+        $bk = DB::table("docs")
           ->where("group", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->files));
         break;
       case "photoin":
-        $bk = \DB::table("photogalleries")
+        $bk = DB::table("photogalleries")
           ->where("photogalleries.id", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
 
       case "post":
-        $bk = \DB::table("posts")
+        $bk = DB::table("posts")
           ->where("posts.group", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
       case "page":
-        $bk = \DB::table("pages_groups")
+        $bk = DB::table("pages_groups")
           ->where("pages_groups.id", "=", $id)->first();
         return response()->download(storage_path("app/public/photos/1/" . $bk->photo_url));
         break;
       case "doc":
-        $bk = \DB::table("docs")
+        $bk = DB::table("docs")
           ->where("docs.id", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->files));
         break;
       case "statistica":
-        $bk = \DB::table("statisticas")
+        $bk = DB::table("statisticas")
           ->where("id", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
       case "raxbariyat":
-        $bk = \DB::table("raxbariyats")
+        $bk = DB::table("raxbariyats")
           ->where("id", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
       case "link":
-        $bk = \DB::table("links")
+        $bk = DB::table("links")
           ->where("id", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
       case "years":
-        $bk = \DB::table("years")
+        $bk = DB::table("years")
           ->where("id", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->photo_url));
         break;
@@ -523,14 +521,14 @@ class SearchController extends Controller
 
     $languages = Language::get();
     $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->where("events.language_id", "=", $this->getLang())
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
     if ($request->has('start') && $request->has('finish') && $request->input('status') == 0) {
-      $model = \DB::table("tenders")
+      $model = DB::table("tenders")
         ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
         ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
@@ -543,7 +541,7 @@ class SearchController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } elseif ($request->has('start') && $request->has('finish') && $request->input('status') == 1) {
-      $model = \DB::table("tenders")
+      $model = DB::table("tenders")
         ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
         ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
@@ -557,7 +555,7 @@ class SearchController extends Controller
         ->paginate(10);
     }
     if ($request->input('status') == 0) {
-      $model = \DB::table("tenders")
+      $model = DB::table("tenders")
         ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
         ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
@@ -569,7 +567,7 @@ class SearchController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $model = \DB::table("tenders")
+      $model = DB::table("tenders")
         ->select(['tenders.*', 'languages.language_name', 'tendercategories.category_name'])
         ->leftJoin("languages", "languages.id", "=", "tenders.language_id")
         ->leftJoin("tendercategories", "tendercategories.group", "=", "tenders.tender_category_id")
@@ -583,12 +581,12 @@ class SearchController extends Controller
     }
 
 
-    $category = \DB::table("tendercategories")
+    $category = DB::table("tendercategories")
       ->select(['tendercategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
       ->where("tendercategories.language_id", "=", $this->getLang())->get();
 
-    $curcat = \DB::table("tendercategories")
+    $curcat = DB::table("tendercategories")
       ->where('group', '=', $request->cutcat)
       ->where("language_id", "=", $this->getLang())
       ->first();
@@ -607,16 +605,16 @@ class SearchController extends Controller
 
   public function sorov(Request $request)
   {
-    $savol = \DB::table("sorovnomas")
+    $savol = DB::table("sorovnomas")
       ->select(['sorovnomas.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "sorovnomas.language_id")
       ->where("sorovnomas.language_id", "=", $this->getLang())
       ->first();
 
-    $type = \DB::table("sorovvotes")->where("ip", "=", \Session::getId())->first();
+    $type = DB::table("sorovvotes")->where("ip", "=", Session::getId())->first();
 
     if ($type) {
-      $tb = \DB::table("sorovnoma_atters")
+      $tb = DB::table("sorovnoma_atters")
         ->select(['sorovnoma_atters.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "sorovnoma_atters.language_id")
         ->where("sorovnoma_atters.language_id", "=", \App\Http\Controllers\SearchController::languages())
@@ -644,7 +642,7 @@ class SearchController extends Controller
 
       ];
     } else {
-      $tb = \DB::table("sorovnoma_atters")
+      $tb = DB::table("sorovnoma_atters")
         ->select(['sorovnoma_atters.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "sorovnoma_atters.language_id")
         ->where("sorovnoma_atters.language_id", "=", $this->getLang())
@@ -664,7 +662,7 @@ class SearchController extends Controller
 
     $languages = Language::get();
     $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -672,7 +670,7 @@ class SearchController extends Controller
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->get();
 
 
-    $model = \DB::table("events")
+    $model = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -685,12 +683,12 @@ class SearchController extends Controller
       ->paginate(10);
 
 
-    $category = \DB::table("eventcategories")
+    $category = DB::table("eventcategories")
       ->select(['eventcategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
       ->where("eventcategories.language_id", "=", $this->getLang())->get();
 
-    $curcat = \DB::table("eventcategories")
+    $curcat = DB::table("eventcategories")
       ->where('group', '=', $request->cutcat)
       ->where("language_id", "=", $this->getLang())
       ->first();

@@ -23,7 +23,7 @@
         </div>
         <div class="col-md-3 hidden-xs hidden-sm" style="padding-top: 11px;">
           <a class="page-print-link" target="_self"><span class="glyphicon glyphicon-print"></span> Чоп этиш </a>
-          <a class="rss-link pull-right" href="{{URL(\Illuminate\Support\Facades\App::getLocale().'/rss/video')}}"><img
+          <a class="rss-link pull-right" href="{{URL(\Illuminate\Support\Facadesapp()->getLocale().'/rss/video')}}"><img
               src="{{URL('/images/Feed-icon.svg.png')}}" alt="" width="20" height="20"> RSS</a>
         </div>
       </div>

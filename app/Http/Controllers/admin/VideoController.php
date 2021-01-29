@@ -15,7 +15,7 @@ class VideoController extends Controller
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $model = \DB::table("videogalleries")
+      $model = DB::table("videogalleries")
         ->select(['videogalleries.*', 'languages.language_name', 'videogallerycategories.title'])
         ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
         ->leftJoin("videogallerycategories", "videogallerycategories.group", "=", "videogalleries.category_id")
@@ -26,7 +26,7 @@ class VideoController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      // $model = \DB::table("videogalleries")
+      // $model = DB::table("videogalleries")
       //   ->select(['videogalleries.*', 'languages.language_name', 'videogallerycategories.title'])
       //   ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
       //   ->leftJoin("videogallerycategories", "videogallerycategories.group", "=", "videogalleries.category_id")
@@ -168,7 +168,7 @@ class VideoController extends Controller
 
   public function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
 
     if ($model) {
       return $model->id;

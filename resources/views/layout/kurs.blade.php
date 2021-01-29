@@ -1,6 +1,6 @@
 <?php
 
-$all =\DB::table('translate')->where('type',"=","kurs")->orderByDesc("id")->first();
+$all =DB::table('translate')->where('type',"=","kurs")->orderByDesc("id")->first();
 ;
 
 ?>
@@ -13,26 +13,26 @@ $all =\DB::table('translate')->where('type',"=","kurs")->orderByDesc("id")->firs
         <div class="text-center">
             <table class="table table-condensed">
                 <thead>
-                <tr>
-                    <th>@lang('blog.currency-code')</th>
-                    <th>@lang('blog.currency-rate')</th>
-                    <th>@lang('blog.currency-diff')</th>
-                </tr>
+                    <tr>
+                        <th>@lang('blog.currency-code')</th>
+                        <th>@lang('blog.currency-rate')</th>
+                        <th>@lang('blog.currency-diff')</th>
+                    </tr>
                 </thead>
                 <tbody>
-{{--                @foreach(json_decode($all->jsons) as $key=>$value)--}}
+                    {{--                @foreach(json_decode($all->jsons) as $key=>$value)--}}
 
 
-{{--                <tr>--}}
-{{--                    <td>{!! $value->Ccy !!}</td>--}}
-{{--                    <td>{!! $value->Rate !!}</td>--}}
-{{--                    <td>{!! $value->Diff !!}</td>--}}
+                    {{--                <tr>--}}
+                    {{--                    <td>{!! $value->Ccy !!}</td>--}}
+                    {{--                    <td>{!! $value->Rate !!}</td>--}}
+                    {{--                    <td>{!! $value->Diff !!}</td>--}}
 
-{{--                </tr>--}}
-{{--                    @if($key == 3)--}}
-{{--                        @break--}}
-{{--                        @endif--}}
-{{--                    @endforeach--}}
+                    {{--                </tr>--}}
+                    {{--                    @if($key == 3)--}}
+                    {{--                        @break--}}
+                    {{--                        @endif--}}
+                    {{--                    @endforeach--}}
 
                 </tbody>
             </table>

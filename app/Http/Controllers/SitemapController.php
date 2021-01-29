@@ -12,7 +12,7 @@ class SitemapController extends Controller
 {
   public function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {

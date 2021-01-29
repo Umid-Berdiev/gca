@@ -6,15 +6,15 @@ use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\EventCategory;
-use Illuminate\Support\Facades\Validator as FacadesValidator;
-use Illuminate\Validation\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class EventCategoryController extends Controller
 {
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $model = \DB::table("eventcategories")
+      $model = DB::table("eventcategories")
         ->select(['eventcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
         ->where("eventcategories.language_id", "=", $this->getLang())
@@ -22,7 +22,7 @@ class EventCategoryController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $model = \DB::table("eventcategories")
+      $model = DB::table("eventcategories")
         ->select(['eventcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "eventcategories.language_id")
         ->where("language_id", "=", $this->getLang())
@@ -47,7 +47,7 @@ class EventCategoryController extends Controller
   public function store(Request $request)
   {
     // dd($request->all());
-    $validator = FacadesValidator::make($request->all(), [
+    $validator = Validator::make($request->all(), [
       'category_names.*' => 'required|max:40|min:3|unique:eventcategories,category_name',
       'language_ids.*' => 'required|exists:languages,id',
     ], $this->validationMessages());
@@ -85,10 +85,15 @@ class EventCategoryController extends Controller
 
   public function update(Request $request, $id)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_names.*' => 'required|max:255',
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     foreach ($request->language_ids as $key => $value) {
       EventCategory::where("group", $id)
         ->where("language_id", $value)
@@ -111,7 +116,7 @@ class EventCategoryController extends Controller
 
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
 
     return $model->id;
   }

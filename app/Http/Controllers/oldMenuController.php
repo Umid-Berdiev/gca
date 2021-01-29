@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\language;
 use App\menumaker;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
   private function getlang()
   {
-    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", \App::getLocale())->first();
+    $model = language::all()->where('status', '=', '1')->where("language_prefix", "=", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {
@@ -23,17 +24,17 @@ class MenuController extends Controller
   {
     $model = language::all()->where('status', '=', '1');
 
-    $menu = \DB::table("menumakers")->where("language_id", "=", $this->getlang())->where("parent_id", "=", 0)->get();
+    $menu = DB::table("menumakers")->where("language_id", "=", $this->getlang())->where("parent_id", "=", 0)->get();
 
-    $edits = \DB::table("menumakers")->where("group", "=", $request->input('id'))->get();
+    $edits = DB::table("menumakers")->where("group", "=", $request->input('id'))->get();
 
-    $doc = \DB::table("doccategories")->where("language_id", "=", $this->getlang())->get();
-    $event = \DB::table("eventcategories")->where("language_id", "=", $this->getlang())->get();
-    $page = \DB::table("pages")->where("language_id", "=", $this->getlang())->get();
-    $photo = \DB::table("photogallerycategories")->where("language_id", "=", $this->getlang())->get();
-    $video = \DB::table("videogallerycategories")->where("language_id", "=", $this->getlang())->get();
-    $tenders = \DB::table("tendercategories")->where("language_id", "=", $this->getlang())->get();
-    $postcategories = \DB::table("postcategories")->where("language_id", "=", $this->getlang())->get();
+    $doc = DB::table("doccategories")->where("language_id", "=", $this->getlang())->get();
+    $event = DB::table("eventcategories")->where("language_id", "=", $this->getlang())->get();
+    $page = DB::table("pages")->where("language_id", "=", $this->getlang())->get();
+    $photo = DB::table("photogallerycategories")->where("language_id", "=", $this->getlang())->get();
+    $video = DB::table("videogallerycategories")->where("language_id", "=", $this->getlang())->get();
+    $tenders = DB::table("tendercategories")->where("language_id", "=", $this->getlang())->get();
+    $postcategories = DB::table("postcategories")->where("language_id", "=", $this->getlang())->get();
 
 
     return view("admin.menubuildere", [
@@ -56,7 +57,7 @@ class MenuController extends Controller
   {
 
 
-    $menu = \DB::table("menumakers")->where("language_id", "=", $this->getlang())->where("parent_id", "=", 0)->orderBy("orders")->get();
+    $menu = DB::table("menumakers")->where("language_id", "=", $this->getlang())->where("parent_id", "=", 0)->orderBy("orders")->get();
 
 
 
@@ -72,16 +73,16 @@ class MenuController extends Controller
   {
     $model = language::all()->where('status', '=', '1');
 
-    $menu = \DB::table("menumakers")->where("language_id", "=", $this->getlang())->where("parent_id", "=", 0)->get();
+    $menu = DB::table("menumakers")->where("language_id", "=", $this->getlang())->where("parent_id", "=", 0)->get();
 
 
-    $doc = \DB::table("doccategories")->where("language_id", "=", $this->getlang())->get();
-    $event = \DB::table("eventcategories")->where("language_id", "=", $this->getlang())->get();
-    $page = \DB::table("pages")->where("language_id", "=", $this->getlang())->get();
-    $photo = \DB::table("photogallerycategories")->where("language_id", "=", $this->getlang())->get();
-    $video = \DB::table("videogallerycategories")->where("language_id", "=", $this->getlang())->get();
-    $tenders = \DB::table("tendercategories")->where("language_id", "=", $this->getlang())->get();
-    $postcategories = \DB::table("postcategories")->where("language_id", "=", $this->getlang())->get();
+    $doc = DB::table("doccategories")->where("language_id", "=", $this->getlang())->get();
+    $event = DB::table("eventcategories")->where("language_id", "=", $this->getlang())->get();
+    $page = DB::table("pages")->where("language_id", "=", $this->getlang())->get();
+    $photo = DB::table("photogallerycategories")->where("language_id", "=", $this->getlang())->get();
+    $video = DB::table("videogallerycategories")->where("language_id", "=", $this->getlang())->get();
+    $tenders = DB::table("tendercategories")->where("language_id", "=", $this->getlang())->get();
+    $postcategories = DB::table("postcategories")->where("language_id", "=", $this->getlang())->get();
 
 
     return view("admin.menubuilder", [
@@ -102,24 +103,24 @@ class MenuController extends Controller
   {
     $model = language::all()->where('status', '=', '1');
 
-    $menu = \DB::table("menumakers")
+    $menu = DB::table("menumakers")
       ->where("language_id", "=", $this->getlang())
       ->where("parent_id", "=", 0)
       ->get();
 
-    $parent = \DB::table("menumakers")
+    $parent = DB::table("menumakers")
       ->where("language_id", "=", $this->getlang())
       ->where("group", "=", $id)
 
       ->first();
 
-    $doc = \DB::table("doccategories")->where("language_id", "=", $this->getlang())->get();
-    $event = \DB::table("eventcategories")->where("language_id", "=", $this->getlang())->get();
-    $page = \DB::table("pages")->where("language_id", "=", $this->getlang())->get();
-    $photo = \DB::table("photogallerycategories")->where("language_id", "=", $this->getlang())->get();
-    $video = \DB::table("videogallerycategories")->where("language_id", "=", $this->getlang())->get();
-    $tenders = \DB::table("tendercategories")->where("language_id", "=", $this->getlang())->get();
-    $postcategories = \DB::table("postcategories")->where("language_id", "=", $this->getlang())->get();
+    $doc = DB::table("doccategories")->where("language_id", "=", $this->getlang())->get();
+    $event = DB::table("eventcategories")->where("language_id", "=", $this->getlang())->get();
+    $page = DB::table("pages")->where("language_id", "=", $this->getlang())->get();
+    $photo = DB::table("photogallerycategories")->where("language_id", "=", $this->getlang())->get();
+    $video = DB::table("videogallerycategories")->where("language_id", "=", $this->getlang())->get();
+    $tenders = DB::table("tendercategories")->where("language_id", "=", $this->getlang())->get();
+    $postcategories = DB::table("postcategories")->where("language_id", "=", $this->getlang())->get();
 
 
     return view("admin.menubuilderparent", [
@@ -140,13 +141,16 @@ class MenuController extends Controller
   }
   public function insert(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'menu_name' => 'required|max:255',
       'type' => 'required',
-
-
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $this->getgroup_id();
     foreach ($request->input("language_id") as $key => $value) {
@@ -173,14 +177,17 @@ class MenuController extends Controller
   }
   public function Update(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'menu_name' => 'required|max:255',
       'type' => 'required',
       'grp_id' => 'required',
-
-
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $request->input("grp_id");
     foreach ($request->input("language_id") as $key => $value) {
@@ -209,13 +216,13 @@ class MenuController extends Controller
   {
     //dd(Input::all());
 
-    $at = \DB::table("menumakers")
+    $at = DB::table("menumakers")
       ->where("group", "=", $request->input("id"))->first();
 
 
-    $ordermin = \DB::table("menumakers")
+    $ordermin = DB::table("menumakers")
       ->where("parent_id", "=", $at->parent_id)->orderBy("orders")->first();
-    $ordermax = \DB::table("menumakers")
+    $ordermax = DB::table("menumakers")
       ->where("parent_id", "=", $at->parent_id)->orderByDesc("orders")->first();
 
 

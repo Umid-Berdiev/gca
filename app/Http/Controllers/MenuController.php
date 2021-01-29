@@ -7,21 +7,23 @@ use App\MenuMaker;
 use App\Page;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
   public function edits(Request $request)
   {
     $model = Language::where('status', 1)->get();
-    $menu = \DB::table("menumakers")->where("language_id", "=", $this->getLang())->where("parent_id", "=", 0)->get();
-    $edits = \DB::table("menumakers")->where("group", "=", $request->input('id'))->get();
-    $doc = \DB::table("doccategories")->where("language_id", "=", $this->getLang())->get();
-    $event = \DB::table("eventcategories")->where("language_id", "=", $this->getLang())->get();
-    $page = \DB::table("pages")->where("language_id", "=", $this->getLang())->get();
-    $photo = \DB::table("photogallerycategories")->where("language_id", "=", $this->getLang())->get();
-    $video = \DB::table("videogallerycategories")->where("language_id", "=", $this->getLang())->get();
-    $tenders = \DB::table("tendercategories")->where("language_id", "=", $this->getLang())->get();
-    $postcategories = \DB::table("postcategories")->where("language_id", "=", $this->getLang())->get();
+    $menu = DB::table("menumakers")->where("language_id", "=", $this->getLang())->where("parent_id", "=", 0)->get();
+    $edits = DB::table("menumakers")->where("group", "=", $request->input('id'))->get();
+    $doc = DB::table("doccategories")->where("language_id", "=", $this->getLang())->get();
+    $event = DB::table("eventcategories")->where("language_id", "=", $this->getLang())->get();
+    $page = DB::table("pages")->where("language_id", "=", $this->getLang())->get();
+    $photo = DB::table("photogallerycategories")->where("language_id", "=", $this->getLang())->get();
+    $video = DB::table("videogallerycategories")->where("language_id", "=", $this->getLang())->get();
+    $tenders = DB::table("tendercategories")->where("language_id", "=", $this->getLang())->get();
+    $postcategories = DB::table("postcategories")->where("language_id", "=", $this->getLang())->get();
 
     return view("admin.menubuildere", [
       'languages' => $model,
@@ -42,7 +44,7 @@ class MenuController extends Controller
 
   public function editshow()
   {
-    $menu = \DB::table("menumakers")->where("language_id", "=", $this->getLang())->where("parent_id", "=", 0)->orderBy("orders")->get();
+    $menu = DB::table("menumakers")->where("language_id", "=", $this->getLang())->where("parent_id", "=", 0)->orderBy("orders")->get();
     // dd($menu);
     return view("admin.menuedit", [
       'menues' => $menu,
@@ -52,14 +54,14 @@ class MenuController extends Controller
   public function index()
   {
     $model = Language::where('status', 1)->get();
-    $menu = \DB::table("menumakers")->where("language_id", "=", $this->getLang())->where("parent_id", "=", 0)->get();
-    $doc = \DB::table("doccategories")->where("language_id", "=", $this->getLang())->get();
-    $event = \DB::table("eventcategories")->where("language_id", "=", $this->getLang())->get();
-    $page = \DB::table("pages")->where("language_id", "=", $this->getLang())->get();
-    $photo = \DB::table("photogallerycategories")->where("language_id", "=", $this->getLang())->get();
-    $video = \DB::table("videogallerycategories")->where("language_id", "=", $this->getLang())->get();
-    $tenders = \DB::table("tendercategories")->where("language_id", "=", $this->getLang())->get();
-    $postcategories = \DB::table("postcategories")->where("language_id", "=", $this->getLang())->get();
+    $menu = DB::table("menumakers")->where("language_id", "=", $this->getLang())->where("parent_id", "=", 0)->get();
+    $doc = DB::table("doccategories")->where("language_id", "=", $this->getLang())->get();
+    $event = DB::table("eventcategories")->where("language_id", "=", $this->getLang())->get();
+    $page = DB::table("pages")->where("language_id", "=", $this->getLang())->get();
+    $photo = DB::table("photogallerycategories")->where("language_id", "=", $this->getLang())->get();
+    $video = DB::table("videogallerycategories")->where("language_id", "=", $this->getLang())->get();
+    $tenders = DB::table("tendercategories")->where("language_id", "=", $this->getLang())->get();
+    $postcategories = DB::table("postcategories")->where("language_id", "=", $this->getLang())->get();
 
     return view("admin.menubuilder", [
       'languages' => $model,
@@ -80,24 +82,24 @@ class MenuController extends Controller
   {
     $model = Language::where('status', 1)->get();
 
-    $menu = \DB::table("menumakers")
+    $menu = DB::table("menumakers")
       ->where("language_id", "=", $this->getLang())
       ->where("parent_id", "=", 0)
       ->get();
 
-    $parent = \DB::table("menumakers")
+    $parent = DB::table("menumakers")
       ->where("language_id", "=", $this->getLang())
       ->where("group", "=", $id)
 
       ->first();
 
-    $doc = \DB::table("doccategories")->where("language_id", "=", $this->getLang())->get();
-    $event = \DB::table("eventcategories")->where("language_id", "=", $this->getLang())->get();
-    $page = \DB::table("pages")->where("language_id", "=", $this->getLang())->get();
-    $photo = \DB::table("photogallerycategories")->where("language_id", "=", $this->getLang())->get();
-    $video = \DB::table("videogallerycategories")->where("language_id", "=", $this->getLang())->get();
-    $tenders = \DB::table("tendercategories")->where("language_id", "=", $this->getLang())->get();
-    $postcategories = \DB::table("postcategories")->where("language_id", "=", $this->getLang())->get();
+    $doc = DB::table("doccategories")->where("language_id", "=", $this->getLang())->get();
+    $event = DB::table("eventcategories")->where("language_id", "=", $this->getLang())->get();
+    $page = DB::table("pages")->where("language_id", "=", $this->getLang())->get();
+    $photo = DB::table("photogallerycategories")->where("language_id", "=", $this->getLang())->get();
+    $video = DB::table("videogallerycategories")->where("language_id", "=", $this->getLang())->get();
+    $tenders = DB::table("tendercategories")->where("language_id", "=", $this->getLang())->get();
+    $postcategories = DB::table("postcategories")->where("language_id", "=", $this->getLang())->get();
 
     return view("admin.menubuilderparent", [
       'languages' => $model,
@@ -118,11 +120,15 @@ class MenuController extends Controller
 
   public function insert(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'menu_name' => 'required|max:255',
       'type' => 'required',
     ]);
-
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $grp_id = $this->getGroupId();
 
     if (isset($request->type) && $request->type == 3 && isset($request->alias_category_id)) {
@@ -154,13 +160,17 @@ class MenuController extends Controller
 
   public function update(Request $request)
   {
-    // dd($request->all());
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'menu_name' => 'required|max:255',
       'type' => 'required',
       'grp_id' => 'required',
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $grp_id = $request->input("grp_id");
 
     foreach ($request->language_ids as $key => $lang_id) {
@@ -198,12 +208,12 @@ class MenuController extends Controller
 
   public function orderchange(Request $request)
   {
-    $at = \DB::table("menumakers")
+    $at = DB::table("menumakers")
       ->where("group", "=", $request->input("id"))->first();
 
-    $ordermin = \DB::table("menumakers")
+    $ordermin = DB::table("menumakers")
       ->where("parent_id", "=", $at->parent_id)->orderBy("orders")->first();
-    $ordermax = \DB::table("menumakers")
+    $ordermax = DB::table("menumakers")
       ->where("parent_id", "=", $at->parent_id)->orderByDesc("orders")->first();
 
     if ($request->input("p") == "up") {
@@ -275,7 +285,7 @@ class MenuController extends Controller
 
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {

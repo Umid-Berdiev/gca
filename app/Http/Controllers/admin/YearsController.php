@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class YearsController extends Controller
 {
@@ -18,7 +19,7 @@ class YearsController extends Controller
    */
   public function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model) {
 
       return $model->id;
@@ -54,17 +55,22 @@ class YearsController extends Controller
    */
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'language_id' => 'required',
       'cover' => 'required',
-
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     $grp_id = $this->getGroupId();
     foreach ($request->language_ids as $key => $value) {
       $years = new Years();
       if (isset($request->file('cover')[$key])) {
-        $years->photo_url =  \Storage::putFile('public', $request->file('cover')[$key]);
+        $years->photo_url =  Storage::putFile('public', $request->file('cover')[$key]);
       } else {
         $years->photo_url = "";
       }
@@ -108,13 +114,15 @@ class YearsController extends Controller
    */
   public function update(Request $request)
   {
-
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'language_id' => 'required',
-
-
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $id = $request->group;
 
     foreach ($request->language_ids as $key => $value) {
@@ -141,15 +149,16 @@ class YearsController extends Controller
    */
   public function destroy(Request $request)
   {
-    $validatedData = $request->validate([
-
+    $validator = Validator::make($request->all(), [
       'id' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $model = Years::where("group", "=", $request->input("id"))->delete();;
-
-
-
     return redirect("admin/years");
   }
 

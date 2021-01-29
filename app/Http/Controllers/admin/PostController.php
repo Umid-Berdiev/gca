@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Post;
 use App\PostCategory;
 use App\PostGroup;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -65,6 +65,7 @@ class PostController extends Controller
       'country_id' => 'required',
       'titles.*' => 'required',
       'descriptions.*' => 'required',
+      'cover' => 'image|nullable'
     ]);
 
     if ($validator->fails()) {
@@ -128,6 +129,7 @@ class PostController extends Controller
       'country_id' => 'required',
       'titles.*' => 'required',
       'descriptions.*' => 'required',
+      'cover' => 'image|nullable'
     ]);
 
     if ($validator->fails()) {
@@ -172,7 +174,7 @@ class PostController extends Controller
 
   public function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     return $model->id;
   }
 

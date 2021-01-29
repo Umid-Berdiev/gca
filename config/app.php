@@ -195,7 +195,7 @@ return [
 
   'aliases' => [
 
-    'App' => Illuminate\Support\Facades\App::class,
+    'App' => Illuminate\Support\Facadesapp()->class,
     'Artisan' => Illuminate\Support\Facades\Artisan::class,
     'Auth' => Illuminate\Support\Facades\Auth::class,
     'Blade' => Illuminate\Support\Facades\Blade::class,
@@ -205,7 +205,7 @@ return [
     'Config' => Illuminate\Support\Facades\Config::class,
     'Cookie' => Illuminate\Support\Facades\Cookie::class,
     'Crypt' => Illuminate\Support\Facades\Crypt::class,
-    'DB' => Illuminate\Support\Facades\DB::class,
+    'DB' => Illuminate\Support\FacadesDB::class,
     'Eloquent' => Illuminate\Database\Eloquent\Model::class,
     'Event' => Illuminate\Support\Facades\Event::class,
     'File' => Illuminate\Support\Facades\File::class,

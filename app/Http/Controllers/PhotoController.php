@@ -10,7 +10,7 @@ class PhotoController extends Controller
 {
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {
@@ -23,14 +23,14 @@ class PhotoController extends Controller
     $model = "";
     $languages = Language::get();
     $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->get();
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
       ->where('events.title', '<>', '')
       ->where("events.language_id", "=", $this->getLang())
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->orderBy('id', 'desc')->get();
-    $model = \DB::table("photogallerycategories")
+    $model = DB::table("photogallerycategories")
       ->select(['photogallerycategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
       ->where("photogallerycategories.language_id", "=", $this->getLang())
@@ -38,7 +38,7 @@ class PhotoController extends Controller
       ->paginate(10);
 
 
-    $category = \DB::table("photogallerycategories")
+    $category = DB::table("photogallerycategories")
       ->select(['photogallerycategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
       ->where("photogallerycategories.language_id", "=", $this->getLang())->get();

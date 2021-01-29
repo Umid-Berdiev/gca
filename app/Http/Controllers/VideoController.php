@@ -10,7 +10,7 @@ class VideoController extends Controller
 {
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {
@@ -24,7 +24,7 @@ class VideoController extends Controller
     $model = "";
     $languages = Language::get();
     $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->get();
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -32,12 +32,12 @@ class VideoController extends Controller
       ->where("events.language_id", "=", $this->getLang())
       ->where("eventcategories.language_id", "=", $this->getLang())->take(5)->orderBy('id', 'desc')->get();
 
-    $category = \DB::table("videogallerycategories")
+    $category = DB::table("videogallerycategories")
       ->select(['videogallerycategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
       ->where("videogallerycategories.language_id", $this->getLang())->get();
 
-    $model = \DB::table("videogallerycategories")
+    $model = DB::table("videogallerycategories")
       ->select(['videogallerycategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
       ->where("videogallerycategories.language_id", $this->getLang())

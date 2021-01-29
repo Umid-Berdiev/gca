@@ -6,6 +6,7 @@ use App\Language;
 use App\Videoalbum;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,13 +15,13 @@ class VideoalbumController extends Controller
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $model = \DB::table("videogallerycategories")
+      $model = DB::table("videogallerycategories")
         ->select(['videogallerycategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "videogallerycategories.language_id")
         ->where("videogallerycategories.language_id", $this->getLang())
         ->where("videogallerycategories.title", "LIKE", '%' . $request->input("search") . '%')->paginate(10);
     } else {
-      $model = \DB::table("videogallerycategories")
+      $model = DB::table("videogallerycategories")
         ->select(['videogallerycategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "videogallerycategories.language_id")
         ->where("language_id", $this->getLang())
@@ -142,7 +143,7 @@ class VideoalbumController extends Controller
 
   public function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model) {
       return $model->id;
     } else {

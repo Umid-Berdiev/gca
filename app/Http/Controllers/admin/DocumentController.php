@@ -17,7 +17,7 @@ class DocumentController extends Controller
     if ($request->has("search")) {
       $docs = Document::where('title', 'like', '%' . $request->input("search") . '%')->where('language_id', $this->getLang())->with('category')->latest()->paginate(10);
 
-      // $model = \DB::table("docs")
+      // $model = DB::table("docs")
       //   ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
       //   ->leftJoin("languages", "languages.id", "=", "docs.language_id")
       //   ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
@@ -31,7 +31,7 @@ class DocumentController extends Controller
     } else {
       $docs = Document::where('language_id', $this->getLang())->with('category')->latest()->paginate(10);
       // dd($docs);
-      // $model = \DB::table("docs")
+      // $model = DB::table("docs")
       //   ->select(['docs.*', 'languages.language_name', 'doccategories.category_name'])
       //   ->leftJoin("languages", "languages.id", "=", "docs.language_id")
       //   ->leftJoin("doccategories", "doccategories.group", "=", "docs.doc_category_id")
@@ -184,7 +184,7 @@ class DocumentController extends Controller
 
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     return $model->id;
   }
 }

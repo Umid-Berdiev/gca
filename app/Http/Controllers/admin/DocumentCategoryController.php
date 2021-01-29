@@ -6,20 +6,21 @@ use App\DocumentCategory;
 use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class DocumentCategoryController extends Controller
 {
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $model = \DB::table("doccategories")
+      $model = DB::table("doccategories")
         ->select(['doccategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "doccategories.language_id")
         ->where("doccategories.language_id", $this->getLang())
         ->where("doccategories.category_name", "LIKE", '%' . $request->input("search") . '%')->orderBy('id', 'desc')->paginate(10);
     } else {
-      $model = \DB::table("doccategories")
+      $model = DB::table("doccategories")
         ->select(['doccategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "doccategories.language_id")
         ->where("language_id", $this->getLang())->orderBy('id', 'desc')->paginate(10);
@@ -82,10 +83,15 @@ class DocumentCategoryController extends Controller
 
   public function update(Request $request, $id)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_names.*' => 'required|max:255',
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     foreach ($request->language_ids as $key => $value) {
       $model = DocumentCategory::where("group", $id)
         ->where("language_id", $value)
@@ -116,7 +122,7 @@ class DocumentCategoryController extends Controller
 
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
 
     return $model->id;
   }

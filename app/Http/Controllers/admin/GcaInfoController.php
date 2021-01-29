@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\GcaInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class GcaInfoController extends Controller
 {
@@ -34,7 +35,7 @@ class GcaInfoController extends Controller
 
   public function update(Request $request)
   {
-    $request->validate([
+    $validator = Validator::make($request->all(), [
       'prefix' => 'required',
       'title' => 'required',
       'name' => 'required',
@@ -44,6 +45,11 @@ class GcaInfoController extends Controller
       'email' => 'required',
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $gca = GcaInfo::find($request->id);
     $gca->prefix = $request->prefix;
     $gca->title = $request->title;

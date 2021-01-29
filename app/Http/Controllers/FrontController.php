@@ -59,7 +59,7 @@ class FrontController extends Controller
     $this->checkcurrency();
     $statisticas = \App\Statistics::where('photo_url', '<>', '')->where("language_id", "=", \App\Http\Controllers\NewsController::getlangid())->orderBy('id', 'desc')->take(10)->get();
 
-    // $events = \DB::table("events")
+    // $events = DB::table("events")
     //   ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
     //   ->leftJoin("languages", "languages.id", "=", "events.language_id")
     //   ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -78,7 +78,7 @@ class FrontController extends Controller
       ->take(3)
       ->get();
 
-    $photos = \DB::table("photogalleries")
+    $photos = DB::table("photogalleries")
       ->select(['photogalleries.*', 'languages.language_name', 'photogallerycategories.title'])
       ->leftJoin("languages", "languages.id", "=", "photogalleries.language_id")
       ->leftJoin("photogallerycategories", "photogallerycategories.group", "=", "photogalleries.category_id")
@@ -87,7 +87,7 @@ class FrontController extends Controller
       ->orderBy('created_at', 'desc')
       ->get();
 
-    $videos = \DB::table("videogalleries")
+    $videos = DB::table("videogalleries")
       ->select(['videogalleries.*', 'languages.language_name', 'videogallerycategories.title'])
       ->leftJoin("languages", "languages.id", "=", "videogalleries.language_id")
       ->leftJoin("videogallerycategories", "videogallerycategories.group", "=", "videogalleries.category_id")
@@ -136,7 +136,7 @@ class FrontController extends Controller
       ->select('pages.*', 'languages.language_name', 'languages.language_prefix', 'pages_groups.photo_url')
       ->where('pages.title', '<>', '')
       ->where('pages.page_category_group_id', 1)
-      ->where('languages.language_prefix', \App::getLocale())
+      ->where('languages.language_prefix', app()->getLocale())
       ->get();
 
     // dd($videos);
@@ -183,7 +183,7 @@ class FrontController extends Controller
 
   public function getLang()
   {
-    $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::all()->where("language_prefix", "=", app()->getLocale())->first();
 
     return $model->id;
   }
@@ -191,7 +191,7 @@ class FrontController extends Controller
   public function page($lang, $category_id, $id)
   {
     // dd('ok');
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -235,7 +235,7 @@ class FrontController extends Controller
 
   public function pages($lang, $category_id)
   {
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -267,7 +267,7 @@ class FrontController extends Controller
 
   public function post($category_id, $id)
   {
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")

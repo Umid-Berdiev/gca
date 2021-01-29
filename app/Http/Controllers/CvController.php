@@ -8,6 +8,9 @@ use App\Language;
 use App\tender;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage as FacadesStorage;
+use Illuminate\Support\Facades\Validator;
 use Storage;
 
 class CvController extends Controller
@@ -19,7 +22,7 @@ class CvController extends Controller
    */
   public function index()
   {
-    $events = \DB::table("events")
+    $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
       ->leftJoin("languages", "languages.id", "=", "events.language_id")
       ->leftJoin("eventcategories", "eventcategories.group", "=", "events.event_category_id")
@@ -54,7 +57,7 @@ class CvController extends Controller
    */
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'fio' => 'required|max:255',
       'email' => 'required|email',
       'phone' => 'required',
@@ -62,13 +65,18 @@ class CvController extends Controller
       'file' => 'required',
     ]);
 
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     // dd(Input::all());
     $cv = new CvForm();
     $cv->fio = $request->fio;
     $cv->email = $request->email;
     $cv->phone_number = $request->phone;
     $cv->comment = $request->comment;
-    $cv->uploaded_file  = Storage::disk('public_uploads')->put('upload', $request->file('file')); //Storage::putFile('public/upload', $request->file('file'));
+    $cv->uploaded_file  = FacadesStorage::disk('public_uploads')->put('upload', $request->file('file')); //Storage::putFile('public/upload', $request->file('file'));
     $cv->unique_number  = "BCM" . Carbon::now()->timestamp;
     $cv->status  = 0;
     $cv->save();
@@ -126,7 +134,7 @@ class CvController extends Controller
 
   public function getLang()
   {
-    $model = Language::all()->where("language_prefix", "=", \App::getLocale())->first();
+    $model = Language::all()->where("language_prefix", "=", app()->getLocale())->first();
 
     return $model->id;
   }

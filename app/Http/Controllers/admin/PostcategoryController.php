@@ -13,7 +13,7 @@ class PostCategoryController extends Controller
   public function index(Request $request)
   {
     if ($request->has("search")) {
-      $model = \DB::table("postcategories")
+      $model = DB::table("postcategories")
         ->select(['postcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "postcategories.language_id")
         ->where("postcategories.language_id", "=", $this->getLang())
@@ -21,7 +21,7 @@ class PostCategoryController extends Controller
         ->orderBy('id', 'desc')
         ->paginate(10);
     } else {
-      $model = \DB::table("postcategories")
+      $model = DB::table("postcategories")
         ->select(['postcategories.*', 'languages.language_name'])
         ->leftJoin("languages", "languages.id", "=", "postcategories.language_id")
         ->where("language_id", "=", $this->getLang())
@@ -111,7 +111,7 @@ class PostCategoryController extends Controller
 
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
 
     return $model->id;
   }

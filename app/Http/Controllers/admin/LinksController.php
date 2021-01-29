@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class LinksController extends Controller
 {
@@ -19,7 +20,7 @@ class LinksController extends Controller
    */
   public function index()
   {
-    $model = \DB::table("links")
+    $model = DB::table("links")
       ->select(['links.*', 'languages.language_name', 'links_categories.title as category_name'])
       ->leftJoin("languages", "languages.id", "=", "links.language_id")
       ->leftJoin("links_categories", "links_categories.group", "=", "links.category_group")
@@ -34,7 +35,7 @@ class LinksController extends Controller
 
   public function indexCategories()
   {
-    $model = \DB::table("links_categories")
+    $model = DB::table("links_categories")
       ->select(['links_categories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "links_categories.language_id")
       ->where("language_id", "=", $this->getLang())
@@ -44,7 +45,7 @@ class LinksController extends Controller
   }
   private function getLang()
   {
-    $model = Language::where('status', '1')->where("language_prefix", \App::getLocale())->first();
+    $model = Language::where('status', '1')->where("language_prefix", app()->getLocale())->first();
     if ($model)
       return $model->id;
     else {
@@ -83,15 +84,19 @@ class LinksController extends Controller
    */
   public function store(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'title' => 'required|max:255',
       'language_id' => 'required',
       'cover' => 'required',
       'links_category_id' => 'required',
       'link' => 'required',
-
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     // dd(Input::all());
     $grp_id = $this->getGroupId();
@@ -118,11 +123,17 @@ class LinksController extends Controller
   }
   public function categories_store(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_name' => 'required|max:255',
       'language_id' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     $max_id = LinksCategories::max('id');
     $grp_id = $this->getGroupId();
     foreach ($request->language_ids as $key => $value) {
@@ -201,17 +212,19 @@ class LinksController extends Controller
    */
   public function update(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'title' => 'required|max:255',
       'language_id' => 'required',
       'links_category_id' => 'required',
       'link' => 'required',
       'group' => 'required',
-
-
     ]);
 
-    //dd(Input::all());
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
 
     $grp_id = $request->input("group");
 
@@ -246,12 +259,17 @@ class LinksController extends Controller
 
   public function categories_update(Request $request)
   {
-    $validatedData = $request->validate([
+    $validator = Validator::make($request->all(), [
       'category_name' => 'required|max:255',
       'language_id' => 'required',
       'group' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     $grp_id = $request->input("group");
 
 
@@ -275,11 +293,16 @@ class LinksController extends Controller
    */
   public function destroy(Request $request)
   {
-    $validatedData = $request->validate([
-
+    $validator = Validator::make($request->all(), [
       'id' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
+
     Links::where("group", "=", $request->input("id"))->delete();
 
 
@@ -288,11 +311,15 @@ class LinksController extends Controller
   public function categories_destroy(Request $request)
   {
 
-    $validatedData = $request->validate([
-
+    $validator = Validator::make($request->all(), [
       'id' => 'required',
-
     ]);
+
+    if ($validator->fails()) {
+      return back()
+        ->withErrors($validator)
+        ->withInput();
+    }
     LinksCategories::where("group", "=", $request->input("id"))->delete();
 
 
