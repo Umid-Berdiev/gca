@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Language;
 use App\tender;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PhotoController extends Controller
 {

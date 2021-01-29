@@ -6,6 +6,7 @@ use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\PostCategory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PostCategoryController extends Controller

@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\admin;
 
-use App\GcaInfo;
 use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Page;
-use App\PageCategory;
 use App\PageGroup;
 use App\Tender;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 

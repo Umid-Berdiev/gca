@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Language;
 use App\tender;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VideoController extends Controller
 {
@@ -22,7 +23,6 @@ class VideoController extends Controller
   public function ViewVideo()
   {
     $model = "";
-    $languages = Language::get();
     $tenders = tender::take(3)->where('title', '<>', '')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->get();
     $events = DB::table("events")
       ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])

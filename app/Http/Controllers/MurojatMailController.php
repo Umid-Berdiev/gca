@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\DemoEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class MurojatMailController extends Controller
 {
