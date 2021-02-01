@@ -20,7 +20,6 @@ class Localization
     {
         if ( Session::has('locale')) {
             App::setLocale(Session::get('locale'));
-
             // You also can set the Carbon locale
             Carbon::setLocale(Session::get('locale'));
         }

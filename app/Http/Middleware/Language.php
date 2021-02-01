@@ -18,9 +18,9 @@ class Language
   public function handle($request, Closure $next)
   {
     $model = L::where("language_prefix", $request->segment(1))->first();
-
     if ($model) {
       app()->setLocale($model->language_prefix);
+      // return redirect()->route('front_index', ['lang' => app()->getLocale()]);
       return $next($request);
     } else {
       if (
@@ -45,7 +45,7 @@ class Language
       ) {
         return $next($request);
       } else {
-        return redirect("/en");
+        return redirect("/" . app()->getLocale());
       }
     }
   }

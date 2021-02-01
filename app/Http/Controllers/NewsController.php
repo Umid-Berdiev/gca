@@ -42,22 +42,16 @@ class NewsController extends Controller
       ->select(['postcategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "postcategories.language_id")
       ->where("language_id", "=", $this->getLang())->get();
-
-
-
     $news = DB::table("postgroups")
       ->select(['postcategories.category_name', 'languages.language_name', 'posts.*', 'postgroups.viewcount', 'postgroups.id'])
       ->join("posts", "posts.group", "=", "postgroups.id")
       ->leftJoin("languages", "languages.id", "=", "posts.language_id")
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
-
       ->where("posts.language_id", "=", $this->getLang())
       ->where('posts.title', '<>', '')
       ->where("postgroups.post_category_group_id", "=", $curcat->group)
       ->orderBy('posts.id', 'desc')
       ->paginate(10);
-
-
     return view('gca.posts', [
       'newscat' => $category,
       'languages' => $languages,

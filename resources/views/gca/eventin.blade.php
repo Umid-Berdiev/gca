@@ -11,6 +11,7 @@
 {{--@endsection--}}
 
 <section class="inner_all">
+  {{-- @dd($event) --}}
   <div class="container">
     <div class="bar_inner">
       <div class="bar_inner_left">

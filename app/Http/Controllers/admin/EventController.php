@@ -210,7 +210,10 @@ class EventController extends Controller
   {
     // dd($request->id);
     $event = Event::whereId($request->id)->where('language_id', $this->getLang())->with('category')->first();
-    $upcoming_events = Event::where('language_id', $this->getLang())->whereDate('dateend', '>=', date('Y-m-d'))->take(5)->get()->except($request->id);
+    $upcoming_events = Event::where('language_id', $this->getLang())
+      ->whereDate('dateend', '>=', date('Y-m-d'))
+      ->take(5)->get()
+      ->except($request->id);
     return view('gca.eventin', compact('event', 'upcoming_events'));
   }
 }

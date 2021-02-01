@@ -366,7 +366,6 @@ class SearchController extends Controller
           ->where("videogalleries.category_id", "=", $category_id)
           ->orderBy('created_at', 'desc')
           ->paginate(10);
-
         $category = DB::table("videogallerycategories")
           ->select(['videogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "videogallerycategories.language_id")
@@ -376,7 +375,6 @@ class SearchController extends Controller
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
-
         return view('gca.videoin', [
           'newscat' => $category,
           'table' => $model,
@@ -399,18 +397,14 @@ class SearchController extends Controller
           ->where("photogalleries.language_id", "=", $this->getLang())
           ->where("photogalleries.category_id", "=", $category_id)
           ->paginate(10);
-
-
         $category = DB::table("photogallerycategories")
           ->select(['photogallerycategories.*', 'languages.language_name'])
           ->leftJoin("languages", "languages.id", "=", "photogallerycategories.language_id")
           ->where("photogallerycategories.language_id", "=", $this->getLang())->get();
-
         $curcat = DB::table("photogallerycategories")
           ->where('group', '=', $category_id)
           ->where("language_id", "=", $this->getLang())
           ->first();
-
         return view('gca.mediain', [
           'newscat' => $category,
           'table' => $model,
@@ -436,7 +430,6 @@ class SearchController extends Controller
           ->where("group", "=", $id)->first();
         return response()->download(storage_path("app/public/upload/" . $bk->cover));
         break;
-
       case "event":
         $bk = DB::table("events")
           ->where("group", "=", $id)->first();
@@ -456,7 +449,6 @@ class SearchController extends Controller
         $i = 0;
         return $response;
         break;
-
       case "photo":
         $bk = DB::table("photogallerycategories")
           ->where("group", "=", $id)->first();
@@ -518,7 +510,6 @@ class SearchController extends Controller
 
   public function TenderFilter(Request $request)
   {
-
     $languages = Language::get();
     $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
     $events = DB::table("events")
@@ -580,7 +571,6 @@ class SearchController extends Controller
         ->paginate(10);
     }
 
-
     $category = DB::table("tendercategories")
       ->select(['tendercategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "tendercategories.language_id")
@@ -591,7 +581,6 @@ class SearchController extends Controller
       ->where("language_id", "=", $this->getLang())
       ->first();
 
-
     return view('tender', [
       'newscat' => $category,
       'table' => $model,
@@ -599,7 +588,6 @@ class SearchController extends Controller
       'tenders' => $tenders,
       'events' => $events,
       'languages' => $languages,
-
     ]);
   }
 
@@ -610,9 +598,7 @@ class SearchController extends Controller
       ->leftJoin("languages", "languages.id", "=", "sorovnomas.language_id")
       ->where("sorovnomas.language_id", "=", $this->getLang())
       ->first();
-
     $type = DB::table("sorovvotes")->where("ip", "=", Session::getId())->first();
-
     if ($type) {
       $tb = DB::table("sorovnoma_atters")
         ->select(['sorovnoma_atters.*', 'languages.language_name'])
@@ -627,11 +613,8 @@ class SearchController extends Controller
       }
 
       $table_return = [];
-
       foreach ($tb as $key => $value) {
-
         $counts = (\App\Http\Controllers\admin\SorovnomaController::getsorovs($value->group) * 100) / $total;
-
         array_push($table_return, ['text' => $value->javob, 'count' => $counts, 'count_round' => round($counts)]);
       }
 
@@ -639,7 +622,6 @@ class SearchController extends Controller
         'savol' => $savol->savol,
         'javob' => $table_return,
         'type' => 'stat',
-
       ];
     } else {
       $tb = DB::table("sorovnoma_atters")
@@ -647,19 +629,17 @@ class SearchController extends Controller
         ->leftJoin("languages", "languages.id", "=", "sorovnoma_atters.language_id")
         ->where("sorovnoma_atters.language_id", "=", $this->getLang())
         ->where("sorovnoma_atters.savol_id", "=", $savol->group)->get();
-
       return [
         'savol' => $savol->savol,
         'javob' => $tb,
         'type' => 'check',
-
       ];
     }
   }
 
   public function EventFilter(Request $request)
   {
-
+    dd($request->all());
     $languages = Language::get();
     $tenders = tender::take(3)->where('language_id', '=', $this->getLang())->get();
     $events = DB::table("events")
@@ -681,7 +661,6 @@ class SearchController extends Controller
       ->where("eventcategories.language_id", "=", $this->getLang())
       ->orderBy('id', 'desc')
       ->paginate(10);
-
 
     $category = DB::table("eventcategories")
       ->select(['eventcategories.*', 'languages.language_name'])

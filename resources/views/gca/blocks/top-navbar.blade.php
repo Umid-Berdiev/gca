@@ -47,7 +47,7 @@
         </p>
         <div class="body_language" style="z-index: 999999!important;">
           @foreach(\App\Language::all() as $key=>$language)
-          <a href="{{  str_replace("/".App::getLocale(),"/".$language->language_prefix,URL::current()) }}"
+          <a href="{{  str_replace("/".App::getLocale(),"/".$language->language_prefix, URL::current()) }}"
             class="{{App::getLocale() ?  $language->language_prefix : 'active'}}">{{$language->language_name}}</a>
           @endforeach
         </div>
