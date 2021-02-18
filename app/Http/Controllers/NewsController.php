@@ -80,7 +80,6 @@ class NewsController extends Controller
       ->join("posts", "posts.group", "=", "postgroups.id")
       ->leftJoin("languages", "languages.id", "=", "posts.language_id")
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
-
       ->where("posts.language_id", "=", $this->getLang())
       ->where("postgroups.post_category_group_id", "=", $cat_id)
       ->orderBy('posts.id', 'desc')->take(3)->get();
@@ -99,7 +98,6 @@ class NewsController extends Controller
       ->join("posts", "posts.group", "=", "postgroups.id")
       ->leftJoin("languages", "languages.id", "=", "posts.language_id")
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
-
       ->where("posts.language_id", "=", $this->getLang())
       ->where("postgroups.post_category_group_id", "=", $curcat->group)
       ->where("postgroups.id", "=", $title)

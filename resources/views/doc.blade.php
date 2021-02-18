@@ -104,11 +104,6 @@
                         class="list-group-item">{{$value->category_name}}</a>
                     @endif
                     @endforeach
-
-
-
-
-
                 </div>
             </div>
         </div>

@@ -17,10 +17,11 @@
                         <a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$value->id)}}">
                             <img src="{{asset('project_gca/images/word.svg')}}" alt="">
                         </a>
-                        @elseif($value->file_type == 'pdf')
+                        @else{{-- if($value->file_type == 'pdf') --}}
                         <a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$value->id)}}">
                             <img src="{{asset('project_gca/images/pdf.svg')}}" alt="">
                         </a>
+                        
                         @endif
                     </div>
                 </div>

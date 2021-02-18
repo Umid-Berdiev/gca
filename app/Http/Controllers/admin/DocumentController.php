@@ -64,8 +64,8 @@ class DocumentController extends Controller
       'titles.*' => 'required|max:255',
       'descriptions.*' => 'required',
       'language_ids.*' => 'required',
-      'files' => 'required',
-      'register_numbers' => 'required',
+      'files.*' => 'required',
+      // 'register_numbers' => 'required',
       'register_dates' => 'required',
       'category_id' => 'required',
     ]);
@@ -75,17 +75,14 @@ class DocumentController extends Controller
         ->withErrors($validator)
         ->withInput();
     }
-
     $grp_id = $this->getGroupId();
 
-    if ($request->file("files")) {
-      $file = $request->file("files");
-      // dd($file);
-      $file_name = $file->getClientOriginalName();
-      Storage::putFileAs('public/upload', $file, $file_name);
-    }
-
     foreach ($request->input("language_ids") as $key => $value) {
+      if ($request->file("files")) {
+        $file = $request->file("files")[$key];
+        $file_name = $file->getClientOriginalName();
+        Storage::putFileAs('public/upload', $file, $file_name);
+      }
       $model = Document::create([
         'title' => $request->titles[$key],
         'description' => $request->descriptions[$key],
@@ -128,7 +125,7 @@ class DocumentController extends Controller
       'descriptions.*' => 'required',
       'language_ids.*' => 'required',
       'files.*' => 'required',
-      'register_numbers.*' => 'required',
+      // 'register_numbers.*' => 'required',
       'register_dates.*' => 'required',
       'category_id' => 'required'
     ]);

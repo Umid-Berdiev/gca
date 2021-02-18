@@ -65,7 +65,7 @@ class EventController extends Controller
       'dateend' => 'required',
       'datestart' => 'required',
       'cover' => 'required|mimes:jpg,jpeg,gif,png',
-      'descriptions.*' => 'required',
+      // 'descriptions.*' => 'required',
     ]);
     // dd($request->language_ids);
 
@@ -123,7 +123,7 @@ class EventController extends Controller
         $obj = Event::where("group", $id)->first();
         return $obj->cover == 'null';
       }),
-      'descriptions.*' => 'required',
+      // 'descriptions.*' => 'required',
     ]);
 
     if ($validator->fails()) {

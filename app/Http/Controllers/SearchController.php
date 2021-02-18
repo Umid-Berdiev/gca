@@ -102,7 +102,6 @@ class SearchController extends Controller
         ]);
         break;
       case "event":
-
         if ($request->has('date')) {
 
           $model = DB::table("events")
@@ -280,6 +279,7 @@ class SearchController extends Controller
         ]);
         break;
       case "event":
+        // dd(1);
         $events = DB::table("events")
           ->select(['events.*', 'languages.language_name', 'eventcategories.category_name'])
           ->leftJoin("languages", "languages.id", "=", "events.language_id")

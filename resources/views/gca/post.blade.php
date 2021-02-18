@@ -24,7 +24,8 @@
                 <div class="bar_inner_events event_bord">
                     <h3>@lang('blog.news')</h3>
                     @foreach($news_in as $value)
-                    <a href="{{ URL(App::getLocale() . '/posts/' . $value->category_group_id . '/' .$value->group)  }}"
+                    {{-- @dd($value) --}}
+                    <a href="{{ url(app()->getLocale() . '/posts/' . $value->category_group_id . '/' .$value->group)  }}"
                         class="news_item {{ $value->group == $news->group ? 'active' : ''}}">
                         <img src="{{ asset("storage/posts/$value->cover") }}">
                         <div>
@@ -36,6 +37,7 @@
                     <hr>
                     <h3>@lang('blog.events')</h3>
                     @foreach($events as $value)
+                    {{-- @dd($value) --}}
                     <a href="{{ url(app()->getLocale() . '/event?id=' . $value->id) }}" class="news_item">
                         <img src="{{ asset("storage/events/$value->cover") }}">
                         <div>

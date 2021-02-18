@@ -42,7 +42,7 @@
               <textarea name="descriptions[]" class="form-control"></textarea>
             </div>
             <div class="form-group floating-label">
-              <input type="file" placeholder="PDF" name="files" class="form-control">
+              <input type="file" name="files[]" class="form-control">
             </div>
             <div class="form-group floating-label">
               <input type="text" name="links" class="form-control" id="links">
@@ -77,11 +77,11 @@
               <textarea name="descriptions[]" class="form-control"></textarea>
             </div>
 
-            {{-- <div class="form-group floating-label">
+            <div class="form-group floating-label">
               <input type="file" placeholder="PDF" name="files[]" class="form-control" id="pdf">
             </div>
 
-            <div class="form-group floating-label">
+            {{-- <div class="form-group floating-label">
               <input type="text" name="links[]" class="form-control" id="links">
               <label for="links">link</label>
             </div>
