@@ -2,7 +2,7 @@
   <div class="container">
     <h2 class="title">{{ __('blog.news') }}</h2>
     <div class="row">
-      @foreach($posts_for as $item)
+      @foreach($posts as $item)
       <div class="col-lg-3 col-sm-6">
         <a href="{{ url(app()->getLocale().'/posts/'.$item->category_group_id .'/'.$item->group)  }}" class="card">
           <div class="card-img">
