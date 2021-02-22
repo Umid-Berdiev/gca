@@ -208,12 +208,16 @@ class EventController extends Controller
 
   public function getEvent(Request $request)
   {
-    // dd($request->id);
-    $event = Event::whereId($request->id)->where('language_id', $this->getLang())->with('category')->first();
+    if (isset($request->id)) {
+      $request->session()->put('event_group', $request->id);
+    }
+    $group = $request->session()->get('event_group');
+    $event = Event::with('category')->where('group', $group)->where('language_id', $this->getLang())->first();
+    // dd($group, $event);
     $upcoming_events = Event::where('language_id', $this->getLang())
       ->whereDate('dateend', '>=', date('Y-m-d'))
-      ->take(5)->get()
-      ->except($request->id);
+      ->take(5)->get();
+    // ->except($group);
     return view('gca.eventin', compact('event', 'upcoming_events'));
   }
 }

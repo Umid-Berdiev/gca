@@ -38,7 +38,7 @@
                     <h3>@lang('blog.events')</h3>
                     @foreach($events as $value)
                     {{-- @dd($value) --}}
-                    <a href="{{ url(app()->getLocale() . '/event?id=' . $value->id) }}" class="news_item">
+                    <a href="{{ url(app()->getLocale() . '/event?id=' . $value->group) }}" class="news_item">
                         <img src="{{ asset("storage/events/$value->cover") }}">
                         <div>
                             <span>{{ \Carbon\Carbon::parse($value->created_at)->format('d.m.Y')  }}</span>
