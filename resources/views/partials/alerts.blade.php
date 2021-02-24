@@ -9,6 +9,12 @@
   {{ session('warning') }}
 </div>
 @endif
+
+@if (session('error'))
+<div class="alert alert-danger small text-center   mb-0 py-2 ">
+  {{ session('error') }}
+</div>
+@endif
 {{-- @dd($errors->all()) --}}
 @if ($errors->any())
 <div class="alert alert-danger small">

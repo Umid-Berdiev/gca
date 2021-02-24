@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\PageCategory;
 use App\PageCategoryGroup;
+use App\Page;
 use DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -100,8 +101,13 @@ class PageCategoryController extends Controller
 
   public function destroy(Request $request, $id)
   {
-    PageCategory::where('category_group_id', $id)->delete();
-    return redirect(route('page-categories.index'))->with('success', 'Deleted!');
+    $pages_in_categories = Page::where('page_category_group_id', $id)->get();
+    if (count($pages_in_categories) > 0) {
+      return redirect(route('page-categories.index'))->with('error', 'This category has some pages.This can\'t be deleted');
+    } else {
+      PageCategory::where('category_group_id', $id)->delete();
+      return redirect(route('page-categories.index'))->with('success', 'Deleted!');
+    }
   }
 
   private function getLang()
