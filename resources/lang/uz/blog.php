@@ -149,10 +149,6 @@ return [
 	'currency-source' => 'ЎзР МБ',
 	'weather-source' => 'Узгидромет',
 	'more' => 'Батафсил...',
-<<<<<<< HEAD
 	'no_content' => "Ma'lumot yuklanmagan",
 	'archive'=>'Arxiv'
-=======
-	'no_content' => "Ma'lumot yuklanmagan"
->>>>>>> b7d852de5b88bf72818bf9416e2159dbaaa142af
 ];
