@@ -7,6 +7,22 @@
                 @forelse($table as $value)
                 <div class="item_documents">
                     <div class="item_documents_left">
+<<<<<<< HEAD
+                         <a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$value->id)}}">
+                            <img src="{{URL('\storage/images/'.$value->cover_image)}}"  width="200" height="250" alt="cover_image">
+                        </a>
+                    </div>
+                    <div class="item_documents_right">
+                        <a
+                            href="{{URL(App::getLocale().'/doc/'.$value->doc_category_id.'/'.$value->group)}}">{{$value->title}}</a>
+                            <span class="date_ban">
+                                @lang('blog.register_date'): {{$value->r_date}} | @lang('blog.number'):{{$value->r_number}} 
+                            </span>
+                            <p>
+                                {!!$value->description!!}
+                            </p>
+                     
+=======
                         <a
                             href="{{URL(App::getLocale().'/doc/'.$value->doc_category_id.'/'.$value->group)}}">{{$value->title}}</a>
                         <span class="date_ban">@lang('blog.register_date'): {{$value->r_date}} | @lang('blog.number'):
@@ -23,6 +39,7 @@
                         </a>
                         
                         @endif
+>>>>>>> b7d852de5b88bf72818bf9416e2159dbaaa142af
                     </div>
                 </div>
                 @empty

@@ -35,6 +35,9 @@
           @lang('blog.vizit_text')
         </a>
       </div>
+      <div class="address_top right_border">
+        <a href="http://waterca.samar.uz/" target="_blank"> @lang('blog.archive')</a>
+      </div>
       <div class="language_top right_border">
         <p>
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +54,13 @@
             class="{{App::getLocale() ?  $language->language_prefix : 'active'}}">{{$language->language_name}}</a>
           @endforeach
         </div>
+<<<<<<< HEAD
+         
       </div>
+      
+=======
+      </div>
+>>>>>>> b7d852de5b88bf72818bf9416e2159dbaaa142af
       <div class="socials">
         <a href="https://twitter.com/GreenCentralAs1">
           <svg width="15" height="13" viewBox="0 0 15 13" xmlns="http://www.w3.org/2000/svg">

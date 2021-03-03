@@ -15,7 +15,11 @@
                             </ol>
                         </div>
                     </div>
+<<<<<<< HEAD
+                    
+=======
 
+>>>>>>> b7d852de5b88bf72818bf9416e2159dbaaa142af
                     <div class="page-header row">
                         <div class="col-md-9">
                             <h4><b>{{ $table->title }}</b></h4>

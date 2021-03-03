@@ -9,7 +9,10 @@ use App\DocumentCategory;
 use App\Document;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\File;
+use Spatie\PdfToImage\Pdf;
+use Org_Heigl\Ghostscript\Ghostscript;
+use MYPDF;
 class DocumentController extends Controller
 {
   public function index(Request $request)
@@ -59,13 +62,11 @@ class DocumentController extends Controller
 
   public function store(Request $request)
   {
-    // dd($request->all());
     $validator = Validator::make($request->all(), [
       'titles.*' => 'required|max:255',
       'descriptions.*' => 'required',
       'language_ids.*' => 'required',
       'files.*' => 'required',
-      // 'register_numbers' => 'required',
       'register_dates' => 'required',
       'category_id' => 'required',
     ]);
@@ -78,12 +79,56 @@ class DocumentController extends Controller
     $grp_id = $this->getGroupId();
 
     foreach ($request->input("language_ids") as $key => $value) {
-      if ($request->file("files")) {
-        $file = $request->file("files")[$key];
-        $file_name = $file->getClientOriginalName();
-        Storage::putFileAs('public/upload', $file, $file_name);
+      if ($request->file("files")) 
+      {
+          $file = $request->file("files")[$key];
+          $file_name = $file->getClientOriginalName();
+          $file_name_wthout_ext=pathinfo($file_name, PATHINFO_FILENAME);
+          Storage::putFileAs('public/upload/', $file, $file_name);
+          $file_type= $file->clientExtension();
+          /* SCREENSHOT OF FIRST PAGE OF DOCUMENT*/
+          //Supported formats:doc,docx,pdf,ppt,pptx
+          if($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx')
+          {
+
+              if($file_type=="doc"||$file_type=="docx")
+              {
+                  // Set the PDF Engine Renderer Path
+                  $domPdfPath = base_path('vendor/dompdf/dompdf');
+                  \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+                  \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+                  
+                  //Load word file
+                  $Content = \PhpOffice\PhpWord\IOFactory::load(Storage::path('public/upload/'.$file_name)); 
+                  
+                  //Save it into PDF
+                  $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
+                  $PDFWriter->save(Storage::path('public/upload/temp.pdf')); 
+              }
+              if($file_type!='ppt'&&$file_type!='pptx')
+              {
+                GhostScript::setGsPath('C:\Program Files\gs\gs9.53.3\bin\gswin64c.exe');
+                if($file_type=='pdf')
+                {
+                  $pdf=new Pdf(Storage::path('public/upload/'.$file_name));
+                }
+                else
+                {
+                  $pdf=new Pdf(Storage::path('public/upload/temp.pdf'));
+                }
+      
+                $pdf->setPage(1)->saveImage(Storage::path('public/images/'.$file_name_wthout_ext.'.jpg'));
+                if($file_type!='pdf')
+                Storage::delete('public/upload/temp.pdf');
+              }
+          }
+          else
+          {
+            return back()
+            ->with('error','Supported file types:doc,docx,pdf');
+          }
       }
-      $model = Document::create([
+        $model = Document::create([
         'title' => $request->titles[$key],
         'description' => $request->descriptions[$key],
         'link' => $request->links,
@@ -95,7 +140,8 @@ class DocumentController extends Controller
         'doc_category_id' => $request->category_id,
         'files' => $file_name,
         'file_type' => $file->clientExtension(),
-        'file_size' => $file->getClientSize()
+        'file_size' => $file->getClientSize(),
+        'cover_image'=>$file_type=='ppt'||$file_type=='pptx'?'ppt.png':$file_name_wthout_ext.'.jpg'
       ]);
     }
 
@@ -152,12 +198,68 @@ class DocumentController extends Controller
       if (isset($request->file("files")[$key])) {
         $file = $request->file("files")[$key];
         $file_name = $file->getClientOriginalName();
-        $model->update([
+        $file_name_wthout_ext=pathinfo($file_name, PATHINFO_FILENAME);
+        Storage::putFileAs('public/upload', $file, $file_name);
+        $file_type=$file->clientExtension();
+        if($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx')
+        {
+
+            if($file_type=="doc"||$file_type=="docx")
+            {
+                // Set the PDF Engine Renderer Path
+                $domPdfPath = base_path('vendor/dompdf/dompdf');
+                \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+                \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+                
+                //Load word file
+                $Content = \PhpOffice\PhpWord\IOFactory::load(Storage::path('public/upload/'.$file_name)); 
+                
+                //Save it into PDF
+                $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
+                $PDFWriter->save(Storage::path('public/upload/temp.pdf')); 
+            }
+            if($file_type!='ppt'&&$file_type!='pptx')
+            {
+              GhostScript::setGsPath('C:\Program Files\gs\gs9.53.3\bin\gswin64c.exe');
+              if($file_type=='pdf')
+              {
+                return $file_name;
+                $pdf=new Pdf(Storage::path('public/upload/'.$file_name));
+              }
+              else
+              {
+                 $pdf=new Pdf(Storage::path('public/upload/temp.pdf'));
+              }
+    
+              $pdf->setPage(1)->saveImage(Storage::path('public/images/'.$file_name_wthout_ext.'.jpg'));
+              if($file_type!='pdf')
+              Storage::delete('public/upload/temp.pdf');
+            }
+           
+        }
+        else
+        {
+          return back()
+          ->with('error','Supported file types:doc,docx,pdf');
+        }
+        
+        
+
+         $model=Document::where('group',$id)
+        ->where('language_id',$value)->get();
+
+        Storage::delete('public/upload/'.$model[0]->files);
+
+
+        Storage::delete('public/images/'.$model[0]->cover_image); 
+
+        $model=Document::where("group", $id)
+        ->where("language_id", $value)->update([
           'files' => $file_name,
           'file_type' => $file->clientExtension(),
-          'file_size' => $file->getClientSize()
+          'file_size' => $file->getClientSize(),
+          'cover_image'=>$file_type=='ppt'||$file_type=='pptx'?'ppt.png':$file_name_wthout_ext.'.jpg'
         ]);
-        Storage::putFileAs('public/upload', $file, $file_name);
       }
 
       if ($request->remove_cover == "on") {
@@ -170,6 +272,13 @@ class DocumentController extends Controller
 
   public function destroy(Request $request, $id)
   {
+    $model=Document::where('group',$id)->get();
+
+    Storage::delete('public/upload/'  .$model[0]->files);
+
+    if(!($model[0]->file_type=='ppt'||$model[0]->file_type=='pptx'))
+    Storage::delete('public/images/'.$model[0]->cover_image); 
+
     Document::where("group", $id)->delete();
     return back()->with('success', 'Deleted!');
   }
