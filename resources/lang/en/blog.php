@@ -10,7 +10,7 @@
 		'filter_date' => 'Period',
 		'filter_submit' => 'Apply',
 		'filter_reset' => 'Reset',
-		'activity_head' => 'Green Central Asia: Regional Initiative on Climate and Security in Central Asia and Afghanistan',
+		'activity_head' => 'Green Central Asia: Transboundary dialogue on climate, environment and security in Central Asia and Afghanistan',
 		'activity' => 'The aim of ‘Green Central Asia’ is to develop a political dialogue and consequently create better access to information and data in order to enable countries to assess the impact of climate change more accurately and to develop cooperative preventive measures.
 
 The target group of the Initiative consists of the foreign ministries (and, through them, the respective institutions responsible for climate and environmental resources, including educational and research institutions) of Kazakhstan, the Kyrgyz Republic, Tajikistan, Turkmenistan and Uzbekistan as well as Afghanistan.',
