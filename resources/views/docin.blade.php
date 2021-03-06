@@ -15,7 +15,7 @@
                             </ol>
                         </div>
                     </div>
-
+                    
                     <div class="page-header row">
                         <div class="col-md-9">
                             <h4><b>{{ $table->title }}</b></h4>

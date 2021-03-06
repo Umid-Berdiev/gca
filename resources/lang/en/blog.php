@@ -166,7 +166,8 @@ The target group of the Initiative consists of the foreign ministries (and, thro
 		'docs' => 'Documents',
 		'new_docs' => 'Our Latest Publications',
 		'test_mode' => 'The website is in a test mode',
-		'no_content' => 'No content uploaded'
+		'no_content' => 'No content uploaded',
+		'archive'=>'Archive'
 
 	];
 

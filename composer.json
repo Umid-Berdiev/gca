@@ -9,14 +9,18 @@
   "type": "project",
   "require": {
     "php": "^7.2",
+    "barryvdh/laravel-dompdf": "^0.9.0",
     "barryvdh/laravel-ide-helper": "^2.5",
     "fideloper/proxy": "^4.0",
     "intervention/image": "^2.5",
     "laravel/framework": "^6.0",
     "laravel/helpers": "^1.4",
     "laravel/tinker": "~1.0",
+    "org_heigl/ghostscript": "^2.3",
     "php-parallel-lint/php-console-color": "^0.2",
     "php-parallel-lint/php-console-highlighter": "^0.5.0",
+    "phpoffice/phpword": "^0.18.0",
+    "spatie/pdf-to-image": "^2.1",
     "unisharp/laravel-filemanager": "~1.8"
   },
   "require-dev": {
