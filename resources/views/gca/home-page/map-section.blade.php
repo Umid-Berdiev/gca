@@ -78,7 +78,7 @@
     
       <!-- The Modal -->
       <div class="modal fade" id="myModal">
-        <div class="modal-dialog " style="max-width: 90%;">
+        <div class="modal-dialog " style="max-width: 80%;">
           <div class="modal-content" >
           
             <!-- Modal Header -->
