@@ -18,7 +18,7 @@
           <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M9 0H1C0.45 0 0.005 0.45 0.005 1L0 7C0 7.55 0.45 8 1 8H9C9.55 8 10 7.55 10 7V1C10 0.45 9.55 0 9 0ZM9 2L5 4.5L1 2V1L5 3.5L9 1V2Z"
-              fill="#2DA37D" />
+              fill="#2A37D" />
           </svg>
           @{{ gca.email }}
         </p>
@@ -38,6 +38,7 @@
           </svg>
           @{{ gca.wep }}
         </p>
+        
         <span v-if="news && news.length > 0" class="template_span">News and Events</span>
         <div style="padding: 15px 30px;margin-bottom:0;" class="new_event" v-for="item in news">
           <img :src="'/storage/posts/' + item.cover">
@@ -66,11 +67,51 @@
         <div id="chartdiv" style="height: 100%"></div>
       </div>
     </div>
+
+
+    {{-- MODALS --}}
+    <div class="container">
+      <!-- Button to Open the Modal -->
+      <button type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#myModal" id="modal">
+       Modal
+      </button>
+    
+      <!-- The Modal -->
+      <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+          
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h1 class="modal-title p-3" id="title"></h1>
+              <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body p-4" id="content">
+              
+            </div>
+            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
   </div>
+
+
 </section>
 
 @push('scripts')
+
 <script>
+  var a=0;
   let app = new Vue({
     el: "#apps",
     
@@ -110,7 +151,7 @@
           if (ev.target.dataItem.dataContext.name == 'Turkmenistan')
             app.getGcaInfo('TM')
           else if (ev.target.dataItem.dataContext.name == 'Uzbekistan')
-            app.getGcaInfo('UZ')
+              app.getGcaInfo('UZ')
           else if (ev.target.dataItem.dataContext.name == 'Kazakhstan')
             app.getGcaInfo('KZ')
           else if (ev.target.dataItem.dataContext.name == 'Kyrgyzstan')
@@ -137,8 +178,9 @@
         var hs = usPolygonTemplate.states.create("hover");
         hs.properties.fill = am4core.color("#367B25");
       },
-
+      
       getGcaInfo (prefix) {
+        
         axios
           .get("{{ route('gca.info.get', ['lang' => app()->getLocale()]) }}", {
             params: {
@@ -148,13 +190,25 @@
           .then(function (response) {
             app.gca = response.data;
             app.news = response.data.news;
+           
           })
           .catch(function (error) {
             console.log(error);
           })
           .then(function () {
             // always executed
+
+            if(a!==0)
+            {
+              document.getElementById('title').innerHTML=app.gca.name;
+              document.getElementById('content').innerHTML=app.gca.desc;
+              document.getElementById('modal').click(); 
+            }
+            else{
+              a++;
+            }
           });
+         
       }
     },
 

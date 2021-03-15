@@ -10,7 +10,8 @@
         data-src="{{ asset('storage/statistics/' . $item->photo_url) }}">
         <a href="#" class="report_main_item">
           <div class="report_main_item_img">
-            <img src="{{ asset('storage/statistics/' . $item->photo_url) }}" alt="stat image">
+            <img src="{{URL('\storage/statistics/'.$item->photo_url)}}" alt="stat1 image {{  $item->photo_url}}"
+            >
           </div>
           <p>{{ $item->name }}</p>
         </a>

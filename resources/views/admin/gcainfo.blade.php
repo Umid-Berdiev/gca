@@ -1,7 +1,6 @@
 @extends("admin.layout.template")
 
 @section("content")
-
     <div class="col-md-12" style="background-color: white;padding: 25px;">
         <div class="col-md-12">
             <table class="table table-condensed no-margin">
@@ -36,6 +35,7 @@
                 @endforeach
                 </tbody>
             </table>
+           
         </div>
     </div>
 
