@@ -604,20 +604,17 @@ a.report_main_item:hover p:after {
   transform: translateX(0%);
 }
 
-.report_main_item_img {
+ .report_main_item_img {
   width: 100%;
   height: inherit;
-  /*height: 236px;*/
-  /*padding: 25px 75px;*/
   background: #fff;
 }
 
 .report_main_item_img img {
-  width: inherit;
-  height: inherit;
-  object-fit: contain;
-  object-position: center;
-}
+  width: 400px;
+  height: 400px;
+ 
+} 
 
 /********************************************SECTION-END*************************************************/
 /********************************************SECTION-BEGIN*************************************************/

@@ -9,11 +9,11 @@
       <div class="swiper-slide" data-fancybox=":gallery"
         data-src="{{ asset('storage/statistics/' . $item->photo_url) }}">
         <a href="#" class="report_main_item">
-          <div class="report_main_item_img">
+          <div class="">
             <img src="{{URL('\storage/statistics/'.$item->photo_url)}}" alt="stat1 image {{  $item->photo_url}}"
-            >
+             width="400" height="400">
           </div>
-          <p>{{ $item->name }}</p>
+          <p style="width:400px;">{{ $item->name }}</p>
         </a>
       </div>
       @endforeach
