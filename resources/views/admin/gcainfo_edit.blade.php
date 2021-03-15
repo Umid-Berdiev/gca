@@ -1,7 +1,7 @@
 @extends("admin.layout.template")
 
 @section("content")
-
+    
     <div class="card-body" style="background-color: white">
         <div class="col-md-12">
 
@@ -47,7 +47,10 @@
                                class="form-control" id="regular2">
                         <label for="regular2">email</label>
                     </div>
-
+                    <div class="form-group floating-label">
+                        <label for="desc">Description</label>
+                        <textarea name="desc" class="form-control" id=desc>{{ $gca->desc }}</textarea>
+                    </div>
                 </div>
                 <div class="card-actionbar-row">
                     <button type="submit" class="btn btn-flat btn-primary ink-reaction">Update</button>

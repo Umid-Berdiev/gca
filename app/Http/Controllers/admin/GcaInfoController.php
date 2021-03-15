@@ -28,8 +28,9 @@ class GcaInfoController extends Controller
 
   public function get(Request $request)
   {
-    // dd($request->all());
+    //dd($request->all());
     $gca = GcaInfo::with('news')->where('prefix', $request->prefix)->first();
+   
     return response()->json($gca);
   }
 
@@ -58,6 +59,7 @@ class GcaInfoController extends Controller
     $gca->address = $request->address;
     $gca->wep = $request->wep;
     $gca->email = $request->email;
+    $gca->desc=$request->desc;
     $gca->save();
 
 
