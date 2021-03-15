@@ -1,0 +1,24 @@
+[26-Jan-2021 11:44:44 Asia/Tashkent] PHP Fatal error:  Uncaught Error: Call to undefined method Composer\Util\StreamContextFactory::getTlsDefaults() in /home/greencen/public_html/vendor/composer/composer/src/Composer/Util/HttpDownloader.php:62
+Stack trace:
+#0 /home/greencen/public_html/vendor/symfony/thanks/src/GitHubClient.php(103): Composer\Util\HttpDownloader->__construct(Object(Composer\IO\ConsoleIO), Object(Composer\Config))
+#1 /home/greencen/public_html/vendor/symfony/thanks/src/Thanks.php(81): Symfony\Thanks\GitHubClient->__construct(Object(Composer\Composer), Object(Composer\IO\ConsoleIO))
+#2 [internal function]: Symfony\Thanks\Thanks->displayReminder(Object(Composer\Script\Event))
+#3 phar:///opt/cpanel/composer/bin/composer/src/Composer/EventDispatcher/EventDispatcher.php(176): call_user_func(Array, Object(Composer\Script\Event))
+#4 phar:///opt/cpanel/composer/bin/composer/src/Composer/EventDispatcher/EventDispatcher.php(96): Composer\EventDispatcher\EventDispatcher->doDispatch(Object(Composer\Script\Event))
+#5 phar:///opt/cpanel/composer/bin/composer/sr in /home/greencen/public_html/vendor/composer/composer/src/Composer/Util/HttpDownloader.php on line 62
+[28-Jan-2021 12:37:57 Asia/Tashkent] PHP Fatal error:  Uncaught Error: Call to undefined method Composer\Util\StreamContextFactory::getTlsDefaults() in /home/greencen/public_html/vendor/composer/composer/src/Composer/Util/HttpDownloader.php:62
+Stack trace:
+#0 /home/greencen/public_html/vendor/symfony/thanks/src/GitHubClient.php(103): Composer\Util\HttpDownloader->__construct(Object(Composer\IO\ConsoleIO), Object(Composer\Config))
+#1 /home/greencen/public_html/vendor/symfony/thanks/src/Thanks.php(81): Symfony\Thanks\GitHubClient->__construct(Object(Composer\Composer), Object(Composer\IO\ConsoleIO))
+#2 [internal function]: Symfony\Thanks\Thanks->displayReminder(Object(Composer\Script\Event))
+#3 phar:///opt/cpanel/composer/bin/composer/src/Composer/EventDispatcher/EventDispatcher.php(176): call_user_func(Array, Object(Composer\Script\Event))
+#4 phar:///opt/cpanel/composer/bin/composer/src/Composer/EventDispatcher/EventDispatcher.php(96): Composer\EventDispatcher\EventDispatcher->doDispatch(Object(Composer\Script\Event))
+#5 phar:///opt/cpanel/composer/bin/composer/sr in /home/greencen/public_html/vendor/composer/composer/src/Composer/Util/HttpDownloader.php on line 62
+[03-Mar-2021 12:42:51 Asia/Tashkent] PHP Fatal error:  Uncaught Error: Call to undefined method Composer\Util\StreamContextFactory::getTlsDefaults() in /home/greencen/public_html/vendor/composer/composer/src/Composer/Util/HttpDownloader.php:63
+Stack trace:
+#0 /home/greencen/public_html/vendor/symfony/thanks/src/GitHubClient.php(103): Composer\Util\HttpDownloader->__construct(Object(Composer\IO\ConsoleIO), Object(Composer\Config))
+#1 /home/greencen/public_html/vendor/symfony/thanks/src/Thanks.php(81): Symfony\Thanks\GitHubClient->__construct(Object(Composer\Composer), Object(Composer\IO\ConsoleIO))
+#2 [internal function]: Symfony\Thanks\Thanks->displayReminder(Object(Composer\Script\Event))
+#3 phar:///opt/cpanel/composer/bin/composer/src/Composer/EventDispatcher/EventDispatcher.php(176): call_user_func(Array, Object(Composer\Script\Event))
+#4 phar:///opt/cpanel/composer/bin/composer/src/Composer/EventDispatcher/EventDispatcher.php(96): Composer\EventDispatcher\EventDispatcher->doDispatch(Object(Composer\Script\Event))
+#5 phar:///opt/cpanel/composer/bin/composer/sr in /home/greencen/public_html/vendor/composer/composer/src/Composer/Util/HttpDownloader.php on line 63

@@ -112,8 +112,8 @@ class FrontController extends Controller
 
     // $posts = Post::where('category_group_id', '=', '1603259067')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->take(2)->get();
     // $posts_publications = Post::where('category_group_id', '=', '1603259189')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->take(3)->get();
-    $posts = Post::where('language_id', $this->getLang())->latest()->take(4)->get();
-    $posts_publications = Post::where('language_id', $this->getLang())->latest()->skip(3)->take(4)->get();
+    $posts = Post::where('language_id', $this->getLang())->where("category_group_id","!=","1615268167")->latest()->take(4)->get();
+    $posts_publications = Post::where('language_id', $this->getLang())->where("category_group_id","!=","1615268167")->latest()->skip(3)->take(4)->get();
 
     if (count(Post::where('category_group_id', '=', '1603259067')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->get()) > 4)
       $posts_for = Post::where('category_group_id', '=', '1603259067')->where('language_id', '=', $this->getLang())->orderBy('id', 'desc')->where('title', '<>', '')->get()->random(4);
