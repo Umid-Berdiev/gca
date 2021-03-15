@@ -11,9 +11,9 @@
         <a href="#" class="report_main_item">
           <div class="">
             <img src="{{URL('\storage/statistics/'.$item->photo_url)}}" alt="stat1 image {{  $item->photo_url}}"
-             width="400" height="400">
+             width="400" height="300">
           </div>
-          <p style="width:400px;">{{ $item->name }}</p>
+          <p style="width:300px;">{{ $item->name }}</p>
         </a>
       </div>
       @endforeach
