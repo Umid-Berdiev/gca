@@ -32,17 +32,24 @@
                             @if($table->file_type == 'docx' || $table->file_type == 'doc')
                             <div class="col-md-4">
                                 <h6><a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$table->id)}}"><img
-                                    src="{{URL('/storage/images/'.$table->cover_image)}}" alt="cover image doc inside" >
+                                    src="{{URL('/storage/images/word.png')}}" alt="cover image doc inside"  >
                                         @lang('blog.download')
                                         ({{round($table->file_size/1024)}} KB)</a></h6>
                             </div>
                             @elseif($table->file_type == 'pdf')
                             <div class="col-md-4">
-                                <h6><a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$table->id)}}"><img
-                                    src="{{URL('\storage/images/'.$table->cover_image)}}" alt="cover image doc inside" >
+                                <h6><a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$table->id)}}">
+                                    <embed src="{{ URL('storage/upload/'.$table->files) }}" width="320" height="300" />
                                         @lang('blog.download')
                                         ({{round($table->file_size/1024)}} KB)</a></h6>
                             </div>
+                            @else
+                                <div class="col-md-4">
+                                    <h6><a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$table->id)}}"><img
+                                        src="{{URL('/storage/images/ppt.png')}}" alt="cover image doc inside"  >
+                                            @lang('blog.download')
+                                            ({{round($table->file_size/1024)}} KB)</a></h6>
+                                </div>
                             @endif
                         </div>
                     </div>
