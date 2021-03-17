@@ -12,7 +12,7 @@
               <embed src="{{ URL('storage/upload/'.$value->files) }}" width="320" height="300" />
             </a>
             @elseif($value->file_type=="doc"||$value->file_type=="docx")
-              <img src="{{URL('storage/images/word.png')}}" alt=""  width="320" height="300">
+                <img src="{{URL('storage/images/word.jpeg')}}" alt=""  width="320" height="300">
             @else
               <img src="{{URL('storage/images/ppt.png')}}" alt=""  width="320" height="300">
             @endif  

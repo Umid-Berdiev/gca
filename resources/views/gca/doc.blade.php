@@ -25,14 +25,14 @@
                         <div class="col-md-7">
                             @if($table->link != null)
                             <div class="col-md-4">
-                                <h6><a href="{{URL($table->link)}}"><img src="{{URL('/images/lexuz.png')}}" alt=""
-                                            width="42" height="15"> Lex.uz да ўқиш</a></h6>
+                                <h6><a href="{{URL($table->link)}}"><img src="{{URL('storage/images/lexuz.png')}}" alt=""
+                                            width="75" height="50"> Lex.uz да ўқиш</a></h6>
                             </div>
                             @endif
                             @if($table->file_type == 'docx' || $table->file_type == 'doc')
                             <div class="col-md-4">
                                 <h6><a href="{{URL(App::getLocale().'/downloads?type=doc&id='.$table->id)}}"><img
-                                    src="{{URL('/storage/images/word.png')}}" alt="cover image doc inside"  >
+                                    src="{{URL('/storage/images/word.jpeg')}}" alt="cover image doc inside"  >
                                         @lang('blog.download')
                                         ({{round($table->file_size/1024)}} KB)</a></h6>
                             </div>
