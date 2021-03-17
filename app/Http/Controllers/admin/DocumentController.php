@@ -116,7 +116,6 @@ class DocumentController extends Controller
     //   dd($data);
        
         $model = Document::create($data);
-   
   }
   
     return redirect(route('documents.edit', $grp_id))->with('success', 'Created!');
@@ -175,20 +174,17 @@ class DocumentController extends Controller
         $file_name_wthout_ext=pathinfo($file_name, PATHINFO_FILENAME);
         Storage::putFileAs('public/upload', $file, $file_name);
         $file_type=$file->clientExtension();
-        /* if(!($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx'))
+         if(!($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx'))
         {
 
           return back()
           ->with('error','Supported file types:doc,docx,pdf,ppt,pptx');
            
-        } */
+        } 
          $model=Document::where('group',$id)
         ->where('language_id',$value)->get();
 
         Storage::delete('public/upload/'.$model[0]->files);
-
-
-        Storage::delete('public/images/'.$model[0]->cover_image); 
 
         $model=Document::where("group", $id)
         ->where("language_id", $value)->update([
@@ -211,9 +207,6 @@ class DocumentController extends Controller
     $model=Document::where('group',$id)->get();
 
     Storage::delete('public/upload/'  .$model[0]->files);
-
-    if(!($model[0]->file_type=='ppt'||$model[0]->file_type=='pptx'))
-    Storage::delete('public/images/'.$model[0]->cover_image); 
 
     Document::where("group", $id)->delete();
     return back()->with('success', 'Deleted!');
