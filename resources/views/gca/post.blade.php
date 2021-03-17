@@ -14,14 +14,16 @@
         <div class="bar_inner">
             <div class="bar_inner_left">
                 <div class="text_layout">
+                    
                     <span class="date_ban">{{ \Carbon\Carbon::parse($news->datetime)->format('d.m.Y') }}</span>
                     <h1>{{$news->title}}</h1>
                     <img src="{{ asset("storage/posts/$news->cover") }}" alt="{{$news->title}}">
-                    {!! $news->content !!}
+                    {!! $news->content !!} 
                 </div>
             </div>
             <div class="bar_inner_right">
                 <div class="bar_inner_events event_bord">
+                    @if($news->category_group_id!=1615268167)
                     <h3>@lang('blog.news')</h3>
                     @foreach($news_in as $value)
                     {{-- @dd($value) --}}
@@ -30,11 +32,12 @@
                         <img src="{{ asset("storage/posts/$value->cover") }}">
                         <div>
                             <span>{{ \Carbon\Carbon::parse($value->created_at)->format('d.m.Y')  }}</span>
-                            <p>{{$value->title}}</p>
+                            <p>{{$value->title}} </p>
                         </div>
                     </a>
                     @endforeach
                     <hr>
+                    @endif
                     <h3>@lang('blog.events')</h3>
                     @foreach($events as $value)
                     {{-- @dd($value) --}}
