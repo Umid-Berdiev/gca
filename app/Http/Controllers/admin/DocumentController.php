@@ -88,11 +88,11 @@ class DocumentController extends Controller
           $file_type= $file->clientExtension();
           /* SCREENSHOT OF FIRST PAGE OF DOCUMENT*/
           //Supported formats:doc,docx,pdf,ppt,pptx
-          if(!($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx'))
+         /*  if(!($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx'))
           {
             return back()
-            ->with('error','Supported file types:doc,docx,pdf');
-          }
+            ->with('error','Supported file types:doc,docx,pdf,ppt,pptx');
+          } */
       }
         $model = Document::create([
         'title' => $request->titles[$key],
@@ -166,50 +166,13 @@ class DocumentController extends Controller
         $file_name_wthout_ext=pathinfo($file_name, PATHINFO_FILENAME);
         Storage::putFileAs('public/upload', $file, $file_name);
         $file_type=$file->clientExtension();
-        if($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx')
+        /* if(!($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx'))
         {
 
-            if($file_type=="doc"||$file_type=="docx")
-            {
-                // Set the PDF Engine Renderer Path
-                $domPdfPath = base_path('vendor/dompdf/dompdf');
-                \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
-                \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
-                
-                //Load word file
-                $Content = \PhpOffice\PhpWord\IOFactory::load(Storage::path('public/upload/'.$file_name)); 
-                
-                //Save it into PDF
-                $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content,'PDF');
-                $PDFWriter->save(Storage::path('public/upload/temp.pdf')); 
-            }
-            if($file_type!='ppt'&&$file_type!='pptx')
-            {
-              GhostScript::setGsPath('C:\Program Files\gs\gs9.53.3\bin\gswin64c.exe');
-              if($file_type=='pdf')
-              {
-                return $file_name;
-                $pdf=new Pdf(Storage::path('public/upload/'.$file_name));
-              }
-              else
-              {
-                 $pdf=new Pdf(Storage::path('public/upload/temp.pdf'));
-              }
-    
-              $pdf->setPage(1)->saveImage(Storage::path('public/images/'.$file_name_wthout_ext.'.jpg'));
-              if($file_type!='pdf')
-              Storage::delete('public/upload/temp.pdf');
-            }
-           
-        }
-        else
-        {
           return back()
-          ->with('error','Supported file types:doc,docx,pdf');
-        }
-        
-        
-
+          ->with('error','Supported file types:doc,docx,pdf,ppt,pptx');
+           
+        } */
          $model=Document::where('group',$id)
         ->where('language_id',$value)->get();
 
@@ -223,7 +186,6 @@ class DocumentController extends Controller
           'files' => $file_name,
           'file_type' => $file->clientExtension(),
           'file_size' => $file->getClientSize(),
-          'cover_image'=>$file_type=='ppt'||$file_type=='pptx'?'ppt.png':$file_name_wthout_ext.'.jpg'
         ]);
       }
 
