@@ -37,7 +37,7 @@
                     </a>
                     @endforeach
                     <hr>
-                    @endif
+                   
                     <h3>@lang('blog.events')</h3>
                     @foreach($events as $value)
                     {{-- @dd($value) --}}
@@ -49,6 +49,7 @@
                         </div>
                     </a>
                     @endforeach
+                    @endif  
                 </div>
             </div>
         </div>
