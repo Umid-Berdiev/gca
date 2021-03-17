@@ -62,6 +62,7 @@ class DocumentController extends Controller
 
   public function store(Request $request)
   {
+      
     $validator = Validator::make($request->all(), [
       'titles.*' => 'required|max:255',
       'descriptions.*' => 'required',
@@ -83,17 +84,18 @@ class DocumentController extends Controller
       {
           $file = $request->file("files")[$key];
           $file_name = $file->getClientOriginalName();
-          $file_name_wthout_ext=pathinfo($file_name, PATHINFO_FILENAME);
           Storage::putFileAs('public/upload/', $file, $file_name);
-          $file_type= $file->clientExtension();
+          //$file_type= $file->clientExtension();
+          $file_type= $file->extension();
           /* SCREENSHOT OF FIRST PAGE OF DOCUMENT*/
           //Supported formats:doc,docx,pdf,ppt,pptx
-         /*  if(!($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx'))
+          if(!($file_type=='doc'||$file_type=='docx'||$file_type=='pdf'|| $file_type=='ppt'||$file_type=='pptx'))
           {
             return back()
             ->with('error','Supported file types:doc,docx,pdf,ppt,pptx');
-          } */
+          } 
       }
+       
         $model = Document::create([
         'title' => $request->titles[$key],
         'description' => $request->descriptions[$key],
@@ -106,10 +108,12 @@ class DocumentController extends Controller
         'doc_category_id' => $request->category_id,
         'files' => $file_name,
         'file_type' => $file->clientExtension(),
-        'file_size' => $file->getClientSize(),
+        'file_size' => $file->getClientSize()
       ]);
-    }
-
+      return 1;
+   
+  }
+  
     return redirect(route('documents.edit', $model->group))->with('success', 'Created!');
   }
 
