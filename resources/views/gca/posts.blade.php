@@ -16,7 +16,8 @@
             @foreach($news as $value)
                 <div class="col-sm-4">
                     <div class="cart_item_news"
-                         style="background-image: url({{ URL(App::getLocale().'/downloads?type=post&id='.$value->group) }});width: 262px;height: 262px">
+                         {{-- style="background-image: url({{ URL(App::getLocale().'/downloads?type=post&id='.$value->group) }});width: 262px;height: 262px" --}}
+                         style="background-image: url({{ URL("storage/posts/$value->cover") }});width: 262px;height: 262px">
                         <div class="info_item_news">
 {{--              <span>--}}
                             {{--                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">--}}
