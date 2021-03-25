@@ -99,7 +99,7 @@ class NewsController extends Controller
       ->leftJoin("languages", "languages.id", "=", "posts.language_id")
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
       ->where("posts.language_id", "=", $this->getLang())
-      ->where("postgroups.post_category_group_id", "=", $curcat->group)
+      ->where("postgroups.post_category_group_id", "!=", "1615268167")
       ->where("postgroups.id", "=", $title)
       ->first();
     $lastcount = $news->viewcount;
