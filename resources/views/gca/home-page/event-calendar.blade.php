@@ -10,7 +10,7 @@
         </div>
         <div class="events_bottom">
           <a href="{{ url(app()->getLocale().'/events') }}" class="link_template">@lang('blog.all_events')</a>
-          <a href="#" class="joines">@lang('blog.join')</a>
+          
         </div>
       </div>
       <div class="col-lg-6 col-sm-8 right_cal">

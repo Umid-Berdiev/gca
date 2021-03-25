@@ -29,7 +29,9 @@
                     {{-- @dd($value) --}}
                     <a href="{{ url(app()->getLocale() . '/posts/' . $value->category_group_id . '/' .$value->group)  }}"
                         class="news_item {{ $value->group == $news->group ? 'active' : ''}}">
+                        @if($value->cover!=null)
                         <img src="{{ asset("storage/posts/$value->cover") }}">
+                        @endif  
                         <div>
                             <span>{{ \Carbon\Carbon::parse($value->created_at)->format('d.m.Y')  }}</span>
                             <p>{{$value->title}} </p>

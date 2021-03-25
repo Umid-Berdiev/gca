@@ -14,7 +14,7 @@
         <h2 class="title">{{ __('blog.activity_head') }}</h2>
         <p class="title">{{ __('blog.activity') }}</p>
 
-        <a href="{{ url(app()->getLocale().'/page/15/80') }}" class="link_template">{{ __('blog.discover_more') }}</a>
+        <a href="{{ url(app()->getLocale().'/page/15/87') }}" class="link_template">{{ __('blog.discover_more') }}</a>
       </div>
     </div>
   </div>
