@@ -16,7 +16,7 @@
   <script src="{{asset('project_gca/js/vue.js')}}"></script>
   <script src="{{asset('project_gca/js/axios.min.js')}}"></script>
 
-  <title>GSA</title>
+  <title>GCA</title>
   <style>
     header {
       background-repeat: no-repeat;
