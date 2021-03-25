@@ -42,6 +42,7 @@ class NewsController extends Controller
       ->select(['postcategories.*', 'languages.language_name'])
       ->leftJoin("languages", "languages.id", "=", "postcategories.language_id")
       ->where("language_id", "=", $this->getLang())->get();
+
     $news = DB::table("postgroups")
       ->select(['postcategories.category_name', 'languages.language_name', 'posts.*', 'postgroups.viewcount', 'postgroups.id'])
       ->join("posts", "posts.group", "=", "postgroups.id")
@@ -49,7 +50,7 @@ class NewsController extends Controller
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
       ->where("posts.language_id", "=", $this->getLang())
       ->where('posts.title', '<>', '')
-      ->where("postgroups.post_category_group_id", "!=","1615268167")
+      ->where("postgroups.post_category_group_id", $cat_id==1615268167?"=":"!=",$cat_id==1615268167?"1615268167":"1615268167")
       ->orderBy('posts.id', 'desc')
       ->paginate(10);
     return view('gca.posts', [
@@ -99,7 +100,7 @@ class NewsController extends Controller
       ->leftJoin("languages", "languages.id", "=", "posts.language_id")
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
       ->where("posts.language_id", "=", $this->getLang())
-      ->where("postgroups.post_category_group_id", "!=", "1615268167")
+      ->where("postgroups.post_category_group_id", $cat_id==1615268167?"=":"!=",$cat_id==1615268167?"1615268167":"1615268167")
       ->where("postgroups.id", "=", $title)
       ->first();
     $lastcount = $news->viewcount;
