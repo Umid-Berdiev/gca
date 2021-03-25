@@ -47,6 +47,7 @@ The target group of the Initiative consists of the foreign ministries (and, thro
 		'search' => 'Search',
 		'search-placeholder' => 'Search in the website',
 		'news' => 'News',
+		'know'=>"Did you know?",
 		'survey' => 'Survey',
 		'vote' => 'Vote',
 		'feedback' => 'Feedback',
