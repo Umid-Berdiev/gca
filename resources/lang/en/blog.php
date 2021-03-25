@@ -157,7 +157,7 @@ The target group of the Initiative consists of the foreign ministries (and, thro
 		'vizit_text' => '1A Labzak, 4th floor, Tashkent',
 		'you_must' => 'You Must Be The Change You Wish To See In The World',
 		'statistica' => 'Statistics',
-		'gca' => 'GCA Quick Facts',
+		'gca' => 'Facts',
 		'central_asia_map' => 'Central Asia Map',
 		'central_asia_map_text' => 'Protect Environment for Our Next Future Generation',
 		'all_events' => 'View All Events',
