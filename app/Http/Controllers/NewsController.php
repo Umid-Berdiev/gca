@@ -49,7 +49,7 @@ class NewsController extends Controller
       ->leftJoin("postcategories", "postcategories.id", "=", "postgroups.post_category_group_id")
       ->where("posts.language_id", "=", $this->getLang())
       ->where('posts.title', '<>', '')
-      ->where("postgroups.post_category_group_id", "=", $curcat->group)
+      ->where("postgroups.post_category_group_id", "!=","1615268167")
       ->orderBy('posts.id', 'desc')
       ->paginate(10);
     return view('gca.posts', [
