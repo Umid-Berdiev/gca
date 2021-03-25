@@ -4,7 +4,11 @@
     <section class="main_top_layout" style="background-image: url({{asset('gca/images/main.jpg')}});">
         <div class="container">
             <h2>
+                @if($news[0]->category_group_id=="1615268167")
+                <span>@lang('blog.know')</span>
+                @else
                 <span>@lang('blog.news')</span>
+                @endif
             </h2>
         </div>
     </section>
