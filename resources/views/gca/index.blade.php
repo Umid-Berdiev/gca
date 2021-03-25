@@ -10,5 +10,4 @@
 @include('gca.home-page.map-section')
 @include('gca.home-page.event-calendar')
 @include('gca.home-page.media-section')
-@include('gca.home-page.publications-section')
 @endsection
