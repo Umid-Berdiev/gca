@@ -1,5 +1,5 @@
 <section class="media_section">
-  <div class="swiper-container swiper_media for_med" style="width:100%;height:100%">
+  <div class="swiper-container swiper_media for_med">
     <div class="swiper-wrapper">
       @foreach($media_gallery as $item)
       @if (isset($item->youtube_link))
@@ -7,7 +7,7 @@
         <a data-fancybox="" class="videos_fancy over"
           href="https://www.youtube.com/watch?v={{ $item->youtube_link}}&amp;feature=emb_logo"
           data-caption="{{ $item->description}}">
-          <img src="{{ asset('storage/videos/' . $item->cover) }}" alt="youtube_link_cover" height="250" width="250">
+          <img src="{{ asset('storage/videos/' . $item->cover) }}" alt="youtube_link_cover" height="250">
           {{-- <img src="https://img.youtube.com/vi/{{ $item->youtube_link}}/sddefault.jpg" alt="youtube_link_cover"
           height="250"> --}}
           <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -23,7 +23,7 @@
       @else
       <div class="swiper-slide">
         <div class="over" data-fancybox=":gallery" data-src="{{ asset('storage/photos/' . $item->cover) }}">
-          <img src="{{ asset('storage/photos/' . $item->cover) }}" height="250" width="250">
+          <img src="{{ asset('storage/photos/' . $item->cover) }}" height="250">
           <svg width="40" height="36" viewBox="0 0 40 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M24.24 4L27.9 8H36V32H4V8H12.1L15.76 4H24.24ZM26 0H14L10.34 4H4C1.8 4 0 5.8 0 8V32C0 34.2 1.8 36 4 36H36C38.2 36 40 34.2 40 32V8C40 5.8 38.2 4 36 4H29.66L26 0ZM20 14C23.3 14 26 16.7 26 20C26 23.3 23.3 26 20 26C16.7 26 14 23.3 14 20C14 16.7 16.7 14 20 14ZM20 10C14.48 10 10 14.48 10 20C10 25.52 14.48 30 20 30C25.52 30 30 25.52 30 20C30 14.48 25.52 10 20 10Z"
@@ -34,12 +34,5 @@
       @endif
       @endforeach
     </div>
-    <div class="swiper-pagination"></div>
   </div>
 </section>
- @push('scripts')
-<script>
-   var swiper = new Swiper('.swiper-container', {
-    });
-</script>
-@endpush
