@@ -44,7 +44,7 @@ $(document).ready(function() {
     spaceBetween: 2,
     loop: false,
     autoplay: {
-      delay: 5000,
+      delay: 3000,
     },
     breakpoints: {
       767: {
