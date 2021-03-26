@@ -11,8 +11,6 @@
   <link rel="stylesheet" href="{{asset('project_gca/css/jquery.fancybox.min.css')}}">
   <link rel="stylesheet" href="{{asset('project_gca/css/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{asset('project_gca/css/swiper.min.css')}}">
- <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
- <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link rel="stylesheet" href="{{asset('project_gca/css/style.css')}}">
   <link rel="stylesheet" href="{{asset('project_gca/css/media.css')}}">
   <script src="{{asset('project_gca/js/vue.js')}}"></script>
@@ -39,8 +37,6 @@
 
   <script src="{{asset('project_gca/js/jquery.min.js')}}"></script>
   <script src="{{asset('project_gca/js/swiper.min.js')}}"></script>
-  <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
-  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script src="{{asset('project_gca/js/bootstrap.min.js')}}"></script>
   <script src="{{asset('project_gca/js/bootstrap-datepicker.js')}}"></script>
   <script src="{{asset('project_gca/js/jquery.fancybox.min.js')}}"></script>
@@ -49,8 +45,6 @@
   <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
   <script src="{{asset('project_gca/js/main.js')}}"></script>
-
-  @yield('scripts')
   @stack('scripts')
 </body>
 
