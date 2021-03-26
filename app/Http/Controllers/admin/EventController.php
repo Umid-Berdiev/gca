@@ -180,7 +180,6 @@ class EventController extends Controller
   public function getEvents(Request $request)
   {
     $data = Event::where('language_id', $this->getLang())->with('category');
-
     if ($request['date'])
       $data = $data->whereDate('datestart', '<=', $request['date'])
         ->whereDate('dateend', '>=', $request['date']);
@@ -192,12 +191,12 @@ class EventController extends Controller
       $data = $data->whereDate('dateend', '<=', $request['inputDateTo']);
     if ($request['category']) {
       if (!$request['inputDateFrom'] && !$request['inputDateTo']) {
-        $data = $data->where('event_category_id', $request['category'])
-          ->whereDate('dateend', '>=', date('Y-m-d'));
-      } else {
         $data = $data->where('event_category_id', $request['category']);
+      } else {
+        $data = $data->where('event_category_id', '=',$request['category']);
+        
       }
-    } else $data = $data->whereDate('dateend', '>=', date('Y-m-d'));
+    } 
 
     $upcoming_events = $data->paginate(10);
 
