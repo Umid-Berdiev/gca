@@ -10,7 +10,9 @@
   <link href="{{asset('project_gca/css/datepicker.css')}}" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="{{asset('project_gca/css/jquery.fancybox.min.css')}}">
   <link rel="stylesheet" href="{{asset('project_gca/css/bootstrap.min.css')}}">
-  <link rel="stylesheet" href="{{asset('project_gca/css/swiper.min.css')}}">
+ {{--  <link rel="stylesheet" href="{{asset('project_gca/css/swiper.min.css')}}"> --}}
+ <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
+ <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link rel="stylesheet" href="{{asset('project_gca/css/style.css')}}">
   <link rel="stylesheet" href="{{asset('project_gca/css/media.css')}}">
   <script src="{{asset('project_gca/js/vue.js')}}"></script>
@@ -37,7 +39,9 @@
   @include('gca.blocks.footer')
 
   <script src="{{asset('project_gca/js/jquery.min.js')}}"></script>
-  <script src="{{asset('project_gca/js/swiper.min.js')}}"></script>
+  {{-- <script src="{{asset('project_gca/js/swiper.min.js')}}"></script> --}}
+  <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <script src="{{asset('project_gca/js/bootstrap.min.js')}}"></script>
   <script src="{{asset('project_gca/js/bootstrap-datepicker.js')}}"></script>
   <script src="{{asset('project_gca/js/jquery.fancybox.min.js')}}"></script>
