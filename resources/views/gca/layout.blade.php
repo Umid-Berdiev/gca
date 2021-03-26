@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="{{asset('project_gca/css/media.css')}}">
   <script src="{{asset('project_gca/js/vue.js')}}"></script>
   <script src="{{asset('project_gca/js/axios.min.js')}}"></script>
-
+  @yield('stylesheets') 
   <title>GCA</title>
   <style>
     header {
