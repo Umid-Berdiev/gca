@@ -2,8 +2,6 @@
   <div class="container">
     <div class="row" id="apps" v-cloak>
       <div class="col-md-6" v-if="gca" style="min-height: 60vh">
-        
-        
         <span v-if="news && news.length > 0" class="template_span">News and Events</span>
         <div style="padding: 15px 30px;margin-bottom:0;" class="new_event" v-for="item in news">
           <img :src="'/storage/posts/' + item.cover">
@@ -26,6 +24,7 @@
             News
           </div>
           <a :href="'/en/posts/1603259067/' + item.group">@{{ item.title }}</a>
+        
         </div>
       </div>
       <div class="col-md-6">
@@ -155,7 +154,7 @@
           .then(function (response) {
             app.gca = response.data;
             app.news = response.data.news;
-           
+            app.news=app.news.slice(0,3)
           })
           .catch(function (error) {
             console.log(error);
