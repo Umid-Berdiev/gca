@@ -134,7 +134,7 @@ class FrontController extends Controller
       ->where('pages.page_category_group_id', 1)
       ->where('languages.language_prefix', app()->getLocale())
       ->get();
-
+    //return $statisticas;
     // dd($videos);
     return view('gca.index')
       ->with('languages', $languages)
