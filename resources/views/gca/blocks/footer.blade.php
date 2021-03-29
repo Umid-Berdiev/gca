@@ -8,7 +8,7 @@ $menu = \App\MenuMaker::where('language_id', $current_lang->id)->get();
     <div class="container">
       <div class="ftr_top_main">
         <div class="ft1">
-          <a href="index.html" class="logo">
+          <a href="{{ url(app()->getLocale() . '/') }}" class="logo">
             <img src="{{asset('project_gca/images/logo.png')}}" alt="">
           </a>
           <p>@lang('blog.address_placeholder')</p>
