@@ -31,8 +31,8 @@
           <a href="{{ url(app()->getLocale() . '/event?id=' . $item->id) }}" class="news_item">
             <img src="{{ asset('storage/events/' . $item->cover) }}" alt="Event cover image">
             <div>
-              <span>{{ $item->datestart->format('d.m.Y') }} -
-                {{ $item->dateend->format('d.m.Y') }}</span>
+             {{-- < span>{{ $item->datestart->format('d.m.Y') }} - --}}
+                {{ $item->dateend->format('d.m.Y') }}</>
               <p>{{ $item->title }}</p>
             </div>
           </a>

@@ -52,7 +52,7 @@ class NewsController extends Controller
       ->where('posts.title', '<>', '')
       ->where("postgroups.post_category_group_id", $cat_id==1615268167?"=":"!=",$cat_id==1615268167?"1615268167":"1615268167")
       ->orderBy('posts.id', 'desc')
-      ->paginate(10);
+      ->paginate(16);
     return view('gca.posts', [
       'newscat' => $category,
       'languages' => $languages,
