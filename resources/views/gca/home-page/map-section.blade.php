@@ -52,7 +52,7 @@
             </div>
             
             <!-- Modal body -->
-            <div class="modal-body p-5" id="content">
+            <div class="modal-body px-4 py-3" id="content">
               
             </div>
             
