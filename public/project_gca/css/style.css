@@ -1679,3 +1679,8 @@ span.date_ban {
   overflow: hidden;
   transition: max-height 0.2s ease-out;
 }
+
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}

@@ -1,5 +1,5 @@
-<section class="main-slider ">
-  <div class="swiper-container">
+<section class="main-slider">
+  <div class="main-swiper-container swiper-container">
     <div class="swiper-wrapper">
       @foreach($posts as $item)
       @if ($item->cover != 'null')
@@ -15,19 +15,24 @@
       @endif
       @endforeach
     </div>
+    <!-- Add Arrows -->
     <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+    <div class="swiper-button-next" id="button"></div>
   </div>
-  
 </section>
 
 @push('scripts')
 <script>
- var swiper = new Swiper('.swiper-container', {
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    });
+var swiper = new Swiper('.main-swiper-container', {
+  slidesPerView:1,
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+  autoplay: {
+    delay: 3000,
+  },
+});
+ */
 </script>
 @endpush
