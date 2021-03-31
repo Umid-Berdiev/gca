@@ -136,6 +136,7 @@ class FrontController extends Controller
       ->get();
     //return $statisticas;
     // dd($videos);
+    //dd($posts_for);
     return view('gca.index')
       ->with('languages', $languages)
       ->with('suv_xujaliks', $suv_xujaliks)
