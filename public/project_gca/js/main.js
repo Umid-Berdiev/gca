@@ -1,18 +1,10 @@
-$(document).ready(function() {
+window.addEventListener('DOMContentLoaded', (event) => {
+  console.log('DOM fully loaded and parsed');
   $("#menu").on("click", "a", function(event) {
     event.preventDefault(); //опустошим стандартную обработку
     var id = $(this).attr("href"), //заберем айдишник блока с параметром URL
       top = $(id).offset().top; //определим высоту от начала страницы до якоря
     $("body,html").animate({ scrollTop: top }, 1000); //сделаем прокрутку за 1 с
-  });
-
-  var swiper1 = new Swiper(".main-slider", {
-    slidesPerView: 1,
-    navigation: {
-      nextEl: ".main-slider .swiper-button-next",
-      prevEl: ".main-slider .swiper-button-prev",
-    },
-    loop: false,
   });
 
   var swiper2 = new Swiper(".swiper_docs", {
@@ -39,18 +31,28 @@ $(document).ready(function() {
     },
   });
 
-  var swiper3 = new Swiper(".swiper_media", {
-    slidesPerView: 5,
-    spaceBetween: 2,
-    loop: false,
-    autoplay: {
-      delay: 5000,
+  var swiper33 = new Swiper('.media-swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 1,
+    // init: false,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
     },
     breakpoints: {
-      767: {
-        slidesPerView: 4,
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 5,
       },
-    },
+      768: {
+        slidesPerView: 4,
+        spaceBetween: 5,
+      },
+      1024: {
+        slidesPerView: 5,
+        spaceBetween: 5,
+      },
+    }
   });
 
   $("span.togle_form_header").on("click", function() {
