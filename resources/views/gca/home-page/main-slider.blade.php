@@ -33,6 +33,5 @@ var swiper = new Swiper('.main-swiper-container', {
     delay: 3000,
   },
 });
- */
 </script>
 @endpush
