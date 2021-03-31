@@ -32,8 +32,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
   });
 
   var swiper33 = new Swiper('.media-swiper-container', {
-    slidesPerView: 1,
-    spaceBetween: 1,
+    slidesPerView: 5,
+    spaceBetween: 5,
     // init: false,
     pagination: {
       el: '.swiper-pagination',
