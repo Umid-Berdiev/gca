@@ -86,7 +86,16 @@
                 <label for="exampleInputTel">@lang('blog.message_text')</label>
                 <textarea class="form-control" name="comment"></textarea>
             </div>
-            <button type="submit" class="btn link_template">@lang('blog.form_btn_send')</button>
+            <div class="form-group">
+                <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}" data-callback="enable"></div>
+                @if($errors->has('g-recaptcha-response'))
+                <span class="invalid-feedback " style="display:block">
+                <strong class="text-danger">{{$errors->first('g-recaptcha-response')}}</strong>
+                @endif
+            </span>
+
+              </div>
+            <button type="submit" class="btn link_template btn-danger" disabled id="btn">@lang('blog.form_btn_send')</button>
         </form>
     </div>
 </section>
@@ -110,3 +119,13 @@
 {{--    }--}}
 {{--</script>--}}
 @endsection
+@push('scripts')
+    <script>
+        function enable()
+        {
+            var btn=document.getElementById('btn')
+
+            btn.disabled=false;
+        }
+    </script>
+@endpush

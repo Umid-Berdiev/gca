@@ -49,6 +49,7 @@
   <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
   {{-- <script src="https://unpkg.com/swiper/swiper-bundle.js"></script> --}}
   <script src="{{asset('project_gca/js/main.js')}}"></script>
+  <script src="https://www.google.com/recaptcha/api.js"></script>
   @stack('scripts')
 </body>
 
