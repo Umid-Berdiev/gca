@@ -166,6 +166,7 @@ return [
     Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     UniSharp\LaravelFilemanager\LaravelFilemanagerServiceProvider::class,
     Barryvdh\DomPDF\ServiceProvider::class,
+    Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
 
     /*
     * Package Service Providers...
@@ -231,6 +232,7 @@ return [
     'View' => Illuminate\Support\Facades\View::class,
     'Image' => Intervention\Image\Facades\Image::class,
     'MYPDF' => Barryvdh\DomPDF\Facade::class,
+    'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class, 
   ],
 
 ];
