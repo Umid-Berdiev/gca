@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Rules\Captcha;
 
 class FormController extends Controller
 {
@@ -212,6 +213,7 @@ class FormController extends Controller
       'fio' => 'required',
       'phone' => 'required',
       'email' => 'required',
+      'g-recaptcha-response' => new Captcha(),
     ]);
     if ($validator->fails()) {
       return back()
@@ -227,7 +229,7 @@ class FormController extends Controller
 
     //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz','murojaat@minwater.uz','contact');
     //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz',$request->email,'contact_client');
-
+    
     return redirect()->back()->with('message', 'Мурожаатингиз қабул қилинди');
   }
 
