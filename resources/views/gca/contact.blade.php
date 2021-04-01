@@ -1,13 +1,13 @@
 @extends('gca.layout')
 @section('content')
 @section('main_top_layout')
-<section class="main_top_layout" style="background-image: url({{asset('gca/images/main.jpg')}});">
-    <div class="container">
-        <h2>
-            <span>@lang('blog.callback')</span>
-        </h2>
-    </div>
-</section>
+    <section class="main_top_layout" style="background-image: url({{ asset('gca/images/main.jpg') }});">
+        <div class="container">
+            <h2>
+                <span>@lang('blog.callback')</span>
+            </h2>
+        </div>
+    </section>
 @endsection
 
 <section class="contact_inner">
@@ -17,23 +17,23 @@
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A458036ea9a31a6999429075e1efd9d7f6ebd5b2b42325b43324932b42c5889b5&amp;source=constructor"
                 width="1105" height="500" frameborder="0"></iframe></div>
         @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
         @endif
-        @if(session()->has('message'))
-        <div class="alert alert-success">
-            <p>{{ session()->get('message') }}</p>
-        </div>
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                <p>{{ session()->get('message') }}</p>
+            </div>
         @endif
-        <form action="{{URL('/contact_post')}}" method="post">
-            {{csrf_field()}}
+        <form action="{{ URL('/contact_post') }}" method="post">
+            {{ csrf_field() }}
             <h3>@lang('blog.callback')</h3>
-            {{--            <p>Don’t hesitate to contact us</p>--}}
+            {{-- <p>Don’t hesitate to contact us</p> --}}
             <div class="contact_socials">
                 <div class="">
                     <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,45 +87,47 @@
                 <textarea class="form-control" name="comment"></textarea>
             </div>
             <div class="form-group">
-                <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}" data-callback="enable"></div>
-                @if($errors->has('g-recaptcha-response'))
-                <span class="invalid-feedback " style="display:block">
-                <strong class="text-danger">{{$errors->first('g-recaptcha-response')}}</strong>
+                <div class="g-recaptcha" data-sitekey="6Lc8vZYaAAAAAA-AXC2hKjGHcQqgkCPfJVF5Jz29" data-callback="enable">
+                </div>
+                @if ($errors->has('g-recaptcha-response'))
+                    <span class="invalid-feedback " style="display:block">
+                        <strong class="text-danger">{{ $errors->first('g-recaptcha-response') }}</strong>
                 @endif
-            </span>
+                </span>
 
-              </div>
-            <button type="submit" class="btn link_template btn-danger" disabled id="btn">@lang('blog.form_btn_send')</button>
+            </div>
+            <button type="submit" class="btn link_template btn-danger" disabled
+                id="btn">@lang('blog.form_btn_send')</button>
         </form>
     </div>
 </section>
-{{--<script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A458036ea9a31a6999429075e1efd9d7f6ebd5b2b42325b43324932b42c5889b5&amp;width=600&amp;height=450&amp;lang=ru_RU&amp;scroll=true"></script>--}}{{--<script src="https://api-maps.yandex.ru/2.1/?apikey=318a59ea-1b14-4af4-b521-d9e6f0fecf2f&lang=ru_RU" type="text/javascript"></script>--}}
-{{--<script type="text/javascript">--}}
-{{--    // Функция ymaps.ready() будет вызвана, когда--}}
-{{--    // загрузятся все компоненты API, а также когда будет готово DOM-дерево.--}}
-{{--    ymaps.ready(init);--}}
-{{--    function init(){--}}
-{{--        // Создание карты.--}}
-{{--        var myMap = new ymaps.Map("map", {--}}
-{{--            // Координаты центра карты.--}}
-{{--            // Порядок по умолчанию: «широта, долгота».--}}
-{{--            // Чтобы не определять координаты центра карты вручную,--}}
-{{--            // воспользуйтесь инструментом Определение координат.--}}
-{{--            center: [55.76, 37.64],--}}
-{{--            // Уровень масштабирования. Допустимые значения:--}}
-{{--            // от 0 (весь мир) до 19.--}}
-{{--            zoom: 12--}}
-{{--        });--}}
-{{--    }--}}
-{{--</script>--}}
+{{-- <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A458036ea9a31a6999429075e1efd9d7f6ebd5b2b42325b43324932b42c5889b5&amp;width=600&amp;height=450&amp;lang=ru_RU&amp;scroll=true"></script> --}}{{-- <script src="https://api-maps.yandex.ru/2.1/?apikey=318a59ea-1b14-4af4-b521-d9e6f0fecf2f&lang=ru_RU" type="text/javascript"></script> --}}
+{{-- <script type="text/javascript"> --}}
+{{-- // Функция ymaps.ready() будет вызвана, когда --}}
+{{-- // загрузятся все компоненты API, а также когда будет готово DOM-дерево. --}}
+{{-- ymaps.ready(init); --}}
+{{-- function init(){ --}}
+{{-- // Создание карты. --}}
+{{-- var myMap = new ymaps.Map("map", { --}}
+{{-- // Координаты центра карты. --}}
+{{-- // Порядок по умолчанию: «широта, долгота». --}}
+{{-- // Чтобы не определять координаты центра карты вручную, --}}
+{{-- // воспользуйтесь инструментом Определение координат. --}}
+{{-- center: [55.76, 37.64], --}}
+{{-- // Уровень масштабирования. Допустимые значения: --}}
+{{-- // от 0 (весь мир) до 19. --}}
+{{-- zoom: 12 --}}
+{{-- }); --}}
+{{-- } --}}
+{{-- </script> --}}
 @endsection
 @push('scripts')
-    <script>
-        function enable()
-        {
-            var btn=document.getElementById('btn')
+<script>
+    function enable() {
+        var btn = document.getElementById('btn')
 
-            btn.disabled=false;
-        }
-    </script>
+        btn.disabled = false;
+    }
+
+</script>
 @endpush
