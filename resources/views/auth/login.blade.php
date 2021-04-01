@@ -1,99 +1,100 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-	<div class="row">
-		@if (session('success'))
-		<div class="alert alert-success">
-			{{ session('success') }}
-		</div>
-		@endif
-		<div class="col-md-8 col-md-offset-2">
-			<div class="panel panel-default">
-				<div class="panel-heading">Login</div>
-				<div class="panel-body">
-					<form class="form-horizontal" method="POST" action="{{ route('login') }}">
-						{{ csrf_field() }}
+    <div class="container">
+        <div class="row">
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Login</div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                            {{ csrf_field() }}
 
-						<div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-							<label for="email" class="col-md-4 control-label">E-Mail Address</label>
+                            <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                                <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
-							<div class="col-md-6">
-								<input id="email" type="text" class="form-control" name="email"
-									value="{{ old('email') }}" required autofocus>
+                                <div class="col-md-6">
+                                    <input id="email" type="text" class="form-control" name="email"
+                                        value="{{ old('email') }}" required autofocus>
 
-								@if ($errors->has('email'))
-								<span class="help-block">
-									<strong>{{ $errors->first('email') }}</strong>
-								</span>
-								@endif
-							</div>
-						</div>
+                                    @if ($errors->has('email'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('email') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
 
-						<div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}" id="appPassword">
-							<label for="password" class="col-md-4 control-label">Password</label>
-							<div class="col-md-6">
-								<input id="password" :type="type" class="form-control" name="password" required>
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" v-model="showCheckbox" @click="show">
-										Show password
-									</label>
-								</div>
-								@if ($errors->has('password'))
-								<span class="help-block">
-									<strong>{{ $errors->first('password') }}</strong>
-								</span>
-								@endif
-							</div>
-						</div>
+                            <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}" id="appPassword">
+                                <label for="password" class="col-md-4 control-label">Password</label>
+                                <div class="col-md-6">
+                                    <input id="password" :type="type" class="form-control" name="password" required>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" v-model="showCheckbox" @click="show">
+                                            Show password
+                                        </label>
+                                    </div>
+                                    @if ($errors->has('password'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('password') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
 
-						<div class="form-group">
-							<div class="col-md-6 col-md-offset-4">
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-										Remember Me
-									</label>
-								</div>
-							</div>
-						</div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-md-offset-4">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
+                                            Remember Me
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
 
-						<div class="form-group">
-							<div class="col-md-8 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">
-									Login
-								</button>
-								<a class="btn btn-link"
-									href="{{ route('forgot-password', ['lang' => app()->getLocale()]) }}">
-									Forgot Your Password?
-								</a>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Login
+                                    </button>
+                                    <a class="btn btn-link"
+                                        href="{{ route('forgot-password', ['lang' => app()->getLocale()]) }}">
+                                        Forgot Your Password?
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('js')
 
-<script src="{{asset('js/vue.js')}}"></script>
-<script>
-	new Vue({
-		el: '#appPassword',
-		data: {
-			type: 'password',
-			showCheckbox: false
-		},
-		methods: {
-			show () {
-				!this.showCheckbox ? this.type = 'text' : this.type = 'password';
-				console.log(this.showCheckbox, this.type);
-			}
-		}
-	});
-</script>
+    <script src="{{ asset('js/vue.js') }}"></script>
+    <script>
+        new Vue({
+            el: '#appPassword',
+            data: {
+                type: 'password',
+                showCheckbox: false
+            },
+            methods: {
+                show() {
+                    !this.showCheckbox ? this.type = 'text' : this.type = 'password';
+                    console.log(this.showCheckbox, this.type);
+                }
+            }
+        });
+
+    </script>
 @endsection

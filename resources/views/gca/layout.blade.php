@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{asset('project_gca/css/style.css')}}">
   <link rel="stylesheet" href="{{asset('project_gca/css/media.css')}}">
   <!-- Link Swiper's CSS -->
- {{--  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" /> --}}
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css" />
   <title>GCA</title>
   <style>
     header {
@@ -47,7 +47,7 @@
   <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
   <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-  {{-- <script src="https://unpkg.com/swiper/swiper-bundle.js"></script> --}}
+  <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
   <script src="{{asset('project_gca/js/main.js')}}"></script>
   <script src="https://www.google.com/recaptcha/api.js"></script>
   @stack('scripts')
