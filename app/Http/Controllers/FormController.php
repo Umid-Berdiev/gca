@@ -8,7 +8,7 @@ use App\ObjectSend;
 use App\Obuna;
 use Illuminate\Http\Request;
 use App\Language;
-use App\tender;
+use App\Tender;
 use Illuminate\Support\Facades\App;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;

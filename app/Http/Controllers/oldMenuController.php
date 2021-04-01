@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\language;
-use App\menumaker;
+use App\Language;
+use App\Menumaker;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;

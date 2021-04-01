@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Language;
-use App\tender;
+use App\Tender;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
