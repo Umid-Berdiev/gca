@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\CvForm;
 use Illuminate\Http\Request;
 use App\Language;
-use App\tender;
+use App\Tender;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
