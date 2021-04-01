@@ -87,7 +87,7 @@
                 <textarea class="form-control" name="comment"></textarea>
             </div>
             <div class="form-group">
-                <div class="g-recaptcha" data-sitekey="{{env('CAPTCHA_KEY')}}" data-callback="enable"></div>
+                <div class="g-recaptcha" data-sitekey="6Lc8vZYaAAAAAA-AXC2hKjGHcQqgkCPfJVF5Jz29" data-callback="enable"></div>
                 @if($errors->has('g-recaptcha-response'))
                 <span class="invalid-feedback " style="display:block">
                 <strong class="text-danger">{{$errors->first('g-recaptcha-response')}}</strong>
