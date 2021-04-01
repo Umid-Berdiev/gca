@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Language;
-use App\sorovvote;
+use App\Sorovvote;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Sorovnoma;

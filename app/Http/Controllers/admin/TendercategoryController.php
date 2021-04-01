@@ -5,7 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Language;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\tendercategory;
+use App\Tendercategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
