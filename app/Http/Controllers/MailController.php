@@ -43,16 +43,29 @@ class MailController extends Controller
 
     public static function sendPost($post)
     {
-        // dd($post);
+        //dd($post);
         $users = Obuna::select('email')->get();
         foreach ($users as $user) {
-            $text = "New post!\nTitile: $post->title\nContent: $post->content";
+            $text = "New post!\nTitle: $post->title\nContent: " . strip_tags($post->content);
+
             Mail::raw($text, function ($message) use ($user) {
-                $message->from(env('MAIL_FROM_ADDRESS', 'noreply@greencentralasia.org'), env('MAIL_FROM_NAME', 'greencentralasia.org'));
+                $message->from(env('MAIL_FROM_ADDRESS', 'zuckerberg3771@gmail.com'), env('MAIL_FROM_NAME', 'greencentralasia.org'));
                 $message->to($user->email);
                 // $message->cc('umid-berdiev82@mail.ru', 'Bobur');
                 $message->subject('Запрос на авторизацию!');
             });
         }
+    }
+    public static function send_contact($contact)
+    {
+        //dd($post);
+        $text = "Yangi murojaat!\nFIO: $contact->fio\nPhone:$contact->phone\nContent:$contact->comment\nEmail:$contact->email";
+
+        Mail::raw($text, function ($message) {
+            $message->from(env('MAIL_FROM_ADDRESS', 'zuckerberg3771@gmail.com'), env('MAIL_FROM_NAME', 'greencentralasia.org'));
+            $message->to('zuckerberg3771@gmail.com');
+            // $message->cc('umid-berdiev82@mail.ru', 'Bobur');
+            $message->subject('noreplygreencentralasia');
+        });
     }
 }

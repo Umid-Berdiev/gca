@@ -227,9 +227,9 @@ class FormController extends Controller
     $contact->comment = $request->comment;
     $contact->save();
 
-    //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz','murojaat@minwater.uz','contact');
+    MailController::send_contact($contact);
     //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz',$request->email,'contact_client');
-    
+
     return redirect()->back()->with('message', 'Мурожаатингиз қабул қилинди');
   }
 
