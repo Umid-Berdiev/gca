@@ -79,10 +79,6 @@
                 <input class="form-control" name="email" type="email" id="exampleInputEmail1">
             </div>
             <div class="form-group">
-                <label for="exampleInputTel">@lang('blog.phone_number')</label>
-                <input class="form-control" name="phone" type="tel" id="exampleInputTel">
-            </div>
-            <div class="form-group">
                 <label for="exampleInputTel">@lang('blog.message_text')</label>
                 <textarea class="form-control" name="comment"></textarea>
             </div>
