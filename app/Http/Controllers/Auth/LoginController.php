@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use DB;
+use App\User;
 
 class LoginController extends Controller
 {
@@ -40,24 +43,40 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    protected function credentials(Request $request)
+    {
+        return array_merge($request->only($this->username(), 'password'));
+    }
+
     protected function validateLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string',
             'password' => 'required|string',
-        ]);
+        ], $this->messages());
 
         if ($validator->fails()) {
-            return back()
+            return redirect('login')
                 ->withErrors($validator)
                 ->withInput();
         }
     }
 
     /**
-     * Get the needed authorization credentials from the request.
+     * Show the application's login form.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return \Illuminate\Http\Response
      */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => 'something',
+            'string' => 'something',
+        ];
+    }
 }

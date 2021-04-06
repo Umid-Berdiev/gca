@@ -104,7 +104,7 @@ class NewsController extends Controller
       ->where("postgroups.id", "=", $title)
       ->first();
     $lastcount = $news->viewcount;
-    $grpupd = \App\postgroup::all()->where("id", "=", $news->id)->first();
+    $grpupd = \App\PostGroup::all()->where("id", "=", $news->id)->first();
     $grpupd->viewcount = $lastcount + 1;
     $grpupd->update();
     return view('gca.post', [

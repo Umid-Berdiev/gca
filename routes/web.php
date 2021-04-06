@@ -22,9 +22,9 @@ Route::match(['get', 'post'], 'register', function () {
   return redirect('/');
 });
 
-Route::get('login', function () {
-  return view('auth/login');
-})->name('login');
+// Route::get('login', function () {
+//   return view('auth/login');
+// })->name('login');
 
 Route::get('logout', function () {
   \Illuminate\Support\Facades\Auth::logout();
@@ -290,3 +290,7 @@ Route::get('artisan/config-cache', function () {
   $exitCode = \Illuminate\Support\Facades\Artisan::call('config:cache');
   return '<h1>Clear Config cleared</h1>';
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

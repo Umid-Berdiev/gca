@@ -211,8 +211,6 @@ class EventController extends Controller
     if (isset($request->id)) {
       $request->session()->put('event_group', $request->id);
     }
-
-    
     $group = Event::select('group')->where('id','=',$request->id)->first()/*      */;
     $event = Event::with('category')->where('group', $group->group)->where('language_id', $this->getLang())->first();
     $upcoming_events = Event::where('language_id', $this->getLang())

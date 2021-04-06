@@ -19,15 +19,11 @@ class RedirectIfAuthenticated
     {
         if (Auth::guard($guard)->check()) {
             $user = Auth::user();
-            if($user->status != 1 && $user->status != 2 )
-            {
+            if ($user->status != 1 && $user->status != 2) {
                 return redirect('/forums');
-            }
-            else
-            {
+            } else {
                 return redirect('/admin');
             }
-
         }
 
         return $next($request);
