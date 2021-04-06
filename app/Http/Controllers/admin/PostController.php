@@ -96,9 +96,9 @@ class PostController extends Controller
       $model->category_group_id = $request->post_category_id;
       $model->gcainfo_id = $request->country_id;
       $model->save();
-      // MailController::sendPost($model);
+      //MailController::sendPost($model);
     }
-    return redirect(route('posts.edit', $model->group))->with('success', 'Created!');
+    return redirect(route('posts.edit', $model->group))->with('success', 'Created and Sent to subscribers');
   }
 
   public function edit(Request $request, $id)

@@ -26,12 +26,11 @@ class Captcha implements Rule
      */
     public function passes($attribute, $value)
     {
-        $recaptcha=new ReCaptcha(env('CAPTCHA_SECRET'));
+        $recaptcha = new ReCaptcha('6LcdhZ4aAAAAAHpjTcZ369v0roEVW1jmI_jpoiEJ');
 
-        $repsonse=$recaptcha->verify($value,$_SERVER['REMOTE_ADDR']);
+        $repsonse = $recaptcha->verify($value, $_SERVER['REMOTE_ADDR']);
 
         return $repsonse->isSuccess();
-
     }
 
     /**
