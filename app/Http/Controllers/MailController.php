@@ -59,11 +59,11 @@ class MailController extends Controller
     public static function send_contact($contact)
     {
         //dd($post);
-        $text = "Yangi murojaat!\nFIO: $contact->fio\nPhone:$contact->phone\nContent:$contact->comment\nEmail:$contact->email";
+        $text = "Yangi murojaat!\nFIO: $contact->fio\nContent:$contact->comment\nEmail:$contact->email";
 
         Mail::raw($text, function ($message) {
             $message->from(env('MAIL_FROM_ADDRESS', 'zuckerberg3771@gmail.com'), env('MAIL_FROM_NAME', 'greencentralasia.org'));
-            $message->to('zuckerberg3771@gmail.com');
+            $message->to('mukabbat.kamalova@giz.de');
             // $message->cc('umid-berdiev82@mail.ru', 'Bobur');
             $message->subject('noreplygreencentralasia');
         });
