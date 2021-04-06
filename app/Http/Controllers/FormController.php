@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Rules\Captcha;
+use Illuminate\Support\Facades\Lang;
 
 class FormController extends Controller
 {
@@ -211,7 +212,6 @@ class FormController extends Controller
   {
     $validator = Validator::make($request->all(), [
       'fio' => 'required',
-      'phone' => 'required',
       'email' => 'required',
       'g-recaptcha-response' => new Captcha(),
     ]);
@@ -223,14 +223,16 @@ class FormController extends Controller
     $contact = new Contact();
     $contact->fio = $request->fio;
     $contact->email = $request->email;
-    $contact->phone = $request->phone;
     $contact->comment = $request->comment;
     $contact->save();
 
     MailController::send_contact($contact);
     //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz',$request->email,'contact_client');
-
-    return redirect()->back()->with('message', 'Мурожаатингиз қабул қилинди');
+    // if (Lang::getLocale() == 'en') {
+    //   return redirect()->back()->with('Your request is accepted');
+    // } else {
+    return redirect()->back()->with('message', 'Ваше обращение принято');
+    // }
   }
 
 
