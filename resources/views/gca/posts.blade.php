@@ -53,15 +53,5 @@
     cards.forEach(card => {
         card.style.height = max + "px"
     });
-    // function thisHeight() {
-    //     return $(this).height();
-    // }
-    // $('.auto-height').each(function() {
-
-    //     var height = Math.max.apply(Math, $(this).find('.auto-height').map(thisHeight));
-    //     $(this).find('.auto-height').height(height);
-    //     console.log(height)
-    // });
-
 </script>
 @endpush
