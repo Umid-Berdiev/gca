@@ -228,11 +228,11 @@ class FormController extends Controller
 
     MailController::send_contact($contact);
     //        MailController::send($request->fio,$request->comment,'','info@water.gov.uz',$request->email,'contact_client');
-    // if (Lang::getLocale() == 'en') {
-    //   return redirect()->back()->with('Your request is accepted');
-    // } else {
-    return redirect()->back()->with('message', 'Ваше обращение принято');
-    // }
+    if (Lang::getLocale() == 'en') {
+      return redirect()->back()->with('message', 'Your request is accepted');
+    } else {
+      return redirect()->back()->with('message', 'Ваше обращение принято');
+    }
   }
 
 
