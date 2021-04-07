@@ -72,15 +72,17 @@
 
             <div class="form-group">
                 <label for="exampleInputName">@lang('blog.full_name')</label>
-                <input class="form-control" name="fio" type="text" id="exampleInputName">
+                <input class="form-control" name="fio" type="text" id="exampleInputName" value="{{ old('fio') }}">
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail1">@lang('blog.email')</label>
-                <input class="form-control" name="email" type="email" id="exampleInputEmail1">
+                <input class="form-control" name="email" type="email" id="exampleInputEmail1"
+                    value="{{ old('email') }}">
             </div>
             <div class="form-group">
                 <label for="exampleInputTel">@lang('blog.message_text')</label>
-                <textarea class="form-control" name="comment"></textarea>
+                <textarea class="form-control" name="comment">{{ old('comment') }}</textarea>
+
             </div>
             <div class="form-group">
                 <div class="g-recaptcha" data-sitekey="6LcdhZ4aAAAAAAMRAs3ls-W3jF-B74FuXt-VA0IB" data-callback="enable">
