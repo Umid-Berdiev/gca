@@ -213,6 +213,7 @@ class FormController extends Controller
     $validator = Validator::make($request->all(), [
       'fio' => 'required',
       'email' => 'required',
+      'comment' => 'required',
       'g-recaptcha-response' => new Captcha(),
     ]);
     if ($validator->fails()) {
