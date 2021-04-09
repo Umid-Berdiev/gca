@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\EventCategory;
 use App\Event;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -180,6 +182,12 @@ class EventController extends Controller
   public function getEvents(Request $request)
   {
     $data = Event::where('language_id', $this->getLang())->with('category');
+    $data1 = Event::where('language_id', $this->getLang())->with('category');
+
+    $today = Carbon::now()->toDateString();
+
+    $upcoming_events = $data1->where('datestart', '>=', $today)->paginate(3);
+
     if ($request['date'])
       $data = $data->whereDate('datestart', '<=', $request['date'])
         ->whereDate('dateend', '>=', $request['date']);
@@ -193,16 +201,22 @@ class EventController extends Controller
       if (!$request['inputDateFrom'] && !$request['inputDateTo']) {
         $data = $data->where('event_category_id', $request['category']);
       } else {
-        $data = $data->where('event_category_id', '=',$request['category']);
-        
+        $data = $data->where('event_category_id', '=', $request['category']);
       }
-    } 
-
-    $upcoming_events = $data->paginate(10);
+    }
+    $events = $data->paginate(10);
 
     $categories = EventCategory::where("language_id", $this->getLang())->get();
+    $eventsDate = Event::select('datestart', 'dateend')->get();
+    $eventDates = [];
 
-    return view('gca.events', compact('upcoming_events', 'categories'));
+    foreach ($eventsDate as $item) {
+      $dateRange = CarbonPeriod::create($item->datestart, $item->dateend);
+      foreach ($dateRange as $date) {
+        $eventDates[] = $date->format('Y-m-d');
+      }
+    }
+    return view('gca.events', compact('events', 'categories', 'upcoming_events', 'eventDates'));
   }
 
   public function getEvent(Request $request)
@@ -211,7 +225,7 @@ class EventController extends Controller
     if (isset($request->id)) {
       $request->session()->put('event_group', $request->id);
     }
-    $group = Event::select('group')->where('id','=',$request->id)->first()/*      */;
+    $group = Event::select('group')->where('id', '=', $request->id)->first()/*      */;
     $event = Event::with('category')->where('group', $group->group)->where('language_id', $this->getLang())->first();
     $upcoming_events = Event::where('language_id', $this->getLang())
       ->whereDate('dateend', '>=', date('Y-m-d'))
