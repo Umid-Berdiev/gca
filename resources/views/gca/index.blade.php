@@ -9,6 +9,6 @@
     @include('gca.home-page.wish-section')
     @include('gca.home-page.report-section')
     @include('gca.home-page.map-section')
-    @include('gca.home-page.event-calendar')
+   {{--  @include('gca.home-page.event-calendar') --}}
     @include('gca.home-page.media-section')
 @endsection
