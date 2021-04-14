@@ -16,6 +16,11 @@
           <img src="{{ asset('GCAlogos/GIZ-implemented-Logo-Square.jpg') }}" alt="logo" width="180" height="120">
         </a>
       </div>
+      <div class="col-2 mx-auto">
+        <a target="blank" href="https://www.uni-halle.de/">
+          <img src="{{ asset('GCAlogos/Marthin-Luther.jpg') }}" alt="logo">
+        </a>
+      </div>
       <div class="col-1">
         <a target="blank" href="https://www.dku.kz" target="blank">
           <img src="{{ asset('GCAlogos/DKU.jpg') }}" alt="logo" width="100" height="120">
@@ -27,16 +32,12 @@
           <img src="{{ asset('GCAlogos/GFZ-potsdam.jpg') }}" alt="logo" width="140" height="100">
         </a>
       </div>
-      <div class="col-2">
+      <div class="col-1">
         <a target="blank" href="https://www.pik-potsdam.de/en/institute?set_language=en">
           <img src="{{ asset('GCAlogos/PIK.jpg') }}" alt="logo" width="180" height="120">
         </a>
       </div>
-      <div class="col-1 mx-auto">
-        <a target="blank" href="https://www.uni-halle.de/">
-          <img src="{{ asset('GCAlogos/Marthin-Luther.jpg') }}" alt="logo">
-        </a>
-      </div>
+     
     </div>
   </div>
 </section>
