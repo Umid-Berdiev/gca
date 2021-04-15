@@ -17,7 +17,7 @@
         </a>
       </div>
       <div class="col-2">
-        <a target="blank" href="https://www.pik-potsdam.de/en/institute?set_language=en">
+        <a target="blank" href="https://www.pik-potsdam.de/en/institute/departments/climate-resilience/projects/project-pages/green-central-asia?searchterm=green+ce">
           <img src="{{ asset('GCAlogos/PIK.jpg') }}" alt="logo" width="180" height="120">
         </a>
       </div>
@@ -28,7 +28,7 @@
       </div>
       <div class="col-2">
         <a target="blank"
-          href="https://www.gfz-potsdam.de/ueber-uns/organisation/vorstand-gremien-verwaltung/vorstand/">
+          href="https://www.gfz-potsdam.de/en/home/">
           <img src="{{ asset('GCAlogos/GFZ-potsdam.jpg') }}" alt="logo" width="180" height="100">
         </a>
       </div>
