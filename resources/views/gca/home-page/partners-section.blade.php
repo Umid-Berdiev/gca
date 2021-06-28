@@ -3,7 +3,7 @@
     <div class="logotypes_main row justify-content-between no-gutters py-5">
       <div class="col-2">
         <a target="blank" href="https://www.auswaertiges-amt.de/en">
-          <img src="{{ asset('GCAlogos/Federal-Foreign-Office.png') }}" alt="logo" width="180" height="120">
+          <img src="{{ asset('GCAlogos/Federal-Foreign-Office.png') }}" alt="logo" width="160" height="120">
         </a>
       </div>
       <div class="col-2">
@@ -23,13 +23,13 @@
       </div>
       <div class="col-1">
         <a target="blank" href="https://www.dku.kz" target="blank">
-          <img src="{{ asset('GCAlogos/DKU.jpg') }}" alt="logo" width="128" height="120">
+          <img src="{{ asset('GCAlogos/DKU.jpg') }}" alt="logo" width="90" height="120">
         </a>
       </div>
       <div class="col-2">
         <a target="blank"
           href="https://www.gfz-potsdam.de/en/home/">
-          <img src="{{ asset('GCAlogos/GFZ-potsdam.jpg') }}" alt="logo" width="180" height="100">
+          <img src="{{ asset('GCAlogos/GFZ-potsdam.jpg') }}" alt="logo" width="160" height="100">
         </a>
       </div>
       
