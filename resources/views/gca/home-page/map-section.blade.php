@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row" id="apps" v-cloak>
       <div class="col-md-6" v-if="gca" style="min-height: 60vh">
-        <span v-if="news && news.length > 0" class="template_span">News and Events</span>
+        <span v-if="news && news.length > 0" class="template_span">@lang('blog.news_events')</span>
         <div style="padding: 15px 30px;margin-bottom:0;" class="new_event" v-for="item in news">
           <img :src="'/storage/posts/' + item.cover">
           <div class="new_event_date">

@@ -83,14 +83,14 @@ $menu = \App\MenuMaker::where('language_id', $current_lang->id)->get();
           {{--                        </div>--}}
           {{--                    </a>--}}
         </div>
-        <div class="ft4">
+        <div class="ft5">
           <h5>@lang('blog.additional_message')</h5>
           <p>@lang('blog.additional_message_placeholder')</p>
           <form action="{{ route('new-obuna', ['lang' => app()->getLocale()]) }}" class="form_template" method="post">
             @csrf
             <div class="form-group">
-              <input type="email" placeholder="Email Address" name="email">
-              <button type="submit">GO</button>
+              <input type="email" placeholder="@lang('blog.email_placeholder')" name="email">
+              <button type="submit">@lang('blog.go')</button>
             </div>
           </form>
         </div>
@@ -100,7 +100,7 @@ $menu = \App\MenuMaker::where('language_id', $current_lang->id)->get();
   <div class="ftr_bottom">
     <div class="container">
       <div class="ftr_bottom_main">
-        <p>© Copyright 2020 by Green Central Asia</p>
+        <p>© Copyright 2020  Green Central Asia</p>
         <div class="socials">
           <a href="https://twitter.com/GreenCentralAs1">
             <svg width="15" height="13" viewBox="0 0 15 13" xmlns="http://www.w3.org/2000/svg">
