@@ -1,41 +1,38 @@
 <section class="logotypes">
   <div class="container">
     <div class="logotypes_main row justify-content-between no-gutters py-5">
+      
       <div class="col-2">
-        <a target="blank" href="https://www.auswaertiges-amt.de/en">
-          <img src="{{ asset('GCAlogos/Federal-Foreign-Office.png') }}" alt="logo" width="160" height="120">
+        <a target="blank" href="#">
+          <img src="{{ asset('GCAlogos/cooperation.jpg') }}" alt="logo"  width="600" height="120" style="margin-top:75px">
         </a>
       </div>
       <div class="col-2">
         <a target="blank" href="#">
-          <img src="{{ asset('GCAlogos/German-cooperation-logo.jpg') }}" alt="logo" width="180" height="120">
+          <img src="{{ asset('GCAlogos/giz.jpg') }}" alt="logo"  width="600" height="250" style="margin-top:-20px">
         </a>
       </div>
-      <div class="col-2">
-        <a target="blank" href="https://www.giz.de">
-          <img src="{{ asset('GCAlogos/GIZ-implemented-Logo-Square.jpg') }}" alt="logo" width="180" height="120">
-        </a>
-      </div>
+     
       <div class="col-2">
         <a target="blank" href="https://www.pik-potsdam.de/en/institute/departments/climate-resilience/projects/project-pages/green-central-asia?searchterm=green+ce">
-          <img src="{{ asset('GCAlogos/PIK.jpg') }}" alt="logo" width="180" height="120">
+          <img src="{{ asset('GCAlogos/PIK.jpg') }}" alt="logo" style="margin-top:80px">
         </a>
       </div>
-      <div class="col-1">
+      <div class="col-2">
         <a target="blank" href="https://www.dku.kz" target="blank">
-          <img src="{{ asset('GCAlogos/DKU.jpg') }}" alt="logo" width="90" height="120">
+          <img src="{{ asset('GCAlogos/DKU.jpg') }}" alt="logo" style="margin-top:75px">
         </a>
       </div>
       <div class="col-2">
         <a target="blank"
           href="https://www.gfz-potsdam.de/en/home/">
-          <img src="{{ asset('GCAlogos/GFZ-potsdam.jpg') }}" alt="logo" width="160" height="100">
+          <img src="{{ asset('GCAlogos/GFZ-potsdam.jpg') }}" alt="logo"  style="margin-top:80px">
         </a>
       </div>
       
-      <div class="col-1 mx-auto">
+      <div class="col-2">
         <a target="blank" href="https://www.uni-halle.de/">
-          <img src="{{ asset('GCAlogos/Marthin-Luther.jpg') }}" alt="logo">
+          <img src="{{ asset('GCAlogos/Marthin-Luther.jpg') }}" alt="logo" style="margin-top:70px">
         </a>
       </div>
     </div>
