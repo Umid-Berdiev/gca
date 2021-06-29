@@ -77,6 +77,7 @@ class DocumentController extends Controller
         ->withErrors($validator)
         ->withInput();
     }
+    
     $grp_id = $this->getGroupId();
 
     foreach ($request->input("language_ids") as $key => $value) {
@@ -95,12 +96,13 @@ class DocumentController extends Controller
             ->with('error','Supported file types:doc,docx,pdf,ppt,pptx');
           } 
       }
-       
-        $model = Document::create([
+      
+    //   dd(Document::first());
+      
+      $data = [
         'title' => $request->titles[$key],
         'description' => $request->descriptions[$key],
         'link' => $request->links,
-        // 'other_link' => $request->other_link,
         'r_number' => $request->register_numbers,
         'r_date' => $request->register_dates,
         'group' => $grp_id,
@@ -109,10 +111,14 @@ class DocumentController extends Controller
         'files' => $file_name,
         'file_type' => $file->clientExtension(),
         'file_size' => $file->getClientSize()
-      ]); 
+      ];
+      
+    //   dd($data);
+       
+        $model = Document::create($data);
   }
   
-    return redirect(route('documents.edit', $model->group))->with('success', 'Created!');
+    return redirect(route('documents.edit', $grp_id))->with('success', 'Created!');
   }
 
   public function edit(Request $request, $id)
