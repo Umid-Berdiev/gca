@@ -4,7 +4,7 @@
       
       <div class="col-5">
         <a target="blank" href="#">
-          <img src="{{ asset('GCAlogos/2.JPG') }}" alt="logo1"  width="544" height="200"  class="giz">
+          <img src="{{ asset('GCAlogos/2.jpg') }}" alt="logo1"  width="544" height="200"  class="giz">
         </a>
       </div>
      
