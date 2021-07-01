@@ -326,11 +326,11 @@ section.main-slider a.link_template {
 	flex: 0 0 calc(100%/6);
 	text-align: center;
 }*/
-#gizzz {
+.logotypes_main img.two {
   min-height: 52px;
   max-width: 544px;
 }
-.logotypes_main img:not(:first-child) {
+.logotypes_main img.one {
   min-height: 52px;
   max-width: 195px;
 }
