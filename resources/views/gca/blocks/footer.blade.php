@@ -91,7 +91,7 @@ $menu = \App\MenuMaker::where('language_id', $current_lang->id)->get();
             <div class="form-group">
               <input type="email" placeholder="@lang('blog.email_placeholder')" name="email">
               <button type="submit" class=" text-black"> 
-                <img src="{{ asset('GCAlogos/right.png') }}" alt="logo"  style="width:33px; height:33px">
+                <img src="{{ asset('GCAlogos/right.png') }}" alt="logo"  style="width:31px; height:31px">
               </button>
             </div>
           </form>
