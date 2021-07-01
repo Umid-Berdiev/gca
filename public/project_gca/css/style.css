@@ -330,10 +330,8 @@ section.main-slider a.link_template {
   min-height: 52px;
   max-width: 195px;
 }
-.top {
-  margin-top: 65px;
-}
-.logotypes_main img.giz {
+
+#gizzz {
   min-height: 52px;
   max-width: 544px;
 }
