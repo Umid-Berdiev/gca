@@ -585,8 +585,13 @@
     margin-bottom: 20px;
   }
 
-  .logotypes_main img {
+  /* .logotypes_main img {
     max-width: 100%;
+    height: auto;
+  } */
+
+  .logotypes_main img#giz {
+    max-width: 544px;
     height: auto;
   }
 
@@ -823,9 +828,9 @@
   .ftr_bottom p {
     font-size: 10px;
   }
-.report_main_item_img {
+  .report_main_item_img {
     padding: 0;
-  } 
+  }
   a.report_main_item p {
     font-size: 13px;
     padding: 5px;
